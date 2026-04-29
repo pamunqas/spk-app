@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id          String       @id @default(cuid())
+  email       String       @unique
+  password    String
+  name        String
+  role        String       @default("analyst")
+  company     String?
+  title       String?
+  avatarColor String       @default("#1a2a3e")
+  createdAt   DateTime     @default(now())
+  comparisons Comparison[]
+}
+
+model Provider {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  name           String
+  initials       String
+  color          String
+  status         String   @default("active")
+  description    String
+  mdrFee         Float
+  settlementTime Float
+  successRate    Float
+  setupFee       Float
+  supportQuality Float
+  createdAt      DateTime @default(now())
+}
+
+model Criterion {
+  id       String @id @default(cuid())
+  key      String @unique
+  label    String
+  weight   Float
+  type     String
+  unit     String
+  position Int
+}
+
+model Comparison {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  providerIds String[]
+  winner      String
+  results     Json
+  createdAt   DateTime @default(now())
+}
