@@ -17,7 +17,7 @@ export default function RankList({ results }: { results: MooraResult[] }) {
   }, [results])
 
   if (results.length === 0) {
-    return <div className="empty-state"><div className="empty-state-icon">⚙️</div><div className="empty-state-title">Add at least 2 active providers to see rankings</div></div>
+    return <div className="empty-state"><div className="empty-state-icon">⚙️</div><div className="empty-state-title">Tambahkan minimal 2 penyedia aktif untuk melihat peringkat</div></div>
   }
 
   return (

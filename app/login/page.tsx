@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import Link from 'next/link'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
@@ -24,7 +25,7 @@ export default function LoginPage() {
     const res = await signIn('credentials', { email, password, redirect: false })
     setLoading(false)
     if (res?.error) {
-      setError('Invalid email or password.')
+      setError('Email atau kata sandi tidak valid.')
       return
     }
     // fetch session to know role
@@ -48,12 +49,12 @@ export default function LoginPage() {
             </div>
             SPK Payment Gateway
           </div>
-          <div className="login-tagline">MOORA-Powered Payment Gateway Intelligence</div>
+          <div className="login-tagline">Kecerdasan Payment Gateway Berbasis MOORA</div>
         </div>
 
         <div className="login-card">
-          <h2>Welcome back</h2>
-          <p>Sign in to access the platform.</p>
+          <h2>Selamat datang kembali</h2>
+          <p>Masuk untuk mengakses platform.</p>
 
           <div className="role-tabs">
             <div
@@ -62,15 +63,15 @@ export default function LoginPage() {
             >
               <div className="role-tab-icon">⚙️</div>
               <div className="role-tab-label">Admin</div>
-              <div className="role-tab-sub">Full platform control</div>
+              <div className="role-tab-sub">Kendali penuh platform</div>
             </div>
             <div
               className={`role-tab${role === 'analyst' ? ' active' : ''}`}
               onClick={() => handleRoleChange('analyst')}
             >
               <div className="role-tab-icon">🔍</div>
-              <div className="role-tab-label">Analyst</div>
-              <div className="role-tab-sub">Compare & analyse</div>
+              <div className="role-tab-label">Analis</div>
+              <div className="role-tab-sub">Bandingkan & analisis</div>
             </div>
           </div>
 
@@ -81,12 +82,12 @@ export default function LoginPage() {
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                placeholder="your@email.com"
+                placeholder="email@anda.com"
                 required
               />
             </div>
             <div className="form-group">
-              <label>Password</label>
+              <label>Kata Sandi</label>
               <input
                 type="password"
                 value={password}
@@ -95,14 +96,20 @@ export default function LoginPage() {
                 required
               />
               <div className="login-hint">
-                Admin: admin@spkgateway.com &nbsp;·&nbsp; Analyst: user@spkgateway.com &nbsp;·&nbsp; Password: <strong>password</strong>
+                Admin: admin@spkgateway.com &nbsp;·&nbsp; Analis: user@spkgateway.com &nbsp;·&nbsp; Kata sandi: <strong>password</strong>
               </div>
             </div>
             {error && <div className="login-error">{error}</div>}
             <button className="btn-login" type="submit" disabled={loading}>
-              {loading ? 'Signing in…' : 'Sign In →'}
+              {loading ? 'Masuk…' : 'Masuk →'}
             </button>
           </form>
+          <div style={{ marginTop: 16, textAlign: 'center', fontSize: 13, color: 'var(--text-3)' }}>
+            Belum punya akun?{' '}
+            <Link href="/register" style={{ color: 'var(--primary-light)', textDecoration: 'none' }}>
+              Daftar
+            </Link>
+          </div>
         </div>
       </div>
     </div>

@@ -21,22 +21,22 @@ export default function WeightsClient({ initialCriteria }: { initialCriteria: Cr
   }
 
   const save = async () => {
-    if (!ok) { setToast({ msg: 'Weights must sum to 1.00', type: 'blue' }); return }
+    if (!ok) { setToast({ msg: 'Bobot harus berjumlah 1,00', type: 'blue' }); return }
     const res = await fetch('/api/weights', {
       method: 'PUT', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(criteria.map(c => ({ id: c.id, weight: c.weight }))),
     })
-    if (!res.ok) { setToast({ msg: 'Failed to save weights', type: 'red' }); return }
-    setToast({ msg: 'Weights saved — new analyses will use updated values', type: 'green' })
+    if (!res.ok) { setToast({ msg: 'Gagal menyimpan bobot', type: 'red' }); return }
+    setToast({ msg: 'Bobot disimpan — analisis baru akan menggunakan nilai yang diperbarui', type: 'green' })
   }
 
   return (
     <>
       <div className="card-row">
         <div className="card">
-          <div className="card-title">Adjust Criteria Weights</div>
+          <div className="card-title">Sesuaikan Bobot Kriteria</div>
           <p style={{ fontSize: 12, color: 'var(--text-3)', marginBottom: 18, lineHeight: 1.6 }}>
-            Weights must sum to 1.00 (100%). Changes affect all future MOORA calculations.
+            Bobot harus berjumlah 1,00 (100%). Perubahan akan mempengaruhi semua perhitungan MOORA ke depannya.
           </p>
           <div className="weight-editor">
             {criteria.map((c, i) => (
@@ -54,16 +54,16 @@ export default function WeightsClient({ initialCriteria }: { initialCriteria: Cr
             ))}
           </div>
           <div className="weight-total" style={{ marginTop: 16 }}>
-            <span style={{ fontSize: 13, color: 'var(--text-2)' }}>Total weight</span>
+            <span style={{ fontSize: 13, color: 'var(--text-2)' }}>Total bobot</span>
             <span className={`weight-total-num ${ok ? 'ok' : 'err'}`}>{total.toFixed(2)}</span>
           </div>
           <button className="btn-primary" style={{ marginTop: 14, width: '100%', padding: 10 }} onClick={save}>
-            Save Weights
+            Simpan Bobot
           </button>
         </div>
 
         <div className="card">
-          <div className="card-title">Criteria Types & Descriptions</div>
+          <div className="card-title">Jenis & Deskripsi Kriteria</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             {criteria.map(c => (
               <div key={c.id} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
@@ -74,7 +74,7 @@ export default function WeightsClient({ initialCriteria }: { initialCriteria: Cr
                   </div>
                   <div style={{ fontSize: 12, color: 'var(--text-3)', lineHeight: 1.5 }}>{c.desc}</div>
                   <span className={`badge ${c.type}`} style={{ marginTop: 5, display: 'inline-block' }}>
-                    {c.type === 'benefit' ? 'Maximize' : 'Minimize'}
+                    {c.type === 'benefit' ? 'Maksimalkan' : 'Minimalkan'}
                   </span>
                 </div>
               </div>

@@ -8,27 +8,27 @@ const CRITERION_COLORS: Record<string, string> = {
 const STEPS = [
   {
     num: '1',
-    title: 'Build the Decision Matrix',
-    desc: "You score each payment gateway on each criterion from 1 to 5, where 5 = best performance. These scores form a matrix X[m×n] where m = providers and n = criteria.",
+    title: 'Buat Matriks Keputusan',
+    desc: "Anda memberi skor setiap payment gateway pada setiap kriteria dari 1 hingga 5, di mana 5 = performa terbaik. Skor-skor ini membentuk matriks X[m×n] dengan m = penyedia dan n = kriteria.",
     formula: null,
   },
   {
     num: '2',
-    title: 'Vector Normalization',
-    desc: 'Each column is divided by its Euclidean norm. This makes all values unit-free and comparable across criteria.',
+    title: 'Normalisasi Vektor',
+    desc: 'Setiap kolom dibagi dengan norma Euclidean-nya. Ini membuat semua nilai bebas satuan dan dapat dibandingkan antar kriteria.',
     formula: 'x*ij = xij / √(Σ xij²)',
   },
   {
     num: '3',
-    title: 'Apply Importance Weights',
-    desc: 'Normalized values are multiplied by the weight assigned to each criterion, reflecting its relative importance.',
+    title: 'Terapkan Bobot Kepentingan',
+    desc: 'Nilai ternormalisasi dikalikan dengan bobot yang ditetapkan untuk setiap kriteria, mencerminkan kepentingan relatifnya.',
     formula: 'v*ij = wj × x*ij',
   },
   {
     num: '4',
-    title: 'Compute yi Score & Rank',
-    desc: 'For benefit criteria (higher = better), values are added. For cost criteria (lower = better), values are subtracted. The provider with the highest yi wins.',
-    formula: 'yi = Σ(benefit) − Σ(cost)',
+    title: 'Hitung Skor yi & Peringkat',
+    desc: 'Untuk kriteria keuntungan (lebih tinggi = lebih baik), nilai dijumlahkan. Untuk kriteria biaya (lebih rendah = lebih baik), nilai dikurangkan. Penyedia dengan yi tertinggi menang.',
+    formula: 'yi = Σ(keuntungan) − Σ(biaya)',
   },
 ]
 
@@ -38,11 +38,11 @@ export default async function AlgorithmPage() {
   return (
     <>
       <div className="card">
-        <div className="card-title">What is MOORA?</div>
+        <div className="card-title">Apa itu MOORA?</div>
         <p style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.8, marginBottom: 16 }}>
-          <strong style={{ color: 'var(--text)' }}>Multi-Objective Optimization on the Basis of Ratio Analysis</strong> is a
-          decision-making method that lets you rank alternatives (payment gateways) across multiple conflicting criteria
-          simultaneously — without arbitrary guesswork.
+          <strong style={{ color: 'var(--text)' }}>Multi-Objective Optimization on the Basis of Ratio Analysis</strong> adalah
+          metode pengambilan keputusan yang memungkinkan Anda merangking alternatif (payment gateway) berdasarkan beberapa
+          kriteria yang saling bertentangan secara bersamaan — tanpa tebakan sembarangan.
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
           {STEPS.map((s, i) => (
@@ -68,7 +68,7 @@ export default async function AlgorithmPage() {
       </div>
 
       <div className="card">
-        <div className="card-title">Current Criteria Weights</div>
+        <div className="card-title">Bobot Kriteria Saat Ini</div>
         <div className="criteria-mini">
           {criteria.map(c => (
             <div key={c.key} className="criteria-mini-row">
@@ -92,7 +92,7 @@ export default async function AlgorithmPage() {
           ))}
         </div>
         <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 14 }}>
-          Weights are set by platform administrators. Contact your admin to request adjustments.
+          Bobot ditetapkan oleh administrator platform. Hubungi admin Anda untuk meminta penyesuaian.
         </p>
       </div>
     </>

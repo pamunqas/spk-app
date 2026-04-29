@@ -7,11 +7,11 @@ const CRITERION_COLORS: Record<string, string> = {
 }
 
 const CRITERION_DESC: Record<string, string> = {
-  mdrFee:         'Transaction fee charged per payment. Lower is better for merchants at scale.',
-  settlementTime: 'Business days for funds to reach your account. Faster improves cash flow.',
-  successRate:    '% of transactions completed successfully. Every 1% matters at high volumes.',
-  setupFee:       'One-time integration cost. Lower weight as it amortizes quickly.',
-  supportQuality: 'Technical support responsiveness and coverage on a 10-point scale.',
+  mdrFee:         'Biaya transaksi yang dikenakan per pembayaran. Lebih rendah lebih baik untuk merchant berskala besar.',
+  settlementTime: 'Hari kerja untuk dana sampai ke akun Anda. Lebih cepat meningkatkan arus kas.',
+  successRate:    '% transaksi yang berhasil diselesaikan. Setiap 1% penting pada volume tinggi.',
+  setupFee:       'Biaya integrasi satu kali. Bobot lebih rendah karena cepat teramortisasi.',
+  supportQuality: 'Responsivitas dan cakupan dukungan teknis dalam skala 10 poin.',
 }
 
 export default async function AdminWeights() {

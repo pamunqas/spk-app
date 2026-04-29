@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { Chart as ChartType, ChartConfiguration } from 'chart.js'
 
 interface BarChartProps {
@@ -41,44 +41,52 @@ const CHART_DEFAULTS = {
 export default function BarChart({ labels, data, colors, tooltipLabel }: BarChartProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const chartRef  = useRef<ChartType | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     let destroyed = false
     ;(async () => {
-      const { Chart, BarElement, CategoryScale, LinearScale, Tooltip } = await import('chart.js')
-      Chart.register(BarElement, CategoryScale, LinearScale, Tooltip)
-      if (destroyed || !canvasRef.current) return
-      if (chartRef.current) { chartRef.current.destroy(); chartRef.current = null }
+      try {
+        const { Chart, BarElement, BarController, CategoryScale, LinearScale, Tooltip } = await import('chart.js')
+        Chart.register(BarElement, BarController, CategoryScale, LinearScale, Tooltip)
+        if (destroyed || !canvasRef.current) return
+        if (chartRef.current) { chartRef.current.destroy(); chartRef.current = null }
 
-      const bgColors = colors ?? data.map(() => '#6366F180')
-      const config: ChartConfiguration = {
-        type: 'bar',
-        data: {
-          labels,
-          datasets: [{
-            data,
-            backgroundColor: bgColors,
-            borderRadius: 5,
-            borderSkipped: false,
-          }],
-        },
-        options: {
-          ...CHART_DEFAULTS,
-          plugins: {
-            ...CHART_DEFAULTS.plugins,
-            tooltip: {
-              ...CHART_DEFAULTS.plugins.tooltip,
-              callbacks: tooltipLabel
-                ? { label: (ctx: any) => ' ' + tooltipLabel(ctx.raw as number, ctx.dataIndex) }
-                : undefined,
-            },
+        const bgColors = colors ?? data.map(() => '#6366F180')
+        const config: ChartConfiguration = {
+          type: 'bar',
+          data: {
+            labels,
+            datasets: [{
+              data,
+              backgroundColor: bgColors,
+              borderRadius: 5,
+              borderSkipped: false,
+            }],
           },
-        } as any,
+          options: {
+            ...CHART_DEFAULTS,
+            plugins: {
+              ...CHART_DEFAULTS.plugins,
+              tooltip: {
+                ...CHART_DEFAULTS.plugins.tooltip,
+                callbacks: tooltipLabel
+                  ? { label: (ctx: any) => ' ' + tooltipLabel(ctx.raw as number, ctx.dataIndex) }
+                  : undefined,
+              },
+            },
+          } as any,
+        }
+        chartRef.current = new Chart(canvasRef.current, config)
+        setError(null)
+      } catch (e: any) {
+        console.error('BarChart error:', e)
+        setError(e.message)
       }
-      chartRef.current = new Chart(canvasRef.current, config)
     })()
     return () => { destroyed = true; chartRef.current?.destroy() }
   }, [labels, data, colors, tooltipLabel])
 
+  if (error) return <div style={{ color: 'var(--red)', fontSize: 12, padding: 8 }}>Chart error: {error}</div>
   return <canvas ref={canvasRef} />
 }

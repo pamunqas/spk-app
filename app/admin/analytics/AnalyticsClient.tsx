@@ -24,52 +24,60 @@ const PROVIDER_COLORS: Record<string, string> = {
 export default function AnalyticsClient({ stats, popLabels, popData, criteria }: Props) {
   const colors = popLabels.map(l => PROVIDER_COLORS[l] ?? '#55557788')
 
+  console.log('AnalyticsClient props:', { popLabels, popData, labelsLength: popLabels.length })
+
   return (
     <>
       <div className="stat-grid">
         <div className="stat-card">
-          <div className="stat-card-label">Total Comparisons</div>
+          <div className="stat-card-label">Total Perbandingan</div>
           <div className="stat-card-num" style={{ color: 'var(--primary-light)' }}>
             {stats.totalComparisons}
           </div>
-          <div className="stat-card-delta up">All time</div>
+          <div className="stat-card-delta up">Sepanjang masa</div>
         </div>
         <div className="stat-card">
-          <div className="stat-card-label">Avg. Providers Compared</div>
+          <div className="stat-card-label">Rata-rata Penyedia Dibandingkan</div>
           <div className="stat-card-num" style={{ color: 'var(--cyan)' }}>{stats.avgProviders}</div>
-          <div className="stat-card-delta">per session</div>
+          <div className="stat-card-delta">per sesi</div>
         </div>
         <div className="stat-card">
-          <div className="stat-card-label">Most Compared</div>
+          <div className="stat-card-label">Paling Banyak Dibandingkan</div>
           <div className="stat-card-num" style={{ color: 'var(--gold)', fontSize: '1.2rem', paddingTop: 6 }}>
             {stats.mostCompared}
           </div>
-          <div className="stat-card-delta">{stats.winRate}% of sessions</div>
+          <div className="stat-card-delta">{stats.winRate}% sesi</div>
         </div>
         <div className="stat-card">
-          <div className="stat-card-label">Win Rate Leader</div>
+          <div className="stat-card-label">Pemimpin Tingkat Kemenangan</div>
           <div className="stat-card-num" style={{ color: 'var(--green)', fontSize: '1.2rem', paddingTop: 6 }}>
             {stats.winLeader}
           </div>
-          <div className="stat-card-delta up">↑ {stats.winRate}% win rate</div>
+          <div className="stat-card-delta up">↑ {stats.winRate}% tingkat kemenangan</div>
         </div>
       </div>
 
       <div className="card-row">
         <div className="card">
-          <div className="card-title">Provider Win Frequency</div>
+          <div className="card-title">Frekuensi Kemenangan Penyedia</div>
           <div className="analytics-chart-wrap">
-            <BarChart
-              labels={popLabels}
-              data={popData}
-              colors={colors}
-              tooltipLabel={(v) => `${v}% of comparisons`}
-            />
+            {popLabels.length === 0 ? (
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--text-3)', fontSize: 13 }}>
+                Belum ada data perbandingan
+              </div>
+            ) : (
+              <BarChart
+                labels={popLabels}
+                data={popData}
+                colors={colors}
+                tooltipLabel={(v) => `${v}% dari perbandingan`}
+              />
+            )}
           </div>
         </div>
 
         <div className="card">
-          <div className="card-title">Provider Win Rates</div>
+          <div className="card-title">Tingkat Kemenangan Penyedia</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 4 }}>
             {popLabels.slice(0, 6).map((name, i) => (
               <div key={name} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -87,8 +95,8 @@ export default function AnalyticsClient({ stats, popLabels, popData, criteria }:
       </div>
 
       <div className="card">
-        <div className="card-title">Criteria Weight Impact</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(180px,1fr))', gap: 12 }}>
+        <div className="card-title">Dampak Bobot Kriteria</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 12, width: '100%' }}>
           {criteria.map(c => (
             <div key={c.key} style={{ background: 'var(--bg-3)', border: '1px solid var(--border)', borderRadius: 'var(--r)', padding: 14 }}>
               <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--text-3)', marginBottom: 6 }}>
@@ -98,7 +106,7 @@ export default function AnalyticsClient({ stats, popLabels, popData, criteria }:
                 {(c.weight * 100).toFixed(0)}%
               </div>
               <div style={{ fontSize: 11, marginTop: 4, color: c.type === 'benefit' ? 'var(--green)' : 'var(--red)' }}>
-                {c.type === 'benefit' ? 'Benefit criterion' : 'Cost criterion'}
+                {c.type === 'benefit' ? 'Kriteria keuntungan' : 'Kriteria biaya'}
               </div>
               <div style={{ marginTop: 8, height: 3, background: 'var(--surface-2)', borderRadius: 2 }}>
                 <div style={{ width: `${(c.weight * 100).toFixed(0)}%`, height: '100%', background: c.color, borderRadius: 2 }} />

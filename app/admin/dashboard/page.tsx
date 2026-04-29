@@ -33,46 +33,46 @@ export default async function AdminDashboard() {
     <>
       <div className="stat-grid">
         <div className="stat-card">
-          <div className="stat-card-label">Total Providers</div>
+          <div className="stat-card-label">Total Penyedia</div>
           <div className="stat-card-num" style={{ color: 'var(--primary-light)' }}>{providers.length}</div>
           <div className="stat-card-delta">
-            {providers.filter(p => p.status === 'active').length} active
+            {providers.filter(p => p.status === 'active').length} aktif
           </div>
         </div>
         <div className="stat-card">
-          <div className="stat-card-label">Active Users</div>
+          <div className="stat-card-label">Pengguna Aktif</div>
           <div className="stat-card-num" style={{ color: 'var(--green)' }}>{users.length}</div>
-          <div className="stat-card-delta up">Analyst accounts</div>
+          <div className="stat-card-delta up">Akun analis</div>
         </div>
         <div className="stat-card">
-          <div className="stat-card-label">Comparisons Run</div>
+          <div className="stat-card-label">Analisis Dijalankan</div>
           <div className="stat-card-num" style={{ color: 'var(--gold)' }}>{totalComparisons}</div>
-          <div className="stat-card-delta up">All time</div>
+          <div className="stat-card-delta up">Sepanjang masa</div>
         </div>
         <div className="stat-card">
-          <div className="stat-card-label">Top Ranked</div>
+          <div className="stat-card-label">Peringkat Teratas</div>
           <div className="stat-card-num" style={{ color: 'var(--accent)', fontSize: '1.3rem', paddingTop: 4 }}>
             {topProvider}
           </div>
-          <div className="stat-card-delta">All-provider MOORA winner</div>
+          <div className="stat-card-delta">Pemenang MOORA semua penyedia</div>
         </div>
       </div>
 
       <div className="card-row">
         <div className="card">
-          <div className="card-title">Recent Comparisons</div>
+          <div className="card-title">Perbandingan Terbaru</div>
           {comparisons.length === 0 ? (
             <div className="empty-state">
               <div className="empty-state-icon">📊</div>
-              <div className="empty-state-title">No comparisons yet</div>
+              <div className="empty-state-title">Belum ada perbandingan</div>
             </div>
           ) : comparisons.map(c => (
             <div key={c.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 0', borderBottom: '1px solid var(--border)' }}>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-3)', width: 80, flexShrink: 0 }}>
-                {new Date(c.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                {new Date(c.createdAt).toLocaleDateString('id-ID', { month: 'short', day: 'numeric' })}
               </div>
               <div style={{ flex: 1, fontSize: 12, color: 'var(--text-2)' }}>
-                {c.providerIds.length} providers compared
+                {c.providerIds.length} penyedia dibandingkan
               </div>
               <div style={{ fontSize: 12, fontWeight: 500, color: 'var(--gold)' }}>🏆 {c.winner}</div>
             </div>
@@ -80,7 +80,7 @@ export default async function AdminDashboard() {
         </div>
 
         <div className="card">
-          <div className="card-title">Weight Distribution</div>
+          <div className="card-title">Distribusi Bobot</div>
           <div className="criteria-mini">
             {criteria.map(c => (
               <div key={c.key} className="criteria-mini-row">
@@ -110,7 +110,7 @@ export default async function AdminDashboard() {
       </div>
 
       <div className="card">
-        <div className="card-title">Full MOORA Ranking — All Active Providers</div>
+        <div className="card-title">Peringkat MOORA Penuh — Semua Penyedia Aktif</div>
         <RankList results={results} />
       </div>
     </>

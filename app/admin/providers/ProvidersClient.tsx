@@ -35,15 +35,15 @@ export default function ProvidersClient({ initialProviders }: Props) {
   }
 
   const handleAdd = async () => {
-    if (!form.name || !form.initials) { showToast('Name and initials required', 'blue'); return }
+    if (!form.name || !form.initials) { showToast('Nama dan inisial diperlukan', 'blue'); return }
     const res = await fetch('/api/providers', {
       method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form),
     })
-    if (!res.ok) { showToast('Failed to add provider', 'red'); return }
+    if (!res.ok) { showToast('Gagal menambahkan penyedia', 'red'); return }
     const p = await res.json()
     setProviders(prev => [...prev, p])
     setModal(null)
-    showToast(`${p.name} added successfully`)
+    showToast(`${p.name} berhasil ditambahkan`)
   }
 
   const handleEdit = async () => {
@@ -52,11 +52,11 @@ export default function ProvidersClient({ initialProviders }: Props) {
     const res = await fetch(`/api/providers/${p.id}`, {
       method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form),
     })
-    if (!res.ok) { showToast('Failed to update provider', 'red'); return }
+    if (!res.ok) { showToast('Gagal memperbarui penyedia', 'red'); return }
     const updated = await res.json()
     setProviders(prev => prev.map((x, i) => (i === editIdx ? updated : x)))
     setModal(null)
-    showToast(`${updated.name} updated`)
+    showToast(`${updated.name} diperbarui`)
   }
 
   const toggleStatus = async (idx: number) => {
@@ -66,9 +66,9 @@ export default function ProvidersClient({ initialProviders }: Props) {
       method: 'PATCH', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: newStatus }),
     })
-    if (!res.ok) { showToast('Failed to update status', 'red'); return }
+    if (!res.ok) { showToast('Gagal memperbarui status', 'red'); return }
     setProviders(prev => prev.map((x, i) => (i === idx ? { ...x, status: newStatus } : x)))
-    showToast(`${p.name} ${newStatus}`, 'blue')
+    showToast(`${p.name} ${newStatus === 'active' ? 'diaktifkan' : 'dinonaktifkan'}`, 'blue')
   }
 
   const f = (k: string) => form[k] ?? ''
@@ -78,17 +78,17 @@ export default function ProvidersClient({ initialProviders }: Props) {
     <>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
         <div style={{ fontSize: 13, color: 'var(--text-2)' }}>
-          <strong style={{ color: 'var(--text)' }}>{providers.length}</strong> providers in the database
+          <strong style={{ color: 'var(--text)' }}>{providers.length}</strong> penyedia dalam database
         </div>
-        <button className="btn-primary" onClick={openAdd}>+ Add Provider</button>
+        <button className="btn-primary" onClick={openAdd}>+ Tambah Penyedia</button>
       </div>
 
       <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
         <table className="data-table">
           <thead>
             <tr>
-              <th>Provider</th><th>MDR Fee</th><th>Settlement</th>
-              <th>Success Rate</th><th>Support</th><th>Status</th><th>Actions</th>
+              <th>Penyedia</th><th>Biaya MDR</th><th>Penyelesaian</th>
+              <th>Tingkat Keberhasilan</th><th>Dukungan</th><th>Status</th><th>Aksi</th>
             </tr>
           </thead>
           <tbody>
@@ -114,7 +114,7 @@ export default function ProvidersClient({ initialProviders }: Props) {
                   <div style={{ display: 'flex', gap: 6 }}>
                     <button className="action-btn" onClick={() => openEdit(i)}>Edit</button>
                     <button className="action-btn danger" onClick={() => toggleStatus(i)}>
-                      {p.status === 'active' ? 'Deactivate' : 'Activate'}
+                      {p.status === 'active' ? 'Nonaktifkan' : 'Aktifkan'}
                     </button>
                   </div>
                 </td>
@@ -126,24 +126,24 @@ export default function ProvidersClient({ initialProviders }: Props) {
 
       {modal === 'add' && (
         <Modal
-          title="Add New Provider"
-          subtitle="Fill in the provider details below."
+          title="Tambah Penyedia Baru"
+          subtitle="Isi detail penyedia di bawah ini."
           onClose={() => setModal(null)}
           actions={<>
-            <button className="btn-cancel" onClick={() => setModal(null)}>Cancel</button>
-            <button className="btn-primary" onClick={handleAdd}>Add Provider</button>
+            <button className="btn-cancel" onClick={() => setModal(null)}>Batal</button>
+            <button className="btn-primary" onClick={handleAdd}>Tambah Penyedia</button>
           </>}
         >
           <div className="provider-form">
-            <div><label>Provider Name</label><input placeholder="e.g. PayGate Pro" value={f('name')} onChange={e => sf('name')(e.target.value)} /></div>
-            <div><label>Initials (2 char)</label><input maxLength={2} placeholder="PG" value={f('initials')} onChange={e => sf('initials')(e.target.value)} /></div>
-            <div><label>MDR Fee (%)</label><input type="number" step="0.1" placeholder="1.5" value={f('mdrFee')} onChange={e => sf('mdrFee')(e.target.value)} /></div>
-            <div><label>Settlement (days)</label><input type="number" step="0.5" placeholder="1.0" value={f('settlementTime')} onChange={e => sf('settlementTime')(e.target.value)} /></div>
-            <div><label>Success Rate (%)</label><input type="number" step="0.1" placeholder="99.0" value={f('successRate')} onChange={e => sf('successRate')(e.target.value)} /></div>
-            <div><label>Setup Fee (USD)</label><input type="number" placeholder="0" value={f('setupFee')} onChange={e => sf('setupFee')(e.target.value)} /></div>
-            <div><label>Support Quality (/10)</label><input type="number" step="0.5" placeholder="8.0" value={f('supportQuality')} onChange={e => sf('supportQuality')(e.target.value)} /></div>
-            <div><label>Brand Color</label><input placeholder="#6366F1" value={f('color')} onChange={e => sf('color')(e.target.value)} /></div>
-            <div className="full"><label>Description</label><input placeholder="Brief description..." value={f('description')} onChange={e => sf('description')(e.target.value)} /></div>
+            <div><label>Nama Penyedia</label><input placeholder="mis. PayGate Pro" value={f('name')} onChange={e => sf('name')(e.target.value)} /></div>
+            <div><label>Inisial (2 karakter)</label><input maxLength={2} placeholder="PG" value={f('initials')} onChange={e => sf('initials')(e.target.value)} /></div>
+            <div><label>Biaya MDR (%)</label><input type="number" step="0.1" placeholder="1.5" value={f('mdrFee')} onChange={e => sf('mdrFee')(e.target.value)} /></div>
+            <div><label>Penyelesaian (hari)</label><input type="number" step="0.5" placeholder="1.0" value={f('settlementTime')} onChange={e => sf('settlementTime')(e.target.value)} /></div>
+            <div><label>Tingkat Keberhasilan (%)</label><input type="number" step="0.1" placeholder="99.0" value={f('successRate')} onChange={e => sf('successRate')(e.target.value)} /></div>
+            <div><label>Biaya Pengaturan (USD)</label><input type="number" placeholder="0" value={f('setupFee')} onChange={e => sf('setupFee')(e.target.value)} /></div>
+            <div><label>Kualitas Dukungan (/10)</label><input type="number" step="0.5" placeholder="8.0" value={f('supportQuality')} onChange={e => sf('supportQuality')(e.target.value)} /></div>
+            <div><label>Warna Merek</label><input placeholder="#6366F1" value={f('color')} onChange={e => sf('color')(e.target.value)} /></div>
+            <div className="full"><label>Deskripsi</label><input placeholder="Deskripsi singkat..." value={f('description')} onChange={e => sf('description')(e.target.value)} /></div>
           </div>
         </Modal>
       )}
@@ -151,21 +151,21 @@ export default function ProvidersClient({ initialProviders }: Props) {
       {modal === 'edit' && editIdx !== null && (
         <Modal
           title={`Edit ${providers[editIdx].name}`}
-          subtitle="Update this provider's data values."
+          subtitle="Perbarui nilai data penyedia ini."
           onClose={() => setModal(null)}
           actions={<>
-            <button className="btn-cancel" onClick={() => setModal(null)}>Cancel</button>
-            <button className="btn-primary" onClick={handleEdit}>Save Changes</button>
+            <button className="btn-cancel" onClick={() => setModal(null)}>Batal</button>
+            <button className="btn-primary" onClick={handleEdit}>Simpan Perubahan</button>
           </>}
         >
           <div className="provider-form">
-            <div><label>MDR Fee (%)</label><input type="number" step="0.1" value={f('mdrFee')} onChange={e => sf('mdrFee')(e.target.value)} /></div>
-            <div><label>Settlement (days)</label><input type="number" step="0.5" value={f('settlementTime')} onChange={e => sf('settlementTime')(e.target.value)} /></div>
-            <div><label>Success Rate (%)</label><input type="number" step="0.1" value={f('successRate')} onChange={e => sf('successRate')(e.target.value)} /></div>
-            <div><label>Setup Fee (USD)</label><input type="number" value={f('setupFee')} onChange={e => sf('setupFee')(e.target.value)} /></div>
-            <div><label>Support Quality (/10)</label><input type="number" step="0.5" value={f('supportQuality')} onChange={e => sf('supportQuality')(e.target.value)} /></div>
-            <div><label>Brand Color</label><input value={f('color')} onChange={e => sf('color')(e.target.value)} /></div>
-            <div className="full"><label>Description</label><input value={f('description')} onChange={e => sf('description')(e.target.value)} /></div>
+            <div><label>Biaya MDR (%)</label><input type="number" step="0.1" value={f('mdrFee')} onChange={e => sf('mdrFee')(e.target.value)} /></div>
+            <div><label>Penyelesaian (hari)</label><input type="number" step="0.5" value={f('settlementTime')} onChange={e => sf('settlementTime')(e.target.value)} /></div>
+            <div><label>Tingkat Keberhasilan (%)</label><input type="number" step="0.1" value={f('successRate')} onChange={e => sf('successRate')(e.target.value)} /></div>
+            <div><label>Biaya Pengaturan (USD)</label><input type="number" value={f('setupFee')} onChange={e => sf('setupFee')(e.target.value)} /></div>
+            <div><label>Kualitas Dukungan (/10)</label><input type="number" step="0.5" value={f('supportQuality')} onChange={e => sf('supportQuality')(e.target.value)} /></div>
+            <div><label>Warna Merek</label><input value={f('color')} onChange={e => sf('color')(e.target.value)} /></div>
+            <div className="full"><label>Deskripsi</label><input value={f('description')} onChange={e => sf('description')(e.target.value)} /></div>
           </div>
         </Modal>
       )}

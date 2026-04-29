@@ -13,7 +13,7 @@ async function main() {
     { key: 'settlementTime',label: 'Settlement Time', weight: 0.25, type: 'cost',    unit: 'days', position: 1 },
     { key: 'successRate',   label: 'Success Rate',    weight: 0.25, type: 'benefit', unit: '%',    position: 2 },
     { key: 'setupFee',      label: 'Setup Fee',       weight: 0.10, type: 'cost',    unit: 'USD',  position: 3 },
-    { key: 'supportQuality',label: 'Support Quality', weight: 0.10, type: 'benefit', unit: '/10',  position: 4 },
+    { key: 'supportQuality',label: 'Support Quality', weight: 0.10, type: 'benefit', unit: '/10', position: 4 },
   ]
   for (const c of criteria) {
     await prisma.criterion.upsert({ where: { key: c.key }, update: c, create: c })
@@ -56,7 +56,49 @@ async function main() {
     })
   }
 
-  console.log('✓ Seed complete — 12 providers, 5 criteria, 6 users')
+  // Dummy Comparison data
+  const analysts = await prisma.user.findMany({ where: { role: 'analyst' }, select: { id: true } })
+  const activeProviders = await prisma.provider.findMany({ where: { status: 'active' }, select: { id: true, name: true } })
+
+  // Winners weighted toward Xendit, Midtrans, Durianpay
+  const topProviders = ['Xendit', 'Midtrans', 'Durianpay', 'OY! Indonesia', 'Faspay', 'DOKU']
+
+  const dummyComparisons = []
+  const now = Date.now()
+
+  for (let i = 0; i < 50; i++) {
+    const user = analysts[Math.floor(Math.random() * analysts.length)]
+    const shuffled = [...activeProviders].sort(() => Math.random() - 0.5)
+    const selected = shuffled.slice(0, 3 + Math.floor(Math.random() * 3))
+
+    // Generate ranking results
+    const results = selected.map((p) => ({
+      rank: 0,
+      provider: { id: p.id, name: p.name },
+      yiScore: (0.5 + Math.random() * 0.5).toFixed(4),
+      strengths: [],
+    })).sort((a, b) => parseFloat(b.yiScore) - parseFloat(a.yiScore)).map((r, idx) => ({ ...r, rank: idx + 1 }))
+
+    const winner = results[0].provider.name
+
+    // Spread over last 30 days
+    const daysAgo = Math.floor(Math.random() * 30)
+    const createdAt = new Date(now - daysAgo * 24 * 60 * 60 * 1000)
+
+    dummyComparisons.push({
+      userId: user.id,
+      providerIds: selected.map(p => p.id),
+      winner: winner,
+      results: results,
+      createdAt: createdAt,
+    })
+  }
+
+  for (const c of dummyComparisons) {
+    await prisma.comparison.create({ data: c })
+  }
+
+  console.log('✓ Seed complete — 12 providers, 5 criteria, 6 users, 50 comparison records')
 }
 
 main().catch(console.error).finally(() => prisma.$disconnect())

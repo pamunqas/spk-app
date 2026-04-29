@@ -1,5 +1,6 @@
 'use client'
 import { useState, useCallback } from 'react'
+import Link from 'next/link'
 import Toast from '@/components/Toast'
 
 interface User {
@@ -20,31 +21,31 @@ export default function UsersClient({ users, stats }: { users: User[]; stats: St
     <>
       <div className="stat-grid">
         <div className="stat-card">
-          <div className="stat-card-label">Total Users</div>
+          <div className="stat-card-label">Total Pengguna</div>
           <div className="stat-card-num" style={{ color: 'var(--primary-light)' }}>{stats.total}</div>
         </div>
         <div className="stat-card">
-          <div className="stat-card-label">Total Comparisons</div>
+          <div className="stat-card-label">Total Perbandingan</div>
           <div className="stat-card-num" style={{ color: 'var(--gold)' }}>{stats.totalComparisons}</div>
         </div>
         <div className="stat-card">
-          <div className="stat-card-label">Most Active</div>
+          <div className="stat-card-label">Paling Aktif</div>
           <div className="stat-card-num" style={{ color: 'var(--green)', fontSize: '1.2rem', paddingTop: 6 }}>
             {stats.mostActive}
           </div>
         </div>
         <div className="stat-card">
-          <div className="stat-card-label">Avg per User</div>
+          <div className="stat-card-label">Rata-rata per Pengguna</div>
           <div className="stat-card-num" style={{ color: 'var(--accent)' }}>{stats.avg}</div>
-          <div className="stat-card-delta">comparisons/user</div>
+          <div className="stat-card-delta">perbandingan/pengguna</div>
         </div>
       </div>
 
       <div className="card">
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-          <div className="card-title" style={{ marginBottom: 0 }}>All Analyst Users</div>
-          <button className="btn-primary" onClick={() => setToast({ msg: 'Invite feature coming soon', type: 'blue' })}>
-            + Invite User
+          <div className="card-title" style={{ marginBottom: 0 }}>Semua Pengguna Analis</div>
+          <button className="btn-primary" onClick={() => setToast({ msg: 'Fitur undang akan segera hadir', type: 'blue' })}>
+            + Undang Pengguna
           </button>
         </div>
         {users.map((u, i) => (
@@ -57,14 +58,15 @@ export default function UsersClient({ users, stats }: { users: User[]; stats: St
               <div className="user-row-email">{u.email}</div>
             </div>
             <div style={{ textAlign: 'right' }}>
-              <div className="user-row-stat">{u.comparisons} <span style={{ color: 'var(--text-3)', fontSize: 10 }}>runs</span></div>
+              <div className="user-row-stat">{u.comparisons} <span style={{ color: 'var(--text-3)', fontSize: 10 }}>analisis</span></div>
               <div className="user-row-last">
-                Joined: {new Date(u.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                Bergabung: {new Date(u.createdAt).toLocaleDateString('id-ID', { month: 'short', year: 'numeric' })}
               </div>
             </div>
             <div style={{ display: 'flex', gap: 6, marginLeft: 12 }}>
-              <button className="action-btn" onClick={() => setToast({ msg: `Usage report for ${u.name} exported`, type: 'green' })}>Export</button>
-              <button className="action-btn danger" onClick={() => setToast({ msg: `Session reset for ${u.name}`, type: 'blue' })}>Reset</button>
+              <Link href={`/admin/users/${u.id}`} className="action-btn" style={{ textDecoration: 'none' }}>Lihat Detail</Link>
+              <button className="action-btn" onClick={() => setToast({ msg: `Laporan penggunaan untuk ${u.name} diekspor`, type: 'green' })}>Ekspor</button>
+              <button className="action-btn danger" onClick={() => setToast({ msg: `Sesi direset untuk ${u.name}`, type: 'blue' })}>Reset</button>
             </div>
           </div>
         ))}

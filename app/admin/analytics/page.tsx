@@ -13,11 +13,14 @@ export default async function AdminAnalytics() {
     prisma.comparison.findMany({ orderBy: { createdAt: 'desc' }, take: 100 }),
   ])
 
+  console.log('[AdminAnalytics] totalComparisons:', totalComparisons, 'comparisons.length:', comparisons.length)
+
   // Tally winner frequency from DB
   const winnerCounts: Record<string, number> = {}
   comparisons.forEach(c => {
     winnerCounts[c.winner] = (winnerCounts[c.winner] || 0) + 1
   })
+  console.log('[AdminAnalytics] winnerCounts:', winnerCounts)
   const sortedWinners = Object.entries(winnerCounts)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 8)
@@ -26,6 +29,7 @@ export default async function AdminAnalytics() {
   const popData   = sortedWinners.map(([, count]) =>
     totalComparisons ? parseFloat(((count / totalComparisons) * 100).toFixed(1)) : 0
   )
+  console.log('[AdminAnalytics] popLabels:', popLabels, 'popData:', popData)
 
   const avgProviders = comparisons.length
     ? (comparisons.reduce((s, c) => s + c.providerIds.length, 0) / comparisons.length).toFixed(1)
