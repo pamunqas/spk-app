@@ -625,11 +625,19 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 .landing-page {
   min-height: 100vh; display: flex; flex-direction: column;
   position: relative; overflow-x: hidden;
-  z-index: 1;
 }
 .landing-bg {
   position: absolute; inset: 0;
-  z-index: -1;
+  background:
+    radial-gradient(ellipse 50% 40% at 5% 12%,  rgba(0,87,255,0.18)     0%, transparent 55%),
+    radial-gradient(ellipse 40% 35% at 92% 10%,  rgba(108,92,231,0.15)   0%, transparent 52%),
+    radial-gradient(ellipse 35% 40% at 90% 80%,  rgba(243,156,18,0.1)    0%, transparent 55%),
+    radial-gradient(ellipse 42% 35% at 6% 85%,   rgba(39,174,96,0.09)    0%, transparent 52%),
+    radial-gradient(ellipse 55% 50% at 50% 50%,  rgba(99,102,241,0.07)   0%, transparent 65%),
+    radial-gradient(ellipse 30% 30% at 75% 45%,  rgba(232,70,26,0.06)    0%, transparent 50%);
+}
+.landing-grid {
+  position: absolute; inset: 0;
   background:
     radial-gradient(ellipse 65% 55% at 15% 25%,  rgba(99,102,241,0.2)    0%, transparent 55%),
     radial-gradient(ellipse 45% 40% at 85% 18%,  rgba(0,87,255,0.14)     0%, transparent 52%),
@@ -757,20 +765,15 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
   border-top: 1px solid var(--border); padding: 20px 40px;
   display: flex; align-items: center; justify-content: space-between;
   background: var(--bg-2);
-  position: relative; z-index: 100;
 }
 .landing-footer p { font-size: 13px; color: var(--text-3); }
-.landing-footer-links { display: flex; gap: 24px; align-items: center; position: relative; z-index: 101; }
+.landing-footer-links { display: flex; gap: 24px; }
 .landing-footer-links a { 
-  font-size: 14px; color: #818CF8; text-decoration: none;
-  padding: 8px 16px; border-radius: 8px;
-  background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3);
-  transition: all 0.2s ease;
-  display: inline-block;
-  position: relative; z-index: 102;
+  font-size: 13px; color: var(--text-2); text-decoration: none;
+  transition: color 0.2s;
 }
 .landing-footer-links a:hover { 
-  background: rgba(99,102,241,0.25); color: #A5B4FC;
+  color: var(--primary-light); text-decoration: underline;
 }
 
 @media (max-width: 900px) {
