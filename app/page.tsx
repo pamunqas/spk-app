@@ -1,11 +1,13 @@
 'use client'
 import Link from 'next/link'
 import LandingNav from '@/components/LandingNav'
+import PaymentIllustration from '@/components/PaymentIllustration'
 
 export default function LandingPage() {
   return (
     <div className="landing-page">
       <div className="landing-bg" />
+      <PaymentIllustration />
       <div className="landing-grid" />
 
       <LandingNav />
@@ -76,10 +78,10 @@ export default function LandingPage() {
       </div>
 
       <div className="landing-footer">
-        <p>&copy; 2026 SPK Payment Gateway untuk Startup di Sleman Dengan Metode MOORA</p>
+        <p>&copy; 2026 Kelompok 8 SPK UJB</p>
         <div className="landing-footer-links">
           <Link href="/privacy">Privacy Policy</Link>
-          <Link href="/terms">Terms & Conditions</Link>
+          <Link href="/terms">Terms &amp; Conditions</Link>
         </div>
       </div>
     </div>
