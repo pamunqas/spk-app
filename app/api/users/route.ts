@@ -10,7 +10,6 @@ export async function GET() {
   const users = await prisma.user.findMany({
     orderBy: { createdAt: 'asc' },
     select: { id: true, name: true, email: true, role: true, company: true, title: true, avatarColor: true, createdAt: true },
-    where: { role: 'analyst' },
   })
   const usersWithComparisonCount = await prisma.user.findMany({
     where: { id: { in: users.map(u => u.id) } },
