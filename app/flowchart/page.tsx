@@ -12,101 +12,166 @@ export default function FlowchartPage() {
       <div className="doc-container">
         <div className="doc-header">
           <h1>System Flowchart</h1>
-          <p>Alur sistem SPK Payment Gateway dari awal hingga akhir</p>
+          <p>Alur sistem SPK Payment Gateway</p>
         </div>
 
-        <div className="system-flow">
-          <div className="flow-row">
-            <div className="flow-node start">START</div>
-          </div>
-
-          <div className="flow-arrow">↓</div>
-
-          <div className="flow-row branch-row">
-            <div className="flow-node-col">
-              <div className="flow-node green">PUBLIC AREA</div>
-              <div className="flow-node-box">
-                <span>Landing Page → /</span>
-                <span>Providers → /providers</span>
-                <span>Dokumentasi → /documentation</span>
-                <span>Tentang Kami → /developer</span>
-                <span>Login → /login</span>
-                <span>Register → /register</span>
+        {/* USER FLOW */}
+        <section className="flow-section">
+          <h2>User Flow</h2>
+          
+          <div className="system-flow">
+            <div className="flow-row"><div className="flow-node start">START</div></div>
+            <div className="flow-arrow">↓</div>
+            <div className="flow-row branch-row">
+              <div className="flow-node-col">
+                <div className="flow-node green">VISITOR</div>
+                <div className="flow-node-box">
+                  <span>Landing Page → /</span>
+                  <span>Providers → /providers</span>
+                  <span>Dokumentasi → /documentation</span>
+                  <span>Login → /login</span>
+                  <span>Register → /register</span>
+                </div>
+              </div>
+              <div className="flow-node-col">
+                <div className="flow-node blue">REGISTERED USER</div>
+                <div className="flow-node-box auth">
+                  <span>Login → /login</span>
+                  <span>Logout → /login</span>
+                </div>
               </div>
             </div>
-            <div className="flow-node-col">
-              <div className="flow-node blue">AUTH AREA</div>
-              <div className="flow-node-box auth">
-                <span>Login → POST /api/auth</span>
-                <span>Register → POST /api/register</span>
+            <div className="flow-arrow">↓</div>
+            <div className="flow-row"><div className="flow-node diamond">Check Role</div></div>
+            <div className="flow-arrow">↓</div>
+            <div className="flow-row branch-row">
+              <div className="flow-node-col">
+                <span className="branch-badge admin">ADMIN</span>
+                <div className="flow-node-box">
+                  <span>Dasbor → /admin/dashboard</span>
+                  <span>Analitik → /admin/analytics</span>
+                  <span>Providers → /admin/providers</span>
+                  <span>Kriteria & Bobot → /admin/weights</span>
+                  <span>Users → /admin/users</span>
+                </div>
+              </div>
+              <div className="flow-node-col">
+                <span className="branch-badge analyst">ANALIS</span>
+                <div className="flow-node-box">
+                  <span>Bandingkan → /analyst/compare</span>
+                  <span>Riwayat → /analyst/history</span>
+                  <span>MOORA → /analyst/algorithm</span>
+                  <span>Profil → /analyst/profile</span>
+                </div>
+              </div>
+            </div>
+            <div className="flow-arrow">↓</div>
+            <div className="flow-row branch-row">
+              <div className="flow-node-col" style={{flex:1}}>
+                <div className="flow-node purple">MOORA WORKFLOW</div>
+                <div className="flow-node-box process">
+                  <span>1. Select Providers</span>
+                  <span>2. Select Criteria</span>
+                  <span>3. Set Weights</span>
+                  <span>4. Calculate Ranking</span>
+                  <span>5. View Result</span>
+                </div>
+              </div>
+            </div>
+            <div className="flow-arrow">↓</div>
+            <div className="flow-row"><div className="flow-node gold">Save History</div></div>
+            <div className="flow-arrow">↓</div>
+            <div className="flow-row"><div className="flow-node end">END</div></div>
+          </div>
+        </section>
+
+        {/* TECHNICAL FLOW */}
+        <section className="flow-section">
+          <h2>Technical Flow</h2>
+          
+          <div className="system-flow">
+            <div className="flow-row"><div className="flow-node start">CLIENT</div></div>
+            <div className="flow-arrow">↓</div>
+            <div className="flow-row branch-row">
+              <div className="flow-node-col">
+                <div className="flow-node green">FRONTEND</div>
+                <div className="flow-node-box">
+                  <span>Next.js 16 (React 19)</span>
+                  <span>App Router</span>
+                  <span>NextAuth v5</span>
+                  <span>TypeScript</span>
+                </div>
+              </div>
+              <div className="flow-node-col">
+                <div className="flow-node blue">HTTP REQUESTS</div>
+                <div className="flow-node-box auth">
+                  <span>GET /api/providers</span>
+                  <span>GET/PUT /api/weights</span>
+                  <span>POST /api/comparisons</span>
+                  <span>POST /api/auth</span>
+                  <span>POST /api/register</span>
+                </div>
+              </div>
+            </div>
+            <div className="flow-arrow">↓</div>
+            <div className="flow-row"><div className="flow-node diamond">API ROUTES</div></div>
+            <div className="flow-arrow">↓</div>
+            <div className="flow-row branch-row">
+              <div className="flow-node-col">
+                <div className="flow-node purple">MOORA ALGORITHM</div>
+                <div className="flow-node-box process">
+                  <span>lib/moora.ts</span>
+                  <span>Normalization</span>
+                  <span>Weight Application</span>
+                  <span>Ranking Calculation</span>
+                </div>
+              </div>
+              <div className="flow-node-col">
+                <div className="flow-node gold">DATABASE</div>
+                <div className="flow-node-box result">
+                  <span>PostgreSQL</span>
+                  <span>Prisma ORM</span>
+                  <span>Providers Table</span>
+                  <span>Criteria Table</span>
+                  <span>Comparisons Table</span>
+                  <span>Users Table</span>
+                </div>
+              </div>
+            </div>
+            <div className="flow-arrow">↓</div>
+            <div className="flow-row"><div className="flow-node end">RESPONSE</div></div>
+          </div>
+
+          <div className="tech-stack">
+            <h3>Tech Stack</h3>
+            <div className="stack-grid">
+              <div className="stack-item">
+                <span className="stack-title">Frontend</span>
+                <span>Next.js 16, React 19, TypeScript</span>
+              </div>
+              <div className="stack-item">
+                <span className="stack-title">Backend</span>
+                <span>Next.js API Routes</span>
+              </div>
+              <div className="stack-item">
+                <span className="stack-title">Database</span>
+                <span>PostgreSQL (Neon)</span>
+              </div>
+              <div className="stack-item">
+                <span className="stack-title">ORM</span>
+                <span>Prisma 7</span>
+              </div>
+              <div className="stack-item">
+                <span className="stack-title">Auth</span>
+                <span>NextAuth v5 (beta)</span>
+              </div>
+              <div className="stack-item">
+                <span className="stack-title">Algorithm</span>
+                <span>MOORA Method</span>
               </div>
             </div>
           </div>
-
-          <div className="flow-arrow">↓</div>
-
-          <div className="flow-row">
-            <div className="flow-node diamond">Check Role</div>
-          </div>
-
-          <div className="flow-arrow">↓</div>
-
-          <div className="flow-row branch-row">
-            <div className="flow-node-col">
-              <span className="branch-badge admin">ADMIN</span>
-              <div className="flow-node-box">
-                <span>Dasbor → /admin/dashboard</span>
-                <span>Analitik → /admin/analytics</span>
-                <span>Providers → /admin/providers</span>
-                <span>Kriteria & Bobot → /admin/weights</span>
-                <span>Users → /admin/users</span>
-              </div>
-            </div>
-            <div className="flow-node-col">
-              <span className="branch-badge analyst">ANALIS</span>
-              <div className="flow-node-box">
-                <span>Bandingkan → /analyst/compare</span>
-                <span>Riwayat → /analyst/history</span>
-                <span>MOORA → /analyst/algorithm</span>
-                <span>Profil → /analyst/profile</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="flow-arrow">↓</div>
-
-          <div className="flow-row">
-            <div className="flow-node purple">MOORA PROCESS</div>
-          </div>
-          <div className="flow-indent">
-            <div className="flow-node-box process">
-              <span>1. Select Providers → GET /api/providers</span>
-              <span>2. Select Criteria → GET /api/weights</span>
-              <span>3. Set Weights → PUT /api/weights</span>
-              <span>4. Normalization → lib/moora.ts</span>
-              <span>5. Ranking → POST /api/comparisons</span>
-            </div>
-          </div>
-
-          <div className="flow-arrow">↓</div>
-
-          <div className="flow-row">
-            <div className="flow-node gold">RESULT</div>
-          </div>
-          <div className="flow-indent">
-            <div className="flow-node-box result">
-              <span>Best Gateway → Response JSON</span>
-              <span>Score Ranking List</span>
-              <span>Save to History</span>
-            </div>
-          </div>
-
-          <div className="flow-arrow">↓</div>
-
-          <div className="flow-row">
-            <div className="flow-node end">END</div>
-          </div>
-        </div>
+        </section>
       </div>
 
       <div className="landing-footer">

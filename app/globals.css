@@ -845,6 +845,17 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 .branch-badge { padding: 4px 16px; border-radius: var(--r-sm); font-size: 12px; font-weight: 600; margin-bottom: 4px; }
 .branch-badge.admin { background: rgba(245,158,11,0.2); color: var(--gold); }
 .branch-badge.analyst { background: var(--primary-dim); color: var(--primary-light); }
+.flow-section { margin-bottom: 60px; }
+.flow-section h2 { font-size: 1.3rem; font-weight: 600; margin-bottom: 24px; color: var(--text); }
+.tech-stack { margin-top: 40px; }
+.tech-stack h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 16px; }
+.stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.stack-item {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 16px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.stack-title { font-size: 12px; font-weight: 600; color: var(--primary-light); text-transform: uppercase; letter-spacing: 0.05em; }
+.stack-item span:last-child { font-size: 13px; color: var(--text-2); }
 
 @media (max-width: 900px) {
   .landing-hero { grid-template-columns: 1fr; text-align: center; }
