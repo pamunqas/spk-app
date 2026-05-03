@@ -60,7 +60,6 @@ export default function FlowchartPage() {
                 <div className="flow-node-box">
                   <span>Bandingkan → /analyst/compare</span>
                   <span>Riwayat → /analyst/history</span>
-                  <span>MOORA → /analyst/algorithm</span>
                   <span>Profil → /analyst/profile</span>
                 </div>
               </div>
