@@ -12,13 +12,43 @@ export async function PUT(req: Request) {
   if (!session || (session.user as any).role !== 'admin') {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
-  const body: { id: string; weight: number }[] = await req.json()
-  const total = body.reduce((s, c) => s + c.weight, 0)
+  let body: unknown
+  try {
+    body = await req.json()
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
+  }
+
+  if (!Array.isArray(body) || body.length === 0) {
+    return NextResponse.json({ error: 'Body harus berupa array criterion dengan id dan weight' }, { status: 400 })
+  }
+
+  const data = body as { id: string; weight: number }[]
+  for (const item of data) {
+    if (!item.id || typeof item.id !== 'string') {
+      return NextResponse.json({ error: 'Setiap item harus memiliki id yang valid' }, { status: 400 })
+    }
+    if (typeof item.weight !== 'number' || item.weight < 0 || item.weight > 1) {
+      return NextResponse.json({ error: 'Weight harus berupa angka antara 0 dan 1' }, { status: 400 })
+    }
+  }
+
+  const criteria = await prisma.criterion.findMany({
+    where: { id: { in: data.map(d => d.id) } },
+    select: { id: true },
+  })
+  if (criteria.length !== data.length) {
+    const foundIds = new Set(criteria.map(c => c.id))
+    const invalid = data.filter(d => !foundIds.has(d.id)).map(d => d.id)
+    return NextResponse.json({ error: `Criterion tidak ditemukan: ${invalid.join(', ')}` }, { status: 400 })
+  }
+
+  const total = data.reduce((s, c) => s + c.weight, 0)
   if (Math.abs(total - 1) > 0.001) {
     return NextResponse.json({ error: 'Weights must sum to 1.00' }, { status: 400 })
   }
   await Promise.all(
-    body.map(c => prisma.criterion.update({ where: { id: c.id }, data: { weight: c.weight } }))
+    data.map(c => prisma.criterion.update({ where: { id: c.id }, data: { weight: c.weight } }))
   )
   return NextResponse.json({ ok: true })
 }
