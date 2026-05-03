@@ -19,12 +19,12 @@ export default function DeveloperPage() {
       nim: '23330043',
       email: 'mgifaaf7@gmail.com',
     },
+    {
+      name: 'Yumarlin MZ, S.Kom., M.Kom.',
+      nim: '-',
+      email: 'yumarlin@janabadra.ac.id',
+    },
   ]
-
-  const dosen = {
-    name: 'Yumarlin MZ, S.Kom., M.Kom.',
-    email: 'yumarlin@janabadra.ac.id',
-  }
 
   return (
     <div className="landing-page">
@@ -40,52 +40,32 @@ export default function DeveloperPage() {
         </div>
 
         <div className="dev-grid">
-          <div className="dev-card">
-            <div className="dev-card-header">
-              <span>Dosen Pengampu</span>
-            </div>
-            <div className="dev-card-content">
-              <div className="dev-dosen">
-                <div className="dev-avatar-large">
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" strokeWidth="2">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                    <circle cx="12" cy="7" r="4"/>
-                  </svg>
-                </div>
-                <h2>{dosen.name}</h2>
-                <p>{dosen.email}</p>
+          {team.map((member) => (
+            <div key={member.email} className="dev-card">
+              <div className="dev-card-header">
+                <span>{member.nim === '-' ? 'Dosen Pengampu' : 'Mahasiswa'}</span>
               </div>
-            </div>
-          </div>
-
-          <div className="dev-card">
-            <div className="dev-card-header">
-              <span>Kelompok 8</span>
-            </div>
-            <div className="dev-card-content">
-              <div className="dev-team">
-                {team.map((member) => (
-                  <div key={member.nim} className="dev-team-member">
-                    <div className="dev-avatar">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" strokeWidth="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                        <circle cx="12" cy="7" r="4"/>
-                      </svg>
-                    </div>
-                    <div className="dev-member-info">
-                      <div style={{ fontWeight: 600, fontSize: '1rem' }}>{member.name}</div>
-                      <div style={{ color: 'var(--text-3)', fontSize: 13 }}>NIM: {member.nim}</div>
-                      <div style={{ color: 'var(--primary-light)', fontSize: 12, marginTop: 2 }}>{member.email}</div>
-                    </div>
+              <div className="dev-card-content">
+                <div className="dev-team-member">
+                  <div className="dev-avatar-large">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" strokeWidth="2">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                      <circle cx="12" cy="7" r="4"/>
+                    </svg>
                   </div>
-                ))}
+                  <div className="dev-member-info">
+                    <h2>{member.name}</h2>
+                    {member.nim !== '-' && <p>NIM: {member.nim}</p>}
+                    <p>{member.email}</p>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
 
-<div className="landing-footer">
+      <div className="landing-footer">
         <p>&copy; 2026 SPK Payment Gateway untuk Startup di Sleman Dengan Metode MOORA</p>
         <div className="landing-footer-links">
           <Link href="/privacy">Privacy Policy</Link>
