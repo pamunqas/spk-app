@@ -22,29 +22,24 @@ export default function FlowchartPage() {
 
           <div className="flow-arrow">↓</div>
 
-          <div className="flow-row">
-            <div className="flow-node green">PUBLIC AREA</div>
-          </div>
-          <div className="flow-indent">
-            <div className="flow-node-box">
-              <span>Landing Page → /</span>
-              <span>Providers → /providers</span>
-              <span>Dokumentasi → /documentation</span>
-              <span>Tentang Kami → /developer</span>
-              <span>Login → /login</span>
-              <span>Register → /register</span>
+          <div className="flow-row branch-row">
+            <div className="flow-node-col">
+              <div className="flow-node green">PUBLIC AREA</div>
+              <div className="flow-node-box">
+                <span>Landing Page → /</span>
+                <span>Providers → /providers</span>
+                <span>Dokumentasi → /documentation</span>
+                <span>Tentang Kami → /developer</span>
+                <span>Login → /login</span>
+                <span>Register → /register</span>
+              </div>
             </div>
-          </div>
-
-          <div className="flow-arrow">↓</div>
-
-          <div className="flow-row">
-            <div className="flow-node blue">AUTH AREA</div>
-          </div>
-          <div className="flow-indent">
-            <div className="flow-node-box auth">
-              <span>Login Page → POST /api/auth</span>
-              <span>Register Page → POST /api/register</span>
+            <div className="flow-node-col">
+              <div className="flow-node blue">AUTH AREA</div>
+              <div className="flow-node-box auth">
+                <span>Login → POST /api/auth</span>
+                <span>Register → POST /api/register</span>
+              </div>
             </div>
           </div>
 
@@ -57,7 +52,7 @@ export default function FlowchartPage() {
           <div className="flow-arrow">↓</div>
 
           <div className="flow-row branch-row">
-            <div className="flow-branch-box">
+            <div className="flow-node-col">
               <span className="branch-badge admin">ADMIN</span>
               <div className="flow-node-box">
                 <span>Dasbor → /admin/dashboard</span>
@@ -67,7 +62,7 @@ export default function FlowchartPage() {
                 <span>Users → /admin/users</span>
               </div>
             </div>
-            <div className="flow-branch-box">
+            <div className="flow-node-col">
               <span className="branch-badge analyst">ANALIS</span>
               <div className="flow-node-box">
                 <span>Bandingkan → /analyst/compare</span>

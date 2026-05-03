@@ -834,15 +834,15 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 .flow-node.diamond { background: rgba(245,158,11,0.3); color: var(--gold); padding: 16px 24px; border-radius: var(--r); font-size: 13px; }
 .flow-arrow { font-size: 18px; color: var(--text-3); }
 .flow-indent { display: flex; justify-content: center; }
-.flow-node-box { display: flex; flex-direction: column; gap: 4px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 12px 20px; min-width: 280px; }
-.flow-node-box.auth { border-color: var(--primary); background: var(--primary-dim); min-width: 220px; }
+.flow-node-col { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.flow-node-box { display: flex; flex-direction: column; gap: 4px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 12px 20px; min-width: 240px; }
+.flow-node-box.auth { border-color: var(--primary); background: var(--primary-dim); min-width: 200px; }
 .flow-node-box.process { min-width: 300px; }
 .flow-node-box.result { border-color: var(--gold); min-width: 220px; }
 .flow-node-box span { font-size: 12px; font-family: var(--font-mono); color: var(--text-2); padding: 3px 0; border-bottom: 1px solid var(--border); }
 .flow-node-box span:last-child { border-bottom: none; }
-.branch-row { gap: 40px; }
-.flow-branch-box { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-.branch-badge { padding: 4px 16px; border-radius: var(--r-sm); font-size: 12px; font-weight: 600; }
+.branch-row { gap: 60px; }
+.branch-badge { padding: 4px 16px; border-radius: var(--r-sm); font-size: 12px; font-weight: 600; margin-bottom: 4px; }
 .branch-badge.admin { background: rgba(245,158,11,0.2); color: var(--gold); }
 .branch-badge.analyst { background: var(--primary-dim); color: var(--primary-light); }
 
