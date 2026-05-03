@@ -50,5 +50,15 @@ export async function PUT(req: Request) {
   await Promise.all(
     data.map(c => prisma.criterion.update({ where: { id: c.id }, data: { weight: c.weight } }))
   )
+  
+  prisma.auditLog.create({
+    data: {
+      userId: (session.user as any).id,
+      action: 'UPDATE',
+      entity: 'weight',
+      details: { weights: data } as any,
+    },
+  }).catch(console.error)
+  
   return NextResponse.json({ ok: true })
 }

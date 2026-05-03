@@ -75,6 +75,17 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       supportQuality: parseFloat(body.supportQuality as string) || existing.supportQuality,
     },
   })
+  
+  prisma.auditLog.create({
+    data: {
+      userId: (session.user as any).id,
+      action: 'UPDATE',
+      entity: 'provider',
+      entityId: id,
+      details: { name: provider.name } as any,
+    },
+  }).catch(console.error)
+  
   return NextResponse.json(provider)
 }
 
@@ -100,6 +111,17 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   }
 
   const provider = await prisma.provider.update({ where: { id }, data: { status: newStatus } })
+  
+  prisma.auditLog.create({
+    data: {
+      userId: (session.user as any).id,
+      action: 'UPDATE',
+      entity: 'provider',
+      entityId: id,
+      details: { status: newStatus } as any,
+    },
+  }).catch(console.error)
+  
   return NextResponse.json(provider)
 }
 
@@ -116,5 +138,16 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   }
   
   await prisma.provider.delete({ where: { id } })
+  
+  prisma.auditLog.create({
+    data: {
+      userId: (session.user as any).id,
+      action: 'DELETE',
+      entity: 'provider',
+      entityId: id,
+      details: { name: existing.name } as any,
+    },
+  }).catch(console.error)
+  
   return NextResponse.json({ ok: true })
 }

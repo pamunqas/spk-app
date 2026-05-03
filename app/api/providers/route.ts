@@ -2,6 +2,18 @@ import { NextResponse } from 'next/server'
 import { auth } from '@/auth'
 import { prisma } from '@/lib/prisma'
 
+function createAudit(userId: string, action: string, entity: string, entityId?: string, details?: Record<string, unknown>) {
+  prisma.auditLog.create({
+    data: {
+      userId,
+      action,
+      entity,
+      entityId,
+      details: details as any,
+    },
+  }).catch(console.error)
+}
+
 const ALLOWED_COLOR = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/
 
 function validateProvider(body: Record<string, unknown>): string | null {
@@ -84,5 +96,6 @@ const name = (body.name as string).trim()
       supportQuality: parseFloat(body.supportQuality as string) || 7.5,
     },
   })
+  createAudit((session.user as any).id, 'CREATE', 'provider', provider.id, { name: provider.name })
   return NextResponse.json(provider, { status: 201 })
 }

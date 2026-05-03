@@ -99,6 +99,16 @@ export async function POST(req: Request) {
       results:     computation.results as any,
     },
   })
+  
+  prisma.auditLog.create({
+    data: {
+      userId: (session.user as any).id,
+      action: 'CREATE',
+      entity: 'comparison',
+      entityId: comparison.id,
+      details: { winner, providerCount: providerIds.length } as any,
+    },
+  }).catch(console.error)
 
   return NextResponse.json({
     ...comparison,
