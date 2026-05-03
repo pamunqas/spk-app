@@ -7,19 +7,24 @@ export default function DeveloperPage() {
     {
       name: 'Septian Wahyu Pamungkas',
       nim: '19330019',
-      role: 'Ketua',
+      email: 'pamunqas@gmail.com',
     },
     {
       name: 'Nayla Rahmawati',
       nim: '23330022',
-      role: 'Anggota',
+      email: 'nylrhm18@gmail.com',
     },
     {
       name: 'Muhammad Gifari Fitryanor',
       nim: '23330043',
-      role: 'Anggota',
+      email: 'mgifaaf7@gmail.com',
     },
   ]
+
+  const dosen = {
+    name: 'Yumarlin MZ, S.Kom., M.Kom.',
+    email: 'yumarlin@janabadra.ac.id',
+  }
 
   return (
     <div className="landing-page">
@@ -47,8 +52,8 @@ export default function DeveloperPage() {
                     <circle cx="12" cy="7" r="4"/>
                   </svg>
                 </div>
-                <h2>Yumarlin MZ, S.Kom., M.Kom.</h2>
-                <p>Dosen SPK</p>
+                <h2>{dosen.name}</h2>
+                <p>{dosen.email}</p>
               </div>
             </div>
           </div>
@@ -70,7 +75,7 @@ export default function DeveloperPage() {
                     <div className="dev-member-info">
                       <div style={{ fontWeight: 600, fontSize: '1rem' }}>{member.name}</div>
                       <div style={{ color: 'var(--text-3)', fontSize: 13 }}>NIM: {member.nim}</div>
-                      <div style={{ color: 'var(--primary-light)', fontSize: 12, marginTop: 2 }}>{member.role}</div>
+                      <div style={{ color: 'var(--primary-light)', fontSize: 12, marginTop: 2 }}>{member.email}</div>
                     </div>
                   </div>
                 ))}
