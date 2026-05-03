@@ -71,10 +71,10 @@ export default function Sidebar({ items, userName, userRole, initials }: Sidebar
       </nav>
 
       <div className="sidebar-footer">
-        <div className="sidebar-user">
+        <Link href="/analyst/profile" className="sidebar-user-link">
           <div className="sidebar-avatar">{initials}</div>
           <div className="sidebar-user-name">{userName}</div>
-        </div>
+        </Link>
         <div className="sidebar-actions">
           <a href="/documentation" target="_blank" rel="noopener noreferrer" className="sidebar-action-link">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

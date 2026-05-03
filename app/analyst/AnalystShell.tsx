@@ -24,6 +24,7 @@ const TITLES: Record<string, string> = {
   '/analyst/compare':   'Bandingkan Gateway',
   '/analyst/history':   'Riwayat Perbandingan Saya',
   '/analyst/algorithm': 'Cara Kerja MOORA',
+  '/analyst/profile':   'Profil & Preferensi',
 }
 
 interface Props {
