@@ -12,12 +12,11 @@ export async function GET() {
     select: { id: true, name: true, email: true, role: true, company: true, title: true, avatarColor: true, createdAt: true },
     where: { role: 'analyst' },
   })
-  // attach comparison count
-  const withCount = await Promise.all(
-    users.map(async u => ({
-      ...u,
-      comparisons: await prisma.comparison.count({ where: { userId: u.id } }),
-    }))
-  )
+  const usersWithComparisonCount = await prisma.user.findMany({
+    where: { id: { in: users.map(u => u.id) } },
+    include: { _count: { select: { comparisons: true } } },
+  })
+  const countMap = new Map(usersWithComparisonCount.map(u => [u.id, u._count.comparisons]))
+  const withCount = users.map(u => ({ ...u, comparisons: countMap.get(u.id) ?? 0 }))
   return NextResponse.json(withCount)
 }

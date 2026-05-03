@@ -22,12 +22,20 @@ export default function WeightsClient({ initialCriteria }: { initialCriteria: Cr
 
   const save = async () => {
     if (!ok) { setToast({ msg: 'Bobot harus berjumlah 1,00', type: 'blue' }); return }
-    const res = await fetch('/api/weights', {
-      method: 'PUT', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(criteria.map(c => ({ id: c.id, weight: c.weight }))),
-    })
-    if (!res.ok) { setToast({ msg: 'Gagal menyimpan bobot', type: 'red' }); return }
-    setToast({ msg: 'Bobot disimpan — analisis baru akan menggunakan nilai yang diperbarui', type: 'green' })
+    try {
+      const res = await fetch('/api/weights', {
+        method: 'PUT', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(criteria.map(c => ({ id: c.id, weight: c.weight }))),
+      })
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({}))
+        setToast({ msg: json.error || 'Gagal menyimpan bobot', type: 'red' })
+        return
+      }
+      setToast({ msg: 'Bobot disimpan — analisis baru akan menggunakan nilai yang diperbarui', type: 'green' })
+    } catch {
+      setToast({ msg: 'Gagal terhubung ke server', type: 'red' })
+    }
   }
 
   return (

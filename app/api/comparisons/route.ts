@@ -19,41 +19,71 @@ export async function POST(req: Request) {
   const session = await auth()
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const { matrix } = await req.json() as {
-    matrix: Record<string, Record<string, number>>
+  let body: { matrix: Record<string, Record<string, number>> }
+  try {
+    body = await req.json()
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
   }
 
-  if (!matrix || Object.keys(matrix).length < 2) {
+  const { matrix } = body
+  if (!matrix || typeof matrix !== 'object' || Object.keys(matrix).length < 2) {
     return NextResponse.json({ error: 'Matrix must include at least 2 providers' }, { status: 400 })
   }
 
   const providerIds = Object.keys(matrix)
+  for (const pid of providerIds) {
+    if (!pid || typeof pid !== 'string') {
+      return NextResponse.json({ error: 'Invalid provider ID' }, { status: 400 })
+    }
+    const providerData = matrix[pid]
+    if (!providerData || typeof providerData !== 'object') {
+      return NextResponse.json({ error: `Invalid data for provider ${pid}` }, { status: 400 })
+    }
+    const validKeys = ['mdrFee', 'settlementTime', 'successRate', 'setupFee', 'supportQuality']
+    for (const key of Object.keys(providerData)) {
+      if (!validKeys.includes(key)) {
+        return NextResponse.json({ error: `Invalid criterion key: ${key}` }, { status: 400 })
+      }
+      const val = providerData[key]
+      if (typeof val !== 'number' || !Number.isInteger(val) || val < 1 || val > 5) {
+        return NextResponse.json({ error: `Invalid value for ${key}: must be integer 1-5` }, { status: 400 })
+      }
+    }
+  }
 
   const [providers, criteria] = await Promise.all([
     prisma.provider.findMany({ where: { id: { in: providerIds }, status: 'active' } }),
     prisma.criterion.findMany({ orderBy: { position: 'asc' } }),
   ])
 
-  const inputs = providers.map(p => ({
-    id:             p.id,
-    slug:           p.slug,
-    name:           p.name,
-    initials:       p.initials,
-    color:          p.color,
-    description:    p.description,
-    mdrFee:         matrix[p.id]?.mdrFee          ?? 3,
-    settlementTime: matrix[p.id]?.settlementTime  ?? 3,
-    successRate:    matrix[p.id]?.successRate     ?? 3,
-    setupFee:       matrix[p.id]?.setupFee        ?? 3,
-    supportQuality: matrix[p.id]?.supportQuality  ?? 3,
-  }))
+  if (providers.length !== providerIds.length) {
+    const missing = providerIds.filter(id => !providers.find(p => p.id === id))
+    return NextResponse.json({ error: `Providers not found: ${missing.join(', ')}` }, { status: 400 })
+  }
 
-  // All criteria treated as benefit: user's 5 always means best performance
+  const inputs = providers.map(p => {
+    const providerData = matrix[p.id] || {}
+    return {
+      id:             p.id,
+      slug:           p.slug,
+      name:           p.name,
+      initials:       p.initials,
+      color:          p.color,
+      description:    p.description,
+      mdrFee:         providerData.mdrFee ?? 3,
+      settlementTime:  providerData.settlementTime ?? 3,
+      successRate:   providerData.successRate ?? 3,
+      setupFee:       providerData.setupFee ?? 3,
+      supportQuality: providerData.supportQuality ?? 3,
+    }
+  })
+
   const crit = criteria.map(c => ({
     key:      c.key,
     label:    c.label,
     weight:   c.weight,
-    type:     'benefit' as const,
+    type:     c.type as 'benefit' | 'cost',
     unit:     c.unit,
     position: c.position,
   }))
