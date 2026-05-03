@@ -10,7 +10,6 @@ interface BarChartProps {
 }
 
 const CHART_DEFAULTS = {
-  indexAxis: 'y' as const,
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
