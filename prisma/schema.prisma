@@ -17,6 +17,7 @@ model User {
   avatarColor String       @default("#1a2a3e")
   createdAt   DateTime     @default(now())
   comparisons Comparison[]
+  auditLogs   AuditLog[]
 }
 
 model Provider {
@@ -54,4 +55,17 @@ model Comparison {
   winner      String
   results     Json
   createdAt   DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User?    @relation(fields: [userId], references: [id])
+  action   String
+  entity   String
+  entityId String?
+  details  Json?
+  ip       String?
+  userAgent String?
+  createdAt DateTime @default(now())
 }

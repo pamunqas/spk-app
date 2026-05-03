@@ -8,6 +8,16 @@ if (!authConfig.secret) {
   throw new Error('AUTH_SECRET must be defined in .env.local')
 }
 
+async function logAudit(userId: string, action: string, entity: string) {
+  try {
+    await prisma.auditLog.create({
+      data: { userId, action, entity },
+    })
+  } catch (e) {
+    console.error('Audit log error:', e)
+  }
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [
@@ -24,6 +34,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (!user) return null
         const ok = await bcrypt.compare(credentials.password as string, user.password)
         if (!ok) return null
+        await logAudit(user.id, 'LOGIN', 'user')
         return { id: user.id, email: user.email, name: user.name, role: user.role } as any
       },
     }),
