@@ -3,7 +3,6 @@ import UsersClient from './UsersClient'
 
 export default async function AdminUsers() {
   const users = await prisma.user.findMany({
-    where: { role: 'analyst' },
     orderBy: { createdAt: 'asc' },
     select: { id: true, name: true, email: true, role: true, company: true, title: true, avatarColor: true, createdAt: true },
   })
