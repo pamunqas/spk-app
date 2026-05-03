@@ -1,11 +1,9 @@
 'use client'
-import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 export default function LandingNav() {
   const pathname = usePathname()
-  const [policyOpen, setPolicyOpen] = useState(false)
 
   const isActive = (href: string) => pathname === href
 
@@ -34,24 +32,9 @@ export default function LandingNav() {
         </Link>
       </div>
       <div className="landing-nav-links">
+        <Link href="/providers" className={isActive('/providers') ? 'active' : ''}>Providers</Link>
         <Link href="/documentation" className={isActive('/documentation') ? 'active' : ''}>Dokumentasi</Link>
         <Link href="/developer" className={isActive('/developer') ? 'active' : ''}>Tentang Kami</Link>
-        <div className="nav-dropdown" onMouseLeave={() => setPolicyOpen(false)}>
-          <button 
-            className={`nav-dropdown-btn ${isActive('/privacy') || isActive('/terms') || isActive('/providers') ? 'active' : ''}`} 
-            onClick={() => setPolicyOpen(!policyOpen)} 
-            onMouseEnter={() => setPolicyOpen(true)}
-          >
-            others <span className="dropdown-arrow">▼</span>
-          </button>
-          {policyOpen && (
-            <div className="nav-dropdown-menu">
-              <Link href="/providers">Payment Gateway</Link>
-              <Link href="/privacy">Kebijakan Privasi</Link>
-              <Link href="/terms">Ketentuan Layanan</Link>
-            </div>
-          )}
-        </div>
         <Link href="/login" className="btn-login-nav">Masuk</Link>
       </div>
     </div>

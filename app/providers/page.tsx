@@ -14,7 +14,7 @@ const providers = [
   { name: 'Nicepay', initials: 'NP', color: '#FF6600', description: 'South Korean JV with highly stable infrastructure for enterprise.', mdr: '1.5%', settlement: '2-3 hari' },
   { name: 'iPaymu', initials: 'IP', color: '#2D9CDB', description: 'Ease-of-use focus for small merchants, escrow, instant plugins.', mdr: '1.5%', settlement: '1 hari' },
   { name: 'Durianpay', initials: 'DP', color: '#F39C12', description: 'Aggregator-of-aggregators, dynamic routing for best success rates.', mdr: '1.5%', settlement: '1 hari' },
-  { name: 'HitPay', initials: 'HP', color: '#6C5CE7', description: 'SMEs with omni-channel needs, seamless POS + online, no coding.', mDR: '1.5%', settlement: '1 hari' },
+  { name: 'HitPay', initials: 'HP', color: '#6C5CE7', description: 'SMEs with omni-channel needs, seamless POS + online, no coding.', mdr: '1.5%', settlement: '1 hari' },
 ]
 
 export default function ProvidersPage() {
@@ -22,7 +22,6 @@ export default function ProvidersPage() {
     <div className="landing-page">
       <div className="landing-bg" />
       <div className="landing-grid" />
-
       <LandingNav />
 
       <div className="doc-container">
@@ -57,11 +56,11 @@ export default function ProvidersPage() {
       <div className="landing-footer">
         <p>&copy; 2026 SPK Payment Gateway untuk Startup di Sleman Dengan Metode MOORA</p>
         <div className="landing-footer-links">
+          <Link href="/providers">Providers</Link>
           <Link href="/documentation">Dokumentasi</Link>
           <Link href="/developer">Tentang Kami</Link>
-          <Link href="/privacy">Kebijakan Privasi</Link>
-          <Link href="/terms">Ketentuan Layanan</Link>
-          <Link href="/">Beranda</Link>
+          <Link href="/privacy">Privacy Policy</Link>
+          <Link href="/terms">Terms & Conditions</Link>
         </div>
       </div>
     </div>
