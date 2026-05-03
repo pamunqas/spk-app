@@ -56,8 +56,8 @@ export default function DeveloperPage() {
                     <Image
                       src={member.image}
                       alt={member.name}
-                      width={80}
-                      height={80}
+                      width={140}
+                      height={140}
                       style={{ objectFit: 'cover', borderRadius: '50%' }}
                     />
                   </div>
