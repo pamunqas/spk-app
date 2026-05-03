@@ -4,6 +4,10 @@ import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/prisma'
 import { authConfig } from './auth.config'
 
+if (!authConfig.secret) {
+  throw new Error('AUTH_SECRET must be defined in .env.local')
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [

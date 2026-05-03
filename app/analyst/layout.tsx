@@ -7,9 +7,11 @@ export default async function AnalystLayout({ children }: { children: React.Reac
   const session = await auth()
   if (!session) redirect('/login')
 
+  const user = (session?.user as any) || { name: 'Analis', email: '' }
+
   return (
     <SessionProvider session={session}>
-      <AnalystShell user={session.user as any}>
+      <AnalystShell user={user}>
         {children}
       </AnalystShell>
     </SessionProvider>
