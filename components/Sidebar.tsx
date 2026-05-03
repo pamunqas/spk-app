@@ -22,6 +22,7 @@ export default function Sidebar({ items, userName, userRole, initials }: Sidebar
   const router = useRouter()
 
   const handleLogout = async () => {
+    await fetch('/api/auth/logout', { method: 'POST' })
     await signOut({ redirect: false })
     router.push('/login')
   }
