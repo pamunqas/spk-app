@@ -2,10 +2,13 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import PaymentIllustration from '@/components/PaymentIllustration'
+import AuthBrand from '@/components/AuthBrand'
 
 export default function RegisterPage() {
   const router = useRouter()
   const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '', company: '', title: '' })
+  const [acceptPolicy, setAcceptPolicy] = useState(false)
   const [error, setError]     = useState('')
   const [loading, setLoading] = useState(false)
   const [done, setDone]       = useState(false)
@@ -16,6 +19,7 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+    if (!acceptPolicy) { setError('Anda harus menyetujui Kebijakan Privasi dan Ketentuan Layanan'); return }
     if (form.password !== form.confirm) { setError('Kata sandi tidak cocok'); return }
     setLoading(true)
     const res = await fetch('/api/register', {
@@ -38,19 +42,13 @@ export default function RegisterPage() {
         <div className="login-bg" />
         <div className="login-grid" />
         <div className="login-wrap" style={{ position: 'relative', zIndex: 1 }}>
-          <div className="login-brand">
-            <div className="login-logo">
-              <div className="login-logo-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                  <rect x="2" y="7" width="20" height="14" rx="2"/>
-                  <path d="M16 7V5a2 2 0 0 0-4 0v2"/>
-                </svg>
-              </div>
-              SPK Payment Gateway
-            </div>
-          </div>
+          <AuthBrand />
           <div className="login-card" style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: 40, marginBottom: 16 }}>✅</div>
+            <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'var(--green-dim)', border: '1px solid rgba(16,185,129,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" strokeWidth="2.2" width="24" height="24">
+                <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
             <h2 style={{ marginBottom: 8 }}>Akun berhasil dibuat!</h2>
             <p style={{ marginBottom: 24 }}>Selamat datang, <strong>{form.name}</strong>. Silakan masuk untuk mulai menggunakan platform.</p>
             <button className="btn-login" onClick={() => router.push('/login')}>
@@ -65,24 +63,16 @@ export default function RegisterPage() {
   return (
     <div className="login-page">
       <div className="login-bg" />
+      <PaymentIllustration />
       <div className="login-grid" />
       <div className="login-wrap" style={{ position: 'relative', zIndex: 1, maxWidth: 460 }}>
-        <div className="login-brand">
-          <div className="login-logo">
-            <div className="login-logo-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                <rect x="2" y="7" width="20" height="14" rx="2"/>
-                <path d="M16 7V5a2 2 0 0 0-4 0v2"/>
-              </svg>
-            </div>
-            SPK Payment Gateway
-          </div>
-          <div className="login-tagline">Kecerdasan Payment Gateway Berbasis MOORA</div>
-        </div>
+        <AuthBrand />
 
         <div className="login-card">
-          <h2>Buat Akun Baru</h2>
-          <p>Daftar sebagai analis untuk mulai membandingkan gateway.</p>
+          <div className="login-card-header">
+            <h2>Buat Akun Baru</h2>
+            <p>Daftar sebagai analis untuk mulai membandingkan gateway.</p>
+          </div>
 
           <form className="login-form" onSubmit={handleSubmit} style={{ gap: 12 }}>
             <div className="form-group">
@@ -116,7 +106,21 @@ export default function RegisterPage() {
 
             {error && <div className="login-error">{error}</div>}
 
-            <button className="btn-login" type="submit" disabled={loading}>
+            <label className="policy-checkbox">
+              <input 
+                type="checkbox" 
+                checked={acceptPolicy} 
+                onChange={e => setAcceptPolicy(e.target.checked)} 
+              />
+              <span>
+                Saya setuju dengan{' '}
+                <Link href="/privacy" target="_blank" style={{ color: 'var(--primary-light)' }}>Kebijakan Privasi</Link>
+                {' '}dan{' '}
+                <Link href="/terms" target="_blank" style={{ color: 'var(--primary-light)' }}>Ketentuan Layanan</Link>
+              </span>
+            </label>
+
+            <button className="btn-login" type="submit" disabled={loading || !acceptPolicy}>
               {loading ? 'Mendaftar…' : 'Daftar Sekarang →'}
             </button>
           </form>

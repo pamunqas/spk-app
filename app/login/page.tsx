@@ -3,6 +3,8 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import PaymentIllustration from '@/components/PaymentIllustration'
+import AuthBrand from '@/components/AuthBrand'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -37,24 +39,16 @@ export default function LoginPage() {
   return (
     <div className="login-page">
       <div className="login-bg" />
+      <PaymentIllustration />
       <div className="login-grid" />
       <div className="login-wrap">
-        <div className="login-brand">
-          <div className="login-logo">
-            <div className="login-logo-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                <rect x="2" y="7" width="20" height="14" rx="2"/>
-                <path d="M16 7V5a2 2 0 0 0-4 0v2"/>
-              </svg>
-            </div>
-            SPK Payment Gateway
-          </div>
-          <div className="login-tagline">Kecerdasan Payment Gateway Berbasis MOORA</div>
-        </div>
+        <AuthBrand />
 
         <div className="login-card">
-          <h2>Selamat datang kembali</h2>
-          <p>Masuk untuk mengakses platform.</p>
+          <div className="login-card-header">
+            <h2>Selamat datang kembali</h2>
+            <p>Masuk untuk mengakses platform SPK Gateway.</p>
+          </div>
 
           <div className="role-tabs">
             <div
