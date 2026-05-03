@@ -26,8 +26,9 @@ export default function HistoryClient({ comparisons }: { comparisons: Comparison
 
   return (
     <div className="card" style={{ padding: 0 }}>
-      <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border)' }}>
-        <div className="card-title">Perbandingan Sebelumnya</div>
+      <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="card-title">Riwayat Perbandingan</div>
+        <span style={{ fontSize: 11, color: 'var(--text-3)' }}>{comparisons.length} item</span>
       </div>
 
       {comparisons.length === 0 ? (
@@ -53,7 +54,7 @@ export default function HistoryClient({ comparisons }: { comparisons: Comparison
                   onClick={() => toggle(c.id)}
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: '80px 1fr 1fr 1fr 32px',
+                    gridTemplateColumns: '60px 1fr 1fr 1fr 32px',
                     alignItems: 'center',
                     gap: 10,
                     padding: '10px 20px',
@@ -63,6 +64,10 @@ export default function HistoryClient({ comparisons }: { comparisons: Comparison
                     transition: 'background 0.15s',
                   }}
                 >
+                  {/* ID */}
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-3)' }}>
+                    #{c.id.slice(-6).toUpperCase()}
+                  </span>
                   {/* Date */}
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-3)' }}>
                     {new Date(c.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
