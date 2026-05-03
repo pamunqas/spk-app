@@ -27,7 +27,10 @@ export default function LoginPage() {
       setError('Email atau kata sandi tidak valid.')
       return
     }
-    router.replace('/analyst/compare')
+    const sessionRes = await fetch('/api/auth/session')
+    const sessionData = await sessionRes.json()
+    const role = sessionData?.user?.role
+    router.replace(role === 'admin' ? '/admin/dashboard' : '/analyst/dashboard')
   }
 
   return (

@@ -54,57 +54,48 @@ export default function HistoryClient({ comparisons }: { comparisons: Comparison
                   onClick={() => toggle(c.id)}
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: '60px 1fr 1fr 1fr 32px',
+                    gridTemplateColumns: '70px 80px 1fr 1fr 1fr 32px',
                     alignItems: 'center',
-                    gap: 10,
-                    padding: '10px 20px',
+                    gap: 8,
+                    padding: '12px 16px',
                     cursor: 'pointer',
                     borderBottom: isOpen ? 'none' : '1px solid var(--border)',
                     background: isOpen ? 'rgba(99,102,241,0.03)' : 'transparent',
-                    transition: 'background 0.15s',
                   }}
                 >
                   {/* ID */}
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-3)' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--text-3)' }}>
                     #{c.id.slice(-6).toUpperCase()}
                   </span>
+                  
                   {/* Date */}
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-3)' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-3)' }}>
                     {new Date(c.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
                   </span>
 
-                  {/* Podium slots — each takes 1fr */}
+                  {/* Podium slots */}
                   {top3.map((r, i) => {
                     const p = PLACE[i]
                     if (!r) return <div key={i} />
                     return (
                       <div key={i} style={{
-                        display: 'flex', alignItems: 'center', gap: 8,
-                        padding: '7px 11px', borderRadius: 9,
+                        display: 'flex', alignItems: 'center', gap: 6,
+                        padding: '6px 8px', borderRadius: 6,
                         border: `1px solid ${p.border}`, background: p.bg,
-                        overflow: 'hidden', minWidth: 0,
                       }}>
-                        <span style={{ fontSize: 15, flexShrink: 0 }}>{p.medal}</span>
-                        <div style={{ minWidth: 0, flex: 1 }}>
-                          <div style={{
-                            fontSize: 12, fontWeight: 600, color: p.color,
-                            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                          }}>
-                            {r.provider.name}
-                          </div>
-                          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-3)', marginTop: 1 }}>
-                            {Number(r.yiScore).toFixed(4)}
-                          </div>
-                        </div>
+                        <span style={{ fontSize: 14 }}>{p.medal}</span>
+                        <span style={{ fontSize: 11, fontWeight: 500, color: p.color, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {r.provider.name}
+                        </span>
                       </div>
                     )
                   })}
 
                   {/* Chevron */}
                   <svg
-                    width="13" height="13" viewBox="0 0 24 24" fill="none"
-                    stroke="var(--text-3)" strokeWidth="2" strokeLinecap="round"
-                    style={{ flexShrink: 0, transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}
+                    width="12" height="12" viewBox="0 0 24 24" fill="none"
+                    stroke="var(--text-3)" strokeWidth="2"
+                    style={{ transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}
                   >
                     <polyline points="6 9 12 15 18 9" />
                   </svg>
