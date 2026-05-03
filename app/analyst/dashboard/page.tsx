@@ -62,7 +62,7 @@ export default function DashboardPage() {
   } = data
 
   const providers = data.providers || []
-  const providerMap = new Map(providers.map(p => [p.name, p]))
+  const providerMap = new Map(providers.map(p => [p.id, p]))
 
   const formatDate = (dateStr: string | null) => {
     if (!dateStr) return '-'
@@ -123,18 +123,18 @@ export default function DashboardPage() {
                 <span className="last-result-date">{formatDate(lastResult.createdAt)}</span>
               </div>
               <div className="last-result-providers">
-                {lastResult.providerIds.map((name: string) => {
-                  const p = providerMap.get(name)
+                {lastResult.providerIds.map((id: string) => {
+                  const p = providerMap.get(id)
                   return p ? (
-                    <div key={name} className="last-result-provider">
+                    <div key={id} className="last-result-provider">
                       <div className="provider-badge" style={{ background: p.color }}>
                         {p.initials}
                       </div>
                       <span>{p.name}</span>
                     </div>
                   ) : (
-                    <div key={name} className="last-result-provider">
-                      <span>{name}</span>
+                    <div key={id} className="last-result-provider">
+                      <span>{id.slice(-6)}</span>
                     </div>
                   )
                 })}
