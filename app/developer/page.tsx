@@ -1,5 +1,6 @@
 'use client'
 import Link from 'next/link'
+import Image from 'next/image'
 import LandingNav from '@/components/LandingNav'
 
 export default function DeveloperPage() {
@@ -8,21 +9,25 @@ export default function DeveloperPage() {
       name: 'Septian Wahyu Pamungkas',
       nim: '19330019',
       email: 'pamunqas@gmail.com',
+      image: '/images/septian.png',
     },
     {
       name: 'Nayla Rahmawati',
       nim: '23330022',
       email: 'nylrhm18@gmail.com',
+      image: '/images/nayla.jpg',
     },
     {
       name: 'Muhammad Gifari Fitryanor',
       nim: '23330043',
       email: 'mgifaaf7@gmail.com',
+      image: '/images/gifari.jpg',
     },
     {
       name: 'Yumarlin MZ, S.Kom., M.Kom.',
       nim: '-',
       email: 'yumarlin@janabadra.ac.id',
+      image: '/images/yumarlin.jpg',
     },
   ]
 
@@ -48,10 +53,13 @@ export default function DeveloperPage() {
               <div className="dev-card-content">
                 <div className="dev-team-member">
                   <div className="dev-avatar-large">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" strokeWidth="2">
-                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                      <circle cx="12" cy="7" r="4"/>
-                    </svg>
+                    <Image
+                      src={member.image}
+                      alt={member.name}
+                      width={80}
+                      height={80}
+                      style={{ objectFit: 'cover', borderRadius: '50%' }}
+                    />
                   </div>
                   <div className="dev-member-info">
                     <h2>{member.name}</h2>
