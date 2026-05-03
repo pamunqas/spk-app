@@ -11,85 +11,97 @@ export default function FlowchartPage() {
 
       <div className="doc-container">
         <div className="doc-header">
-          <h1>Flowchart Sistem</h1>
-          <p>Alur penggunaan sistem SPK Payment Gateway dari awal hingga akhir berdasarkan tipe pengguna.</p>
+          <h1>System Flowchart</h1>
+          <p>Alur sistem SPK Payment Gateway dari awal hingga akhir</p>
         </div>
 
-        <div className="flowchart">
-          <div className="flow-section">
-            <h2>1. Halaman Umum (Public)</h2>
-            <div className="flow-box blue">Landing Page</div>
-            <div className="flow-arrows">↓</div>
-            <div className="flow-links">
-              <Link href="/providers" className="flow-link">Providers</Link>
-              <Link href="/documentation" className="flow-link">Dokumentasi</Link>
-              <Link href="/developer" className="flow-link">Tentang Kami</Link>
-              <Link href="/login" className="flow-link">Login</Link>
-              <Link href="/register" className="flow-link">Register</Link>
+        <div className="system-flow">
+          <div className="flow-start">
+            <span>START</span>
+          </div>
+          <div className="flow-line-down"></div>
+          
+          <div className="flow-box-group">
+            <div className="flow-box-public">
+              <span className="box-title">PUBLIC</span>
+              <div className="box-content">
+                <div className="box-item">Landing Page</div>
+                <div className="box-item">Providers</div>
+                <div className="box-item">Dokumentasi</div>
+                <div className="box-item">Tentang Kami</div>
+                <div className="box-item">Login</div>
+                <div className="box-item">Register</div>
+              </div>
+            </div>
+            <div className="flow-arrow-right">→</div>
+            <div className="flow-box-auth">
+              <span className="box-title">AUTH</span>
+              <div className="box-content">
+                <div className="box-item">Login Page</div>
+                <div className="box-item">Register Page</div>
+              </div>
             </div>
           </div>
-
-          <div className="flow-section">
-            <h2>2. Authentication</h2>
-            <div className="flow-box">Login / Register</div>
-            <div className="flow-arrows">↓</div>
-            <div className="flow-choices">
-              <span className="flow-choice admin">Admin</span>
-              <span className="flow-choice analyst">Analis</span>
+          
+          <div className="flow-line-down"></div>
+          <div className="flow-decision">
+            <span>Check Role</span>
+          </div>
+          <div className="flow-split">
+            <div className="flow-branch">
+              <span className="branch-label admin">ADMIN</span>
+              <div className="flow-line-branch"></div>
+              <div className="flow-admin">
+                <span className="box-title">ADMIN DASHBOARD</span>
+                <div className="box-content small">
+                  <div className="box-item">Dasbor</div>
+                  <div className="box-item">Analitik</div>
+                  <div className="box-item">Providers</div>
+                  <div className="box-item">Kriteria & Bobot</div>
+                  <div className="box-item">Users</div>
+                </div>
+              </div>
+            </div>
+            <div className="flow-branch">
+              <span className="branch-label analyst">ANALIS</span>
+              <div className="flow-line-branch"></div>
+              <div className="flow-analis">
+                <span className="box-title">ANALIS DASHBOARD</span>
+                <div className="box-content small">
+                  <div className="box-item">Bandingkan</div>
+                  <div className="box-item">Riwayat</div>
+                  <div className="box-item">MOORA</div>
+                  <div className="box-item">Profil</div>
+                </div>
+              </div>
             </div>
           </div>
-
-          <div className="flow-section">
-            <h2>3. Dashboard Admin</h2>
-            <div className="flow-box admin">Admin Dashboard</div>
-            <div className="flow-arrows">↓</div>
-            <div className="flow-grid">
-              <Link href="/admin/dashboard" className="flow-menu">Dasbor</Link>
-              <Link href="/admin/analytics" className="flow-menu">Analitik</Link>
-              <Link href="/admin/providers" className="flow-menu">Providers</Link>
-              <Link href="/admin/weights" className="flow-menu">Kriteria & Bobot</Link>
-              <Link href="/admin/users" className="flow-menu">Users</Link>
+          
+          <div className="flow-line-down"></div>
+          <div className="flow-process">
+            <span className="box-title">MOORA PROCESS</span>
+            <div className="box-content">
+              <div className="box-item">1. Select Providers</div>
+              <div className="box-item">2. Select Criteria</div>
+              <div className="box-item">3. Set Weights</div>
+              <div className="box-item">4. Normalization</div>
+              <div className="box-item">5. Ranking</div>
             </div>
-            <div className="flow-logout">Logout → Login</div>
           </div>
-
-          <div className="flow-section">
-            <h2>4. Dashboard Analis</h2>
-            <div className="flow-box analyst">Analis Dashboard</div>
-            <div className="flow-arrows">↓</div>
-            <div className="flow-grid">
-              <Link href="/analyst/compare" className="flow-menu">Bandingkan</Link>
-              <Link href="/analyst/history" className="flow-menu">Riwayat</Link>
-              <Link href="/analyst/algorithm" className="flow-menu">MOORA</Link>
-              <Link href="/analyst/profile" className="flow-menu">Profil</Link>
+          
+          <div className="flow-line-down"></div>
+          <div className="flow-result">
+            <span className="box-title">RESULT</span>
+            <div className="box-content">
+              <div className="box-item">Best Gateway</div>
+              <div className="box-item">Score Ranking</div>
+              <div className="box-item">Save History</div>
             </div>
-            <div className="flow-logout">Logout → Login</div>
           </div>
-
-          <div className="flow-section">
-            <h2>Alur Penggunaan</h2>
-            <div className="flow-steps">
-              <div className="flow-step">
-                <span className="step-num">1</span>
-                <span>User login ke sistem</span>
-              </div>
-              <div className="flow-step">
-                <span className="step-num">2</span>
-                <span>Admin: kelola providers & kriteria</span>
-              </div>
-              <div className="flow-step">
-                <span className="step-num">3</span>
-                <span>Analis: pilih providers + kriteria</span>
-              </div>
-              <div className="flow-step">
-                <span className="step-num">4</span>
-                <span>Sistem hitung dengan MOORA</span>
-              </div>
-              <div className="flow-step">
-                <span className="step-num">5</span>
-                <span>Tampilkan ranking hasil</span>
-              </div>
-            </div>
+          
+          <div className="flow-line-down"></div>
+          <div className="flow-end">
+            <span>END</span>
           </div>
         </div>
       </div>
