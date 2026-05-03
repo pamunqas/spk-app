@@ -108,3 +108,71 @@ export async function POST(req: Request) {
     yiScores:   computation.yiScores,
   })
 }
+
+export async function PATCH() {
+  const session = await auth()
+  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const userId = (session.user as any).id
+  
+  const userComparisons = await prisma.comparison.findMany({ where: { userId } })
+  const totalComparisons = userComparisons.length
+  
+  const lastComparison = userComparisons[0]?.createdAt || null
+  
+  const thisMonth = new Date()
+  thisMonth.setDate(1)
+  thisMonth.setHours(0, 0, 0, 0)
+  const monthlyCount = userComparisons.filter(c => new Date(c.createdAt) >= thisMonth).length
+  
+  const winnerCounts: Record<string, number> = {}
+  userComparisons.forEach(c => {
+    const winner = c.winner
+    winnerCounts[winner] = (winnerCounts[winner] || 0) + 1
+  })
+  const sortedWinners = Object.entries(winnerCounts).sort((a, b) => b[1] - a[1])
+  const mostChosen = sortedWinners[0]?.[0] || null
+  const mostChosenCount = sortedWinners[0]?.[1] || 0
+  
+  const lastMonth = new Date()
+  lastMonth.setMonth(lastMonth.getMonth() - 1)
+  const lastMonthCount = userComparisons.filter(c => new Date(c.createdAt) >= lastMonth).length
+  const prevMonth = new Date()
+  prevMonth.setMonth(prevMonth.getMonth() - 2)
+  const prevMonthCount = userComparisons.filter(c => {
+    const d = new Date(c.createdAt)
+    return d >= prevMonth && d < lastMonth
+  }).length
+  
+  const allComparisons = await prisma.comparison.findMany({
+    select: { winner: true, createdAt: true },
+  })
+  const globalWinnerCounts: Record<string, number> = {}
+  allComparisons.forEach(c => {
+    globalWinnerCounts[c.winner] = (globalWinnerCounts[c.winner] || 0) + 1
+  })
+  const trendingProviders = Object.entries(globalWinnerCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([name, count]) => ({ name, count }))
+  
+  const lastResult = userComparisons[0] ? {
+    winner: userComparisons[0].winner,
+    providerIds: userComparisons[0].providerIds,
+    createdAt: userComparisons[0].createdAt,
+  } : null
+  
+  const providers = await prisma.provider.findMany({ select: { id: true, name: true, initials: true, color: true } })
+  
+  return NextResponse.json({
+    totalComparisons,
+    lastComparison,
+    monthlyCount,
+    mostChosen,
+    mostChosenCount,
+    lastMonthCount,
+    prevMonthCount,
+    trendingProviders,
+    lastResult,
+    providers,
+  })
+}

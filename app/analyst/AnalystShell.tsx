@@ -4,6 +4,11 @@ import Sidebar from '@/components/Sidebar'
 
 const NAV = [
   {
+    href: '/analyst/dashboard',
+    label: 'Dasbor',
+    icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>,
+  },
+  {
     href: '/analyst/compare',
     label: 'Bandingkan Gateway',
     icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>,
@@ -16,6 +21,7 @@ const NAV = [
 ]
 
 const TITLES: Record<string, string> = {
+  '/analyst/dashboard':   'Dasbor',
   '/analyst/compare':   'Bandingkan Gateway',
   '/analyst/history':   'Riwayat Perbandingan Saya',
   '/analyst/profile':   'Profil & Preferensi',
