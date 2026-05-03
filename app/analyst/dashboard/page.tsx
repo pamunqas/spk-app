@@ -16,9 +16,9 @@ interface DashboardData {
     winner: string
     providerIds: string[]
     createdAt: string
-    results: { rank: number; name: string; yiScore: number }[]
+    results: { rank: number; name: string; yiScore: number; logo?: string }[]
   } | null
-  providers: { id: string; name: string; initials: string; color: string }[]
+  providers: { id: string; name: string; initials: string; color: string; logo?: string | null }[]
 }
 
 type ToastState = { msg: string; type: 'green' | 'blue' | 'red' } | null
@@ -122,12 +122,18 @@ export default function DashboardPage() {
           </div>
           {lastResult && lastResult.results ? (
             <div className="ranking-list">
-              {lastResult.results.map((r: { rank: number; name: string; yiScore: number }) => {
+              {lastResult.results.map((r: { rank: number; name: string; yiScore: number; logo?: string }) => {
                 const medal = r.rank === 1 ? '🏆' : r.rank === 2 ? '🥈' : r.rank === 3 ? '🥉' : `#${r.rank}`
                 const color = r.rank === 1 ? 'var(--gold)' : r.rank === 2 ? '#94A3B8' : r.rank === 3 ? '#B4836B' : 'var(--text-3)'
+                const p = providers.find(p => p.name === r.name)
                 return (
                   <div key={r.rank} className="ranking-item">
                     <span className="ranking-medal" style={{ color }}>{medal}</span>
+                    {p?.logo ? (
+                      <img src={p.logo} alt={p.name} className="ranking-logo" />
+                    ) : (
+                      <div className="ranking-badge" style={{ background: p?.color || '#666' }}>{p?.initials || '??'}</div>
+                    )}
                     <span className="ranking-name">{r.name}</span>
                     <span className="ranking-score">{Number(r.yiScore).toFixed(4)}</span>
                   </div>

@@ -25,6 +25,7 @@ model Provider {
   name           String
   initials       String
   color          String
+  logo           String?
   status         String   @default("active")
   description    String
   mdrFee         Float

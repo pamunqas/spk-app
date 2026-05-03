@@ -173,7 +173,7 @@ export async function PATCH() {
     })),
   } : null
   
-  const providers = await prisma.provider.findMany({ select: { id: true, name: true, initials: true, color: true } })
+  const providers = await prisma.provider.findMany({ select: { id: true, name: true, initials: true, color: true, logo: true } })
   
   return NextResponse.json({
     totalComparisons,
