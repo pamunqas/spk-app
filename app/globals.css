@@ -843,3 +843,19 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
   display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--text-2); cursor: pointer;
 }
 .policy-checkbox input { margin-top: 3px; accent-color: var(--primary); }
+.providers-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+.provider-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 20px;
+}
+.provider-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.provider-avatar {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: white;
+}
+.provider-name { font-size: 1rem; font-weight: 600; }
+.provider-desc { font-size: 13px; color: var(--text-2); line-height: 1.5; margin-bottom: 14px; }
+.provider-stats { display: flex; gap: 20px; }
+.provider-stat { display: flex; flex-direction: column; gap: 2px; }
+.provider-stat .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-3); }
+.provider-stat .stat-value { font-size: 13px; font-weight: 500; color: var(--primary-light); }

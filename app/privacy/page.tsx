@@ -96,6 +96,7 @@ export default function PrivacyPage() {
         <div className="landing-footer-links">
           <Link href="/documentation">Dokumentasi</Link>
           <Link href="/developer">Tentang Kami</Link>
+          <Link href="/providers">Payment Gateway</Link>
           <Link href="/privacy">Kebijakan Privasi</Link>
           <Link href="/terms">Ketentuan Layanan</Link>
           <Link href="/">Beranda</Link>

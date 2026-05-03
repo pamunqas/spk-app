@@ -38,14 +38,15 @@ export default function LandingNav() {
         <Link href="/developer" className={isActive('/developer') ? 'active' : ''}>Tentang Kami</Link>
         <div className="nav-dropdown" onMouseLeave={() => setPolicyOpen(false)}>
           <button 
-            className={`nav-dropdown-btn ${isActive('/privacy') || isActive('/terms') ? 'active' : ''}`} 
+            className={`nav-dropdown-btn ${isActive('/privacy') || isActive('/terms') || isActive('/providers') ? 'active' : ''}`} 
             onClick={() => setPolicyOpen(!policyOpen)} 
             onMouseEnter={() => setPolicyOpen(true)}
           >
-            Kebijakan <span className="dropdown-arrow">▼</span>
+            others <span className="dropdown-arrow">▼</span>
           </button>
           {policyOpen && (
             <div className="nav-dropdown-menu">
+              <Link href="/providers">Payment Gateway</Link>
               <Link href="/privacy">Kebijakan Privasi</Link>
               <Link href="/terms">Ketentuan Layanan</Link>
             </div>
