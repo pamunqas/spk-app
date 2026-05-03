@@ -147,7 +147,7 @@ export default function DocumentationPage() {
       </div>
 
 <div className="landing-footer">
-        <p>&copy; 2026 SPK Payment Gateway untuk Startup di Sleman Dengan Metode MOORA</p>
+        <p>&copy; 2026 Kelompok 8 SPK UJB</p>
         <div className="landing-footer-links">
           <Link href="/privacy">Privacy Policy</Link>
           <Link href="/terms">Terms & Conditions</Link>
