@@ -120,8 +120,8 @@ export default function RegisterPage() {
               </span>
             </label>
 
-            <button className="btn-login" type="submit" disabled={loading || !acceptPolicy}>
-              {loading ? 'Mendaftar…' : 'Daftar Sekarang →'}
+<button className="btn-login" type="submit" disabled={loading || !acceptPolicy}>
+              {loading ? <span className="btn-loading"><span className="spinner-icon"></span>Mendaftar...</span> : 'Daftar Sekarang →'}
             </button>
           </form>
 
