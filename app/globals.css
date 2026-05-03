@@ -980,6 +980,14 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 .dashboard-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
 .dashboard-card.full-width { grid-column: 1 / -1; }
 .dashboard-card.full-width canvas { width: 100% !important; height: 200px !important; }
+
+/* ======== RANKING LIST ======== */
+.ranking-list { display: flex; flex-direction: column; }
+.ranking-item { display: flex; align-items: center; gap: 12px; padding: 12px 18px; border-bottom: 1px solid var(--border); }
+.ranking-item:last-child { border-bottom: none; }
+.ranking-medal { font-size: 16px; width: 28px; text-align: center; }
+.ranking-name { flex: 1; font-size: 13px; font-weight: 500; }
+.ranking-score { font-family: var(--font-mono); font-size: 12px; color: var(--text-3); }
 .dashboard-card-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--border); }
 .dashboard-card-header h2 { font-size: 14px; font-weight: 600; }
 .dashboard-card-link { font-size: 12px; color: var(--primary-light); text-decoration: none; }

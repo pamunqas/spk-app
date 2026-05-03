@@ -166,6 +166,11 @@ export async function PATCH() {
     winner: userComparisons[0].winner,
     providerIds: userComparisons[0].providerIds,
     createdAt: userComparisons[0].createdAt,
+    results: (userComparisons[0].results as any[])?.slice(0, 4).map((r: any, i: number) => ({
+      rank: i + 1,
+      name: r.provider?.name || r.winner || '',
+      yiScore: r.yiScore,
+    })),
   } : null
   
   const providers = await prisma.provider.findMany({ select: { id: true, name: true, initials: true, color: true } })

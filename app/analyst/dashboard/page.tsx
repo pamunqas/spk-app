@@ -12,7 +12,12 @@ interface DashboardData {
   mostChosenCount: number
   monthlyActivity: { label: string; value: number }[]
   trendingProviders: { name: string; count: number }[]
-  lastResult: { winner: string; providerIds: string[]; createdAt: string } | null
+  lastResult: {
+    winner: string
+    providerIds: string[]
+    createdAt: string
+    results: { rank: number; name: string; yiScore: number }[]
+  } | null
   providers: { id: string; name: string; initials: string; color: string }[]
 }
 
@@ -112,33 +117,22 @@ export default function DashboardPage() {
       <div className="dashboard-grid">
         <div className="dashboard-card">
           <div className="dashboard-card-header">
-            <h2>Hasil Terakhir</h2>
+            <h2>Peringkat Terakhir</h2>
             <Link href="/analyst/history" className="dashboard-card-link">Lihat semua →</Link>
           </div>
-          {lastResult ? (
-            <div className="last-result">
-              <div className="last-result-winner">
-                <span className="last-result-label">Pemenang</span>
-                <span className="last-result-name">🏆 {lastResult.winner}</span>
-                <span className="last-result-date">{formatDate(lastResult.createdAt)}</span>
-              </div>
-              <div className="last-result-providers">
-                {lastResult.providerIds.map((id: string) => {
-                  const p = providerMap.get(id)
-                  return p ? (
-                    <div key={id} className="last-result-provider">
-                      <div className="provider-badge" style={{ background: p.color }}>
-                        {p.initials}
-                      </div>
-                      <span>{p.name}</span>
-                    </div>
-                  ) : (
-                    <div key={id} className="last-result-provider">
-                      <span>{id.slice(-6)}</span>
-                    </div>
-                  )
-                })}
-              </div>
+          {lastResult && lastResult.results ? (
+            <div className="ranking-list">
+              {lastResult.results.map((r: { rank: number; name: string; yiScore: number }) => {
+                const medal = r.rank === 1 ? '🏆' : r.rank === 2 ? '🥈' : r.rank === 3 ? '🥉' : `#${r.rank}`
+                const color = r.rank === 1 ? 'var(--gold)' : r.rank === 2 ? '#94A3B8' : r.rank === 3 ? '#B4836B' : 'var(--text-3)'
+                return (
+                  <div key={r.rank} className="ranking-item">
+                    <span className="ranking-medal" style={{ color }}>{medal}</span>
+                    <span className="ranking-name">{r.name}</span>
+                    <span className="ranking-score">{Number(r.yiScore).toFixed(4)}</span>
+                  </div>
+                )
+              })}
             </div>
           ) : (
             <div className="empty-state">
