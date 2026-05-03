@@ -73,19 +73,25 @@ export default function Sidebar({ items, userName, userRole, initials }: Sidebar
       <div className="sidebar-footer">
         <div className="sidebar-user">
           <div className="sidebar-avatar">{initials}</div>
-          <div>
-            <div className="sidebar-user-name">{userName}</div>
-            <div className="sidebar-user-role">{userRole}</div>
-          </div>
+          <div className="sidebar-user-name">{userName}</div>
         </div>
-        <button className="btn-logout" onClick={handleLogout}>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-            <polyline points="16 17 21 12 16 7"/>
-            <line x1="21" y1="12" x2="9" y2="12"/>
-          </svg>
-          Keluar
-        </button>
+        <div className="sidebar-actions">
+          <a href="/documentation" target="_blank" rel="noopener noreferrer" className="sidebar-action-link">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+            Dokumentasi
+          </a>
+          <button className="btn-logout" onClick={handleLogout}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            Keluar
+          </button>
+        </div>
       </div>
     </div>
   )
