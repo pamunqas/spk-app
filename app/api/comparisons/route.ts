@@ -119,6 +119,23 @@ export async function PATCH() {
   
   const lastComparison = userComparisons[0]?.createdAt || null
   
+  function getMonthlyCount(comparisons: typeof userComparisons, monthOffset: number): number {
+    const now = new Date()
+    const targetMonth = new Date(now.getFullYear(), now.getMonth() - monthOffset, 1)
+    const nextMonth = new Date(now.getFullYear(), now.getMonth() - monthOffset + 1, 1)
+    return comparisons.filter(c => {
+      const d = new Date(c.createdAt)
+      return d >= targetMonth && d < nextMonth
+    }).length
+  }
+  
+  const monthlyActivity = [
+    { label: 'Februari', value: getMonthlyCount(userComparisons, 3) },
+    { label: 'Maret', value: getMonthlyCount(userComparisons, 2) },
+    { label: 'April', value: getMonthlyCount(userComparisons, 1) },
+    { label: 'Mei', value: getMonthlyCount(userComparisons, 0) },
+  ]
+  
   const thisMonth = new Date()
   thisMonth.setDate(1)
   thisMonth.setHours(0, 0, 0, 0)
@@ -133,18 +150,8 @@ export async function PATCH() {
   const mostChosen = sortedWinners[0]?.[0] || null
   const mostChosenCount = sortedWinners[0]?.[1] || 0
   
-  const lastMonth = new Date()
-  lastMonth.setMonth(lastMonth.getMonth() - 1)
-  const lastMonthCount = userComparisons.filter(c => new Date(c.createdAt) >= lastMonth).length
-  const prevMonth = new Date()
-  prevMonth.setMonth(prevMonth.getMonth() - 2)
-  const prevMonthCount = userComparisons.filter(c => {
-    const d = new Date(c.createdAt)
-    return d >= prevMonth && d < lastMonth
-  }).length
-  
   const allComparisons = await prisma.comparison.findMany({
-    select: { winner: true, createdAt: true },
+    select: { winner: true },
   })
   const globalWinnerCounts: Record<string, number> = {}
   allComparisons.forEach(c => {
@@ -169,8 +176,7 @@ export async function PATCH() {
     monthlyCount,
     mostChosen,
     mostChosenCount,
-    lastMonthCount,
-    prevMonthCount,
+    monthlyActivity,
     trendingProviders,
     lastResult,
     providers,

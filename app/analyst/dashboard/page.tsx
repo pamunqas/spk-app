@@ -10,8 +10,7 @@ interface DashboardData {
   monthlyCount: number
   mostChosen: string | null
   mostChosenCount: number
-  lastMonthCount: number
-  prevMonthCount: number
+  monthlyActivity: { label: string; value: number }[]
   trendingProviders: { name: string; count: number }[]
   lastResult: { winner: string; providerIds: string[]; createdAt: string } | null
   providers: { id: string; name: string; initials: string; color: string }[]
@@ -57,8 +56,7 @@ export default function DashboardPage() {
     monthlyCount,
     mostChosen,
     mostChosenCount,
-    lastMonthCount,
-    prevMonthCount,
+    monthlyActivity,
     trendingProviders,
     lastResult,
   } = data
@@ -71,9 +69,6 @@ export default function DashboardPage() {
     const date = new Date(dateStr)
     return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
   }
-
-  const monthlyChange = prevMonthCount > 0 ? ((lastMonthCount - prevMonthCount) / prevMonthCount) * 100 : lastMonthCount > 0 ? 100 : 0
-  const isPositiveChange = monthlyChange >= 0
 
   return (
     <div className="dashboard-page">
@@ -100,9 +95,7 @@ export default function DashboardPage() {
         <div className="stat-card">
           <div className="stat-card-label">Bulan Ini</div>
           <div className="stat-card-value">{monthlyCount}</div>
-          <div className={`stat-card-delta ${isPositiveChange ? 'positive' : 'negative'}`}>
-            {isPositiveChange ? '↑' : '↓'} {Math.abs(monthlyChange).toFixed(0)}% vs bulan lalu
-          </div>
+          <div className="stat-card-desc">Mei 2026</div>
         </div>
         <div className="stat-card">
           <div className="stat-card-label">Paling Sering Dipilih</div>
@@ -179,11 +172,11 @@ export default function DashboardPage() {
 
       <div className="dashboard-card full-width">
         <div className="dashboard-card-header">
-          <h2>Aktivitas Bulanan</h2>
+          <h2>Aktivitas 4 Bulan Terakhir</h2>
         </div>
         <BarChart
-          labels={['Bulan Lalu', 'Bulan Ini']}
-          data={[prevMonthCount, lastMonthCount]}
+          labels={monthlyActivity.map(m => m.label)}
+          data={monthlyActivity.map(m => m.value)}
         />
       </div>
 
