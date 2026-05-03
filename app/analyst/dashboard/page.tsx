@@ -38,6 +38,8 @@ export default function DashboardPage() {
 
   const hideToast = () => setToast(null)
 
+  const providers = data?.providers || []
+
   if (loading) {
     return (
       <div className="loading-state">
@@ -65,9 +67,6 @@ export default function DashboardPage() {
     trendingProviders,
     lastResult,
   } = data
-
-  const providers = data.providers || []
-  const providerMap = new Map(providers.map(p => [p.id, p]))
 
   const formatDate = (dateStr: string | null) => {
     if (!dateStr) return '-'
