@@ -34,10 +34,10 @@ export default function FlowchartPage() {
                 </div>
               </div>
               <div className="flow-node-col">
-                <div className="flow-node blue">REGISTERED USER</div>
+                <div className="flow-node blue">REGISTERED</div>
                 <div className="flow-node-box auth">
                   <span>Login → /login</span>
-                  <span>Logout → /login</span>
+                  <span>Logout</span>
                 </div>
               </div>
             </div>
@@ -68,18 +68,19 @@ export default function FlowchartPage() {
             <div className="flow-arrow">↓</div>
             <div className="flow-row branch-row">
               <div className="flow-node-col" style={{flex:1}}>
-                <div className="flow-node purple">MOORA WORKFLOW</div>
+                <div className="flow-node purple">MOORA COMPARISON</div>
                 <div className="flow-node-box process">
-                  <span>1. Select Providers</span>
-                  <span>2. Select Criteria</span>
-                  <span>3. Set Weights</span>
-                  <span>4. Calculate Ranking</span>
-                  <span>5. View Result</span>
+                  <span>1. Select Providers (dari DB)</span>
+                  <span>2. Fill Fuzzy Value per Criteria</span>
+                  <span>3. Hitung Normalization</span>
+                  <span>4. Apply Weights (dari Admin)</span>
+                  <span>5. Calculate Ranking</span>
+                  <span>6. View Result</span>
                 </div>
               </div>
             </div>
             <div className="flow-arrow">↓</div>
-            <div className="flow-row"><div className="flow-node gold">Save History</div></div>
+            <div className="flow-row"><div className="flow-node gold">Save to History</div></div>
             <div className="flow-arrow">↓</div>
             <div className="flow-row"><div className="flow-node end">END</div></div>
           </div>
