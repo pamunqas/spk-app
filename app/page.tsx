@@ -15,9 +15,9 @@ export default function LandingPage() {
       <div className="landing-hero">
         <div className="landing-hero-content">
           <div className="landing-badge">Sistem Pendukung Keputusan</div>
-          <h1>Pemilihan Payment Gateway<br/>untuk Startup di Sleman Dengan Metode MOORA</h1>
+          <h1>Penentuan Pupuk Organik Terbaik<br/>pada Ecofarming Dengan Metode MOORA</h1>
           <p>
-            Membantu Anda memilih payment gateway yang paling tepat untuk startup di wilayah Sleman 
+            Membantu Anda menentukan pupuk organik yang paling tepat untuk kegiatan ecofarming 
             menggunakan metode MOORA (Multi-Objective Optimization on the basis of Ratio Analysis).
           </p>
           <div className="landing-hero-btns">
@@ -52,7 +52,7 @@ export default function LandingPage() {
             </svg>
           </div>
           <h3>Perbandingan Objektif</h3>
-          <p>Bandingkan berbagai payment gateway berdasarkan kriteria bisnis Anda secara objektif.</p>
+          <p>Bandingkan berbagai pupuk organik berdasarkan kriteria ecofarming Anda secara objektif.</p>
         </div>
         <div className="feature">
           <div className="feature-icon">
@@ -63,7 +63,7 @@ export default function LandingPage() {
             </svg>
           </div>
           <h3>Kriteria Customizable</h3>
-          <p>Tentukan bobot kriteria sesuai kebutuhan dan prioritas startup Anda.</p>
+          <p>Tentukan bobot kriteria sesuai kebutuhan dan prioritas ecofarming Anda.</p>
         </div>
         <div className="feature">
           <div className="feature-icon">
@@ -73,7 +73,7 @@ export default function LandingPage() {
             </svg>
           </div>
           <h3>Hasil Cepat</h3>
-          <p>Dapatkan rekomendasi payment gateway terbaik dalam hitungan detik.</p>
+          <p>Dapatkan rekomendasi pupuk organik terbaik dalam hitungan detik.</p>
         </div>
       </div>
 

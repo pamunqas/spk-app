@@ -71,7 +71,7 @@ export default function RegisterPage() {
         <div className="login-card">
           <div className="login-card-header">
             <h2>Buat Akun Baru</h2>
-            <p>Daftar sebagai analis untuk mulai membandingkan gateway.</p>
+            <p>Daftar sebagai analis untuk mulai membandingkan pupuk organik.</p>
           </div>
 
           <form className="login-form" onSubmit={handleSubmit} style={{ gap: 12 }}>

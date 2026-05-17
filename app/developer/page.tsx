@@ -41,7 +41,7 @@ export default function DeveloperPage() {
       <div className="dev-container">
         <div className="doc-header">
           <h1>Tentang Kami</h1>
-          <p>Tim pengembang Sistem Pendukung Keputusan Pemilihan Payment Gateway untuk Startup di Sleman.</p>
+          <p>Tim pengembang Sistem Pendukung Keputusan Penentuan Pupuk Organik Terbaik pada Ecofarming Menggunakan Metode MOORA.</p>
         </div>
 
         <div className="dev-grid">

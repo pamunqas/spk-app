@@ -2,8 +2,8 @@ import { prisma } from '@/lib/prisma'
 import AnalyticsClient from './AnalyticsClient'
 
 const CRITERION_COLORS: Record<string, string> = {
-  mdrFee: '#F87171', settlementTime: '#F59E0B',
-  successRate: '#10B981', setupFee: '#A78BFA', supportQuality: '#818CF8',
+  harga: '#F87171', kandunganNutrisi: '#10B981',
+  kualitas: '#818CF8', dampak: '#A78BFA', ramahLingkungan: '#34D399', ketersediaan: '#F59E0B',
 }
 
 export default async function AdminAnalytics() {

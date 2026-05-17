@@ -29,11 +29,12 @@ model Provider {
   logo           String?
   status         String   @default("active")
   description    String
-  mdrFee         Float
-  settlementTime Float
-  successRate    Float
-  setupFee       Float
-  supportQuality Float
+  harga            Float
+  kandunganNutrisi Float
+  kualitas         Float
+  dampak           Float
+  ramahLingkungan  Float
+  ketersediaan     Float
   createdAt      DateTime @default(now())
 }
 

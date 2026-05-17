@@ -19,16 +19,16 @@ export default function ProvidersClient({ initialProviders }: Props) {
   const hideToast = useCallback(() => setToast(null), [])
 
   const openAdd = () => {
-    setForm({ color: '#6366F1', mdrFee: '1.5', settlementTime: '1.0', successRate: '98.0', setupFee: '0', supportQuality: '7.5' })
+    setForm({ color: '#6366F1', harga: '25000', kandunganNutrisi: '80', kualitas: '8', dampak: '8', ramahLingkungan: '8', ketersediaan: '8' })
     setModal('add')
   }
   const openEdit = (idx: number) => {
     const p = providers[idx]
     setForm({
       color: p.color, description: p.description,
-      mdrFee: String(p.mdrFee), settlementTime: String(p.settlementTime),
-      successRate: String(p.successRate), setupFee: String(p.setupFee),
-      supportQuality: String(p.supportQuality),
+      harga: String(p.harga), kandunganNutrisi: String(p.kandunganNutrisi),
+      kualitas: String(p.kualitas), dampak: String(p.dampak),
+      ramahLingkungan: String(p.ramahLingkungan), ketersediaan: String(p.ketersediaan),
     })
     setEditIdx(idx)
     setModal('edit')
@@ -87,8 +87,8 @@ export default function ProvidersClient({ initialProviders }: Props) {
         <table className="data-table">
           <thead>
             <tr>
-              <th>Penyedia</th><th>Biaya MDR</th><th>Penyelesaian</th>
-              <th>Tingkat Keberhasilan</th><th>Dukungan</th><th>Status</th><th>Aksi</th>
+              <th>Penyedia</th><th>Harga</th><th>Nutrisi</th>
+              <th>Kualitas</th><th>Dampak</th><th>Ramah Lingk.</th><th>Ketersediaan</th><th>Status</th><th>Aksi</th>
             </tr>
           </thead>
           <tbody>
@@ -105,10 +105,12 @@ export default function ProvidersClient({ initialProviders }: Props) {
                     </div>
                   </div>
                 </td>
-                <td className="cell-mono">{p.mdrFee}%</td>
-                <td className="cell-mono">{p.settlementTime}d</td>
-                <td className="cell-mono" style={{ color: 'var(--green)' }}>{p.successRate}%</td>
-                <td className="cell-mono">{p.supportQuality}/10</td>
+                <td className="cell-mono">Rp{p.harga.toLocaleString()}</td>
+                <td className="cell-mono">{p.kandunganNutrisi}%</td>
+                <td className="cell-mono">{p.kualitas}/10</td>
+                <td className="cell-mono">{p.dampak}/10</td>
+                <td className="cell-mono">{p.ramahLingkungan}/10</td>
+                <td className="cell-mono">{p.ketersediaan}/10</td>
                 <td><span className={`badge ${p.status}`}>{p.status}</span></td>
                 <td>
                   <div style={{ display: 'flex', gap: 6 }}>
@@ -137,11 +139,12 @@ export default function ProvidersClient({ initialProviders }: Props) {
           <div className="provider-form">
             <div><label>Nama Penyedia</label><input placeholder="mis. PayGate Pro" value={f('name')} onChange={e => sf('name')(e.target.value)} /></div>
             <div><label>Inisial (2 karakter)</label><input maxLength={2} placeholder="PG" value={f('initials')} onChange={e => sf('initials')(e.target.value)} /></div>
-            <div><label>Biaya MDR (%)</label><input type="number" step="0.1" placeholder="1.5" value={f('mdrFee')} onChange={e => sf('mdrFee')(e.target.value)} /></div>
-            <div><label>Penyelesaian (hari)</label><input type="number" step="0.5" placeholder="1.0" value={f('settlementTime')} onChange={e => sf('settlementTime')(e.target.value)} /></div>
-            <div><label>Tingkat Keberhasilan (%)</label><input type="number" step="0.1" placeholder="99.0" value={f('successRate')} onChange={e => sf('successRate')(e.target.value)} /></div>
-            <div><label>Biaya Pengaturan (USD)</label><input type="number" placeholder="0" value={f('setupFee')} onChange={e => sf('setupFee')(e.target.value)} /></div>
-            <div><label>Kualitas Dukungan (/10)</label><input type="number" step="0.5" placeholder="8.0" value={f('supportQuality')} onChange={e => sf('supportQuality')(e.target.value)} /></div>
+            <div><label>Harga (Rp)</label><input type="number" step="1000" placeholder="25000" value={f('harga')} onChange={e => sf('harga')(e.target.value)} /></div>
+            <div><label>Kandungan Nutrisi (%)</label><input type="number" step="0.1" placeholder="80" value={f('kandunganNutrisi')} onChange={e => sf('kandunganNutrisi')(e.target.value)} /></div>
+            <div><label>Kualitas (/10)</label><input type="number" step="0.5" placeholder="8.0" value={f('kualitas')} onChange={e => sf('kualitas')(e.target.value)} /></div>
+            <div><label>Dampak (/10)</label><input type="number" step="0.5" placeholder="8.0" value={f('dampak')} onChange={e => sf('dampak')(e.target.value)} /></div>
+            <div><label>Ramah Lingkungan (/10)</label><input type="number" step="0.5" placeholder="8.0" value={f('ramahLingkungan')} onChange={e => sf('ramahLingkungan')(e.target.value)} /></div>
+            <div><label>Ketersediaan (/10)</label><input type="number" step="0.5" placeholder="8.0" value={f('ketersediaan')} onChange={e => sf('ketersediaan')(e.target.value)} /></div>
             <div><label>Warna Merek</label><input placeholder="#6366F1" value={f('color')} onChange={e => sf('color')(e.target.value)} /></div>
             <div className="full"><label>Deskripsi</label><input placeholder="Deskripsi singkat..." value={f('description')} onChange={e => sf('description')(e.target.value)} /></div>
           </div>
@@ -159,11 +162,12 @@ export default function ProvidersClient({ initialProviders }: Props) {
           </>}
         >
           <div className="provider-form">
-            <div><label>Biaya MDR (%)</label><input type="number" step="0.1" value={f('mdrFee')} onChange={e => sf('mdrFee')(e.target.value)} /></div>
-            <div><label>Penyelesaian (hari)</label><input type="number" step="0.5" value={f('settlementTime')} onChange={e => sf('settlementTime')(e.target.value)} /></div>
-            <div><label>Tingkat Keberhasilan (%)</label><input type="number" step="0.1" value={f('successRate')} onChange={e => sf('successRate')(e.target.value)} /></div>
-            <div><label>Biaya Pengaturan (USD)</label><input type="number" value={f('setupFee')} onChange={e => sf('setupFee')(e.target.value)} /></div>
-            <div><label>Kualitas Dukungan (/10)</label><input type="number" step="0.5" value={f('supportQuality')} onChange={e => sf('supportQuality')(e.target.value)} /></div>
+            <div><label>Harga (Rp)</label><input type="number" step="1000" value={f('harga')} onChange={e => sf('harga')(e.target.value)} /></div>
+            <div><label>Kandungan Nutrisi (%)</label><input type="number" step="0.1" value={f('kandunganNutrisi')} onChange={e => sf('kandunganNutrisi')(e.target.value)} /></div>
+            <div><label>Kualitas (/10)</label><input type="number" step="0.5" value={f('kualitas')} onChange={e => sf('kualitas')(e.target.value)} /></div>
+            <div><label>Dampak (/10)</label><input type="number" step="0.5" value={f('dampak')} onChange={e => sf('dampak')(e.target.value)} /></div>
+            <div><label>Ramah Lingkungan (/10)</label><input type="number" step="0.5" value={f('ramahLingkungan')} onChange={e => sf('ramahLingkungan')(e.target.value)} /></div>
+            <div><label>Ketersediaan (/10)</label><input type="number" step="0.5" value={f('ketersediaan')} onChange={e => sf('ketersediaan')(e.target.value)} /></div>
             <div><label>Warna Merek</label><input value={f('color')} onChange={e => sf('color')(e.target.value)} /></div>
             <div className="full"><label>Deskripsi</label><input value={f('description')} onChange={e => sf('description')(e.target.value)} /></div>
           </div>

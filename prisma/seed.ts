@@ -9,11 +9,12 @@ const prisma = new PrismaClient({ adapter } as any)
 async function main() {
   // Criteria
   const criteria = [
-    { key: 'mdrFee',        label: 'MDR Fee',        weight: 0.30, type: 'cost',    unit: '%',    position: 0 },
-    { key: 'settlementTime',label: 'Settlement Time', weight: 0.25, type: 'cost',    unit: 'days', position: 1 },
-    { key: 'successRate',   label: 'Success Rate',    weight: 0.25, type: 'benefit', unit: '%',    position: 2 },
-    { key: 'setupFee',      label: 'Setup Fee',       weight: 0.10, type: 'cost',    unit: 'USD',  position: 3 },
-    { key: 'supportQuality',label: 'Support Quality', weight: 0.10, type: 'benefit', unit: '/10', position: 4 },
+    { key: 'harga',            label: 'Harga',           weight: 0.20, type: 'cost',    unit: 'Rp',      position: 0 },
+    { key: 'kandunganNutrisi', label: 'Kandungan Nutrisi', weight: 0.25, type: 'benefit', unit: '%',     position: 1 },
+    { key: 'kualitas',         label: 'Kualitas',        weight: 0.15, type: 'benefit', unit: '/10',    position: 2 },
+    { key: 'dampak',           label: 'Dampak',          weight: 0.20, type: 'benefit', unit: '/10',    position: 3 },
+    { key: 'ramahLingkungan',  label: 'Ramah Lingkungan', weight: 0.10, type: 'benefit', unit: '/10',   position: 4 },
+    { key: 'ketersediaan',     label: 'Ketersediaan',    weight: 0.10, type: 'benefit', unit: '/10',    position: 5 },
   ]
   for (const c of criteria) {
     await prisma.criterion.upsert({ where: { key: c.key }, update: c, create: c })
@@ -21,18 +22,11 @@ async function main() {
 
   // Providers
   const providers = [
-    { slug:'midtrans',   name:'Midtrans',      initials:'MT', color:'#003D7A', logo:'/images/providers/midtrans.png',  status:'active', description:'Industry standard for enterprise & startups. Backed by GoTo Group.',     mdrFee:2.0,  settlementTime:1.5, successRate:99.9, setupFee:0, supportQuality:8.5 },
-    { slug:'xendit',     name:'Xendit',        initials:'XD', color:'#0057FF', logo:'/images/providers/xendit.png', status:'active', description:'Developer-first gateway with modern APIs and rapid real-time settlement.', mdrFee:1.5,  settlementTime:1.0, successRate:99.9, setupFee:0, supportQuality:9.0 },
-    { slug:'doku',       name:'DOKU',          initials:'DK', color:'#00529B', logo:'/images/providers/doku.png',   status:'active', description:'Pioneer in Indonesia, complete BI licenses, deep retail integrations.',    mdrFee:1.75, settlementTime:2.0, successRate:98.5, setupFee:0, supportQuality:8.0 },
-    { slug:'faspay',     name:'Faspay',        initials:'FP', color:'#E8461A', logo:'/images/providers/faspay.png',status:'active', description:'Strong B2B player excelling in Virtual Account aggregation.',              mdrFee:1.5,  settlementTime:1.0, successRate:98.0, setupFee:0, supportQuality:7.5 },
-    { slug:'oy',         name:'OY! Indonesia', initials:'OY', color:'#00AA5B', logo:'/images/providers/oy.png',   status:'active', description:'B2B gateway specializing in disbursements and flat-rate routing.',         mdrFee:1.5,  settlementTime:1.0, successRate:99.0, setupFee:0, supportQuality:8.0 },
-    { slug:'prismalink', name:'Prismalink',    initials:'PL', color:'#7B2FBE', logo:'/images/providers/prismalink.png',status:'active', description:'Custom enterprise integrations, white-labeling, healthcare/education.',    mdrFee:1.5,  settlementTime:1.0, successRate:98.0, setupFee:0, supportQuality:7.0 },
-    { slug:'espay',      name:'Espay',         initials:'EP', color:'#E67E22', logo:'/images/providers/espay.png', status:'active', description:'Mid-market e-commerce with unique B2C2B model.',                           mdrFee:1.75, settlementTime:1.0, successRate:98.0, setupFee:0, supportQuality:7.5 },
-    { slug:'winpay',     name:'Winpay',        initials:'WP', color:'#27AE60', logo:'/images/providers/winpay.png',status:'active', description:'Social commerce and MSMEs needing instant checkout links.',                mdrFee:1.5,  settlementTime:1.0, successRate:98.0, setupFee:0, supportQuality:7.0 },
-    { slug:'nicepay',    name:'Nicepay',       initials:'NP', color:'#FF6600', logo:'/images/providers/nicepay.png',status:'active', description:'South Korean JV with highly stable infrastructure for enterprise.',        mdrFee:1.5,  settlementTime:2.5, successRate:99.0, setupFee:0, supportQuality:7.5 },
-    { slug:'ipaymu',     name:'iPaymu',        initials:'IP', color:'#2D9CDB', logo:'/images/providers/ipaymu.png',status:'active', description:'Ease-of-use focus for small merchants, escrow, instant plugins.',          mdrFee:1.5,  settlementTime:1.0, successRate:98.0, setupFee:0, supportQuality:7.5 },
-    { slug:'durianpay',  name:'Durianpay',     initials:'DP', color:'#F39C12', logo:'/images/providers/durianpay.png',status:'active', description:'Aggregator-of-aggregators, dynamic routing for best success rates.',       mdrFee:1.5,  settlementTime:1.0, successRate:99.5, setupFee:0, supportQuality:8.5 },
-    { slug:'hitpay',     name:'HitPay',        initials:'HP', color:'#6C5CE7', logo:'/images/providers/hitpay.png', status:'active', description:'SMEs with omni-channel needs, seamless POS + online, no coding.',          mdrFee:1.5,  settlementTime:1.0, successRate:99.0, setupFee:0, supportQuality:8.0 },
+    { slug:'kompos',       name:'Pupuk Kompos',      initials:'PK', color:'#4A7C3F', logo:'/images/providers/kompos.png',  status:'active', description:'Pupuk organik dari sisa tanaman dan limbah organik yang telah melalui dekomposisi.',  harga:25000, kandunganNutrisi:6.2, kualitas:9, dampak:8, ramahLingkungan:10, ketersediaan:9 },
+    { slug:'kandang',      name:'Pupuk Kandang',     initials:'PN', color:'#8B5E3C', logo:'/images/providers/kandang.png', status:'active', description:'Pupuk organik dari kotoran hewan ternak. Mengandung unsur hara makro dan mikro.',  harga:35000, kandunganNutrisi:4.5, kualitas:7, dampak:7, ramahLingkungan:8, ketersediaan:9 },
+    { slug:'cair',         name:'Pupuk Organik Cair', initials:'PC', color:'#2E86AB', logo:'/images/providers/cair.png',   status:'active', description:'Pupuk organik cair yang mudah diserap tanaman. Cocok untuk aplikasi daun.',       harga:75000, kandunganNutrisi:3.5, kualitas:6, dampak:6, ramahLingkungan:7, ketersediaan:6 },
+    { slug:'vermikompos',  name:'Vermikompos',       initials:'VK', color:'#A23B72', logo:'/images/providers/vermikompos.png',status:'active', description:'Hasil budidaya cacing tanah. Mengandung hormon pertumbuhan alami dan mikroba.', harga:55000, kandunganNutrisi:7.5, kualitas:9, dampak:9, ramahLingkungan:10, ketersediaan:4 },
+    { slug:'bokashi',      name:'Bokashi',           initials:'BK', color:'#F18F01', logo:'/images/providers/bokashi.png', status:'active', description:'Hasil fermentasi dengan EM4. Proses cepat dan kaya mikroorganisme.',              harga:15000, kandunganNutrisi:3.8, kualitas:7, dampak:7, ramahLingkungan:9, ketersediaan:7 },
   ]
   for (const p of providers) {
     await prisma.provider.upsert({ where: { slug: p.slug }, update: p, create: p })
@@ -41,12 +35,12 @@ async function main() {
   // Users
   const hash = await bcrypt.hash('password', 10)
   const users = [
-    { email:'admin@spkgateway.com', name:'Admin User',      role:'admin',    company:'SPK Platform',       title:'Platform Administrator', avatarColor:'#1a1a2e' },
-    { email:'user@spkgateway.com',  name:'Sarah Analyst',   role:'analyst',  company:'FinTech Ventures ID', title:'Payments Analyst',       avatarColor:'#1a2a3e' },
-    { email:'m.chen@fintech.id',    name:'Marcus Chen',     role:'analyst',  company:'Fintech.id',          title:'Senior Analyst',         avatarColor:'#1a3a2a' },
-    { email:'rini.w@startup.co',    name:'Rini Wulandari',  role:'analyst',  company:'Startup.co',          title:'Payment Specialist',     avatarColor:'#2a1a3a' },
-    { email:'budi.s@commerce.id',   name:'Budi Santoso',    role:'analyst',  company:'Commerce.id',         title:'Business Analyst',       avatarColor:'#3a1a1a' },
-    { email:'dewi.r@payments.io',   name:'Dewi Rahayu',     role:'analyst',  company:'Payments.io',         title:'Lead Analyst',           avatarColor:'#3a2a1a' },
+    { email:'admin@spkecofarming.com', name:'Admin User',      role:'admin',    company:'SPK Ecofarming',       title:'Platform Administrator', avatarColor:'#1a1a2e' },
+    { email:'user@spkecofarming.com',  name:'Sarah Analyst',   role:'analyst',  company:'Ecofarming ID',         title:'Pupuk Analyst',          avatarColor:'#1a2a3e' },
+    { email:'m.chen@ecofarm.id',       name:'Marcus Chen',     role:'analyst',  company:'Ecofarm.id',           title:'Senior Analyst',         avatarColor:'#1a3a2a' },
+    { email:'rini.w@organic.co',       name:'Rini Wulandari',  role:'analyst',  company:'Organic.co',           title:'Kompos Specialist',      avatarColor:'#2a1a3a' },
+    { email:'budi.s@farmers.id',       name:'Budi Santoso',    role:'analyst',  company:'Farmers.id',           title:'Agriculture Analyst',    avatarColor:'#3a1a1a' },
+    { email:'dewi.r@ecofarming.io',    name:'Dewi Rahayu',     role:'analyst',  company:'Ecofarming.io',        title:'Lead Analyst',           avatarColor:'#3a2a1a' },
   ]
   for (const u of users) {
     await prisma.user.upsert({
@@ -60,8 +54,8 @@ async function main() {
   const analysts = await prisma.user.findMany({ where: { role: 'analyst' }, select: { id: true } })
   const activeProviders = await prisma.provider.findMany({ where: { status: 'active' }, select: { id: true, name: true } })
 
-  // Winners weighted toward Xendit, Midtrans, Durianpay
-  const topProviders = ['Xendit', 'Midtrans', 'Durianpay', 'OY! Indonesia', 'Faspay', 'DOKU']
+  // Winners weighted toward top pupuk organik
+  const topProviders = ['Pupuk Kompos', 'Vermikompos', 'Pupuk Kandang', 'Bokashi', 'Pupuk Organik Cair']
 
   const dummyComparisons = []
   const now = Date.now()
@@ -98,7 +92,7 @@ async function main() {
     await prisma.comparison.create({ data: c })
   }
 
-  console.log('✓ Seed complete — 12 providers, 5 criteria, 6 users, 50 comparison records')
+  console.log('✓ Seed complete — 5 providers, 6 criteria, 6 users, 50 comparison records')
 }
 
 main().catch(console.error).finally(() => prisma.$disconnect())

@@ -34,9 +34,9 @@ export default function Sidebar({ items, userName, userRole, initials }: Sidebar
           <svg width="28" height="28" viewBox="0 0 56 56" fill="none" style={{ flexShrink: 0 }}>
             <defs>
               <linearGradient id="sb-logo-bg" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#4F46E5"/>
-                <stop offset="55%" stopColor="#7C3AED"/>
-                <stop offset="100%" stopColor="#A78BFA"/>
+                <stop offset="0%" stopColor="#4C5C2D"/>
+                <stop offset="55%" stopColor="#6B8050"/>
+                <stop offset="100%" stopColor="#8A9B6E"/>
               </linearGradient>
             </defs>
             <path d="M28 2.5 L51 15.25 L51 40.75 L28 53.5 L5 40.75 L5 15.25 Z" fill="url(#sb-logo-bg)"/>
@@ -49,8 +49,8 @@ export default function Sidebar({ items, userName, userRole, initials }: Sidebar
             <polyline points="16.5,29 28.5,17 40.5,24" stroke="rgba(255,255,255,0.5)" strokeWidth="1.4" fill="none" strokeLinejoin="round" strokeLinecap="round"/>
           </svg>
           <div>
-            <div className="sidebar-brand-name"><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.15em', color: 'var(--primary-light)' }}>SPK</span><span style={{ fontStyle: 'italic' }}> Gateway</span></div>
-            <div className="sidebar-brand-tag">Startup · Sleman</div>
+            <div className="sidebar-brand-name"><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.15em', color: 'var(--primary-light)' }}>SPK</span><span style={{ fontStyle: 'italic' }}> Ecofarming</span></div>
+            <div className="sidebar-brand-tag">Pupuk Organik · MOORA</div>
           </div>
         </div>
       </div>

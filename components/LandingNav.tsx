@@ -14,9 +14,9 @@ export default function LandingNav() {
           <svg width="32" height="32" viewBox="0 0 56 56" fill="none" style={{ flexShrink: 0 }}>
             <defs>
               <linearGradient id="nav-logo-bg" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#4F46E5"/>
-                <stop offset="55%" stopColor="#7C3AED"/>
-                <stop offset="100%" stopColor="#A78BFA"/>
+                <stop offset="0%" stopColor="#4C5C2D"/>
+                <stop offset="55%" stopColor="#6B8050"/>
+                <stop offset="100%" stopColor="#8A9B6E"/>
               </linearGradient>
             </defs>
             <path d="M28 2.5 L51 15.25 L51 40.75 L28 53.5 L5 40.75 L5 15.25 Z" fill="url(#nav-logo-bg)"/>
@@ -28,11 +28,11 @@ export default function LandingNav() {
             <circle cx="40.5" cy="24" r="3"   fill="rgba(255,255,255,0.82)"/>
             <polyline points="16.5,29 28.5,17 40.5,24" stroke="rgba(255,255,255,0.5)" strokeWidth="1.4" fill="none" strokeLinejoin="round" strokeLinecap="round"/>
           </svg>
-          <span><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.15em', color: 'var(--primary-light)' }}>SPK</span><span style={{ fontStyle: 'italic' }}> Gateway</span></span>
+          <span><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.15em', color: 'var(--primary-light)' }}>SPK</span><span style={{ fontStyle: 'italic' }}> Ecofarming</span></span>
         </Link>
       </div>
       <div className="landing-nav-links">
-        <Link href="/providers" className={isActive('/providers') ? 'active' : ''}>Providers</Link>
+        <Link href="/criteria" className={isActive('/criteria') ? 'active' : ''}>Pupuk Organik</Link>
         <Link href="/documentation" className={isActive('/documentation') ? 'active' : ''}>Dokumentasi</Link>
         <Link href="/developer" className={isActive('/developer') ? 'active' : ''}>Tentang Kami</Link>
         <Link href="/login" className="btn-login-nav">Masuk</Link>

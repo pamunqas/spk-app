@@ -16,11 +16,12 @@ export interface ProviderInput {
   initials: string
   color: string
   description: string
-  mdrFee: number
-  settlementTime: number
-  successRate: number
-  setupFee: number
-  supportQuality: number
+  harga: number
+  kandunganNutrisi: number
+  kualitas: number
+  dampak: number
+  ramahLingkungan: number
+  ketersediaan: number
 }
 
 export interface MooraResult {
@@ -42,7 +43,7 @@ export interface MooraComputation {
 
 export function computeMoora(providers: ProviderInput[], criteria: Criterion[]): MooraComputation {
   const keys = criteria.map(c => c.key) as (keyof Pick<
-    ProviderInput, 'mdrFee'|'settlementTime'|'successRate'|'setupFee'|'supportQuality'>)[]
+    ProviderInput, 'harga'|'kandunganNutrisi'|'kualitas'|'dampak'|'ramahLingkungan'|'ketersediaan'>)[]
 
   const raw = providers.map(p => keys.map(k => p[k] as number))
 

@@ -44,7 +44,7 @@ export default function LoginPage() {
         <div className="login-card">
           <div className="login-card-header">
             <h2>Selamat datang kembali</h2>
-            <p>Masuk untuk mengakses platform SPK Gateway.</p>
+            <p>Masuk untuk mengakses platform SPK Ecofarming.</p>
           </div>
 
           <form className="login-form" onSubmit={handleSubmit}>
@@ -79,6 +79,17 @@ export default function LoginPage() {
               Daftar
             </Link>
           </div>
+        </div>
+
+        {/* Demo credentials */}
+        <div style={{
+          marginTop: 12, padding: '10px 14px', borderRadius: 8,
+          background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.2)',
+          fontSize: 11, color: 'var(--text-3)', lineHeight: 1.6,
+        }}>
+          <strong style={{ color: '#F59E0B' }}>Akun Demo</strong><br />
+          Admin: <code style={{ fontFamily: 'var(--font-mono)', fontSize: 10, background: 'var(--surface)', padding: '1px 4px', borderRadius: 3 }}>admin@spkecofarming.com</code> / <code style={{ fontFamily: 'var(--font-mono)', fontSize: 10, background: 'var(--surface)', padding: '1px 4px', borderRadius: 3 }}>password</code><br />
+          Analis: <code style={{ fontFamily: 'var(--font-mono)', fontSize: 10, background: 'var(--surface)', padding: '1px 4px', borderRadius: 3 }}>user@spkecofarming.com</code> / <code style={{ fontFamily: 'var(--font-mono)', fontSize: 10, background: 'var(--surface)', padding: '1px 4px', borderRadius: 3 }}>password</code>
         </div>
       </div>
     </div>

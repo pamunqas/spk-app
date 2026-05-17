@@ -3,8 +3,8 @@ import { computeMoora } from '@/lib/moora'
 import RankList from './RankList'
 
 const CRITERION_COLORS: Record<string, string> = {
-  mdrFee: '#F87171', settlementTime: '#F59E0B',
-  successRate: '#10B981', setupFee: '#A78BFA', supportQuality: '#818CF8',
+  harga: '#F87171', kandunganNutrisi: '#10B981',
+  kualitas: '#818CF8', dampak: '#A78BFA', ramahLingkungan: '#34D399', ketersediaan: '#F59E0B',
 }
 
 export default async function AdminDashboard() {
@@ -17,8 +17,8 @@ export default async function AdminDashboard() {
 
   const inputs = providers.filter(p => p.status === 'active').map(p => ({
     id: p.id, slug: p.slug, name: p.name, initials: p.initials, color: p.color,
-    description: p.description, mdrFee: p.mdrFee, settlementTime: p.settlementTime,
-    successRate: p.successRate, setupFee: p.setupFee, supportQuality: p.supportQuality,
+    description: p.description, harga: p.harga, kandunganNutrisi: p.kandunganNutrisi,
+    kualitas: p.kualitas, dampak: p.dampak, ramahLingkungan: p.ramahLingkungan, ketersediaan: p.ketersediaan,
   }))
   const crit = criteria.map(c => ({
     key: c.key, label: c.label, weight: c.weight,

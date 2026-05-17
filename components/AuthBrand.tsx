@@ -8,9 +8,9 @@ export default function AuthBrand() {
         <svg className="auth-logo-mark" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="spk-logo-bg" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%"   stopColor="#4F46E5"/>
-              <stop offset="55%"  stopColor="#7C3AED"/>
-              <stop offset="100%" stopColor="#A78BFA"/>
+              <stop offset="0%"   stopColor="#4C5C2D"/>
+              <stop offset="55%"  stopColor="#6B8050"/>
+              <stop offset="100%" stopColor="#8A9B6E"/>
             </linearGradient>
             <linearGradient id="spk-logo-bar-hi" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%"   stopColor="rgba(255,255,255,1)"/>
@@ -53,7 +53,7 @@ export default function AuthBrand() {
 
         <div className="auth-wordmark">
           <span className="auth-spk">SPK</span>
-          <span className="auth-gateway">Gateway</span>
+          <span className="auth-gateway">Ecofarming</span>
         </div>
       </Link>
 
@@ -66,8 +66,8 @@ export default function AuthBrand() {
       </div>
 
       <p className="auth-tagline-text">
-        Sistem Pendukung Keputusan Pemilihan<br/>
-        Payment Gateway untuk Startup
+        Sistem Pendukung Keputusan Penentuan<br/>
+        Pupuk Organik Terbaik pada Ecofarming
       </p>
     </div>
   )

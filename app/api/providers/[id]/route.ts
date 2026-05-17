@@ -27,7 +27,7 @@ function validateProviderUpdate(body: Record<string, unknown>): string | null {
   if (body.description !== undefined && typeof body.description !== 'string') {
     return 'Deskripsi harus berupa string'
   }
-  const numericFields = ['mdrFee', 'settlementTime', 'successRate', 'setupFee', 'supportQuality']
+  const numericFields = ['harga', 'kandunganNutrisi', 'kualitas', 'dampak', 'ramahLingkungan', 'ketersediaan']
   for (const field of numericFields) {
     if (body[field] !== undefined) {
       const val = parseFloat(body[field] as string)
@@ -68,11 +68,12 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     data: {
       color: (body.color as string)?.trim() || existing.color,
       description: (body.description as string)?.trim() ?? existing.description,
-      mdrFee: parseFloat(body.mdrFee as string) || existing.mdrFee,
-      settlementTime: parseFloat(body.settlementTime as string) || existing.settlementTime,
-      successRate: parseFloat(body.successRate as string) || existing.successRate,
-      setupFee: parseFloat(body.setupFee as string) || existing.setupFee,
-      supportQuality: parseFloat(body.supportQuality as string) || existing.supportQuality,
+      harga: parseFloat(body.harga as string) || existing.harga,
+      kandunganNutrisi: parseFloat(body.kandunganNutrisi as string) || existing.kandunganNutrisi,
+      kualitas: parseFloat(body.kualitas as string) || existing.kualitas,
+      dampak: parseFloat(body.dampak as string) || existing.dampak,
+      ramahLingkungan: parseFloat(body.ramahLingkungan as string) || existing.ramahLingkungan,
+      ketersediaan: parseFloat(body.ketersediaan as string) || existing.ketersediaan,
     },
   })
   

@@ -2,16 +2,17 @@ import { prisma } from '@/lib/prisma'
 import WeightsClient from './WeightsClient'
 
 const CRITERION_COLORS: Record<string, string> = {
-  mdrFee: '#F87171', settlementTime: '#F59E0B',
-  successRate: '#10B981', setupFee: '#A78BFA', supportQuality: '#818CF8',
+  harga: '#F87171', kandunganNutrisi: '#10B981',
+  kualitas: '#818CF8', dampak: '#A78BFA', ramahLingkungan: '#34D399', ketersediaan: '#F59E0B',
 }
 
 const CRITERION_DESC: Record<string, string> = {
-  mdrFee:         'Biaya transaksi yang dikenakan per pembayaran. Lebih rendah lebih baik untuk merchant berskala besar.',
-  settlementTime: 'Hari kerja untuk dana sampai ke akun Anda. Lebih cepat meningkatkan arus kas.',
-  successRate:    '% transaksi yang berhasil diselesaikan. Setiap 1% penting pada volume tinggi.',
-  setupFee:       'Biaya integrasi satu kali. Bobot lebih rendah karena cepat teramortisasi.',
-  supportQuality: 'Responsivitas dan cakupan dukungan teknis dalam skala 10 poin.',
+  harga:            'Biaya pembelian pupuk per satuan. Lebih rendah lebih baik untuk petani.',
+  kandunganNutrisi: 'Persentase kandungan unsur hara esensial (N, P, K) dalam pupuk.',
+  kualitas:        'Kualitas keseluruhan pupuk dalam skala 10 poin.',
+  dampak:          'Dampak positif terhadap pertumbuhan tanaman dan kesuburan tanah.',
+  ramahLingkungan: 'Tingkat keramahan terhadap lingkungan dalam proses produksi dan penggunaan.',
+  ketersediaan:    'Ketersediaan pupuk di pasar dan kemudahan mendapatkannya.',
 }
 
 export default async function AdminWeights() {

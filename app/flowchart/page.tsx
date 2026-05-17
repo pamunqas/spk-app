@@ -12,7 +12,7 @@ export default function FlowchartPage() {
       <div className="doc-container">
         <div className="doc-header">
           <h1>System Flowchart</h1>
-          <p>Alur sistem SPK Payment Gateway</p>
+          <p>Alur sistem SPK Penentuan Pupuk Organik pada Ecofarming</p>
         </div>
 
         {/* USER FLOW */}
@@ -27,7 +27,7 @@ export default function FlowchartPage() {
                 <div className="flow-node green">VISITOR</div>
                 <div className="flow-node-box">
                   <span>Landing Page → /</span>
-                  <span>Providers → /providers</span>
+                  <span>Kriteria → /criteria</span>
                   <span>Dokumentasi → /documentation</span>
                   <span>Login → /login</span>
                   <span>Register → /register</span>

@@ -38,7 +38,7 @@ function validateProvider(body: Record<string, unknown>): string | null {
       return 'Warna harus berupa kode hex yang valid'
     }
   }
-  const numericFields = ['mdrFee', 'settlementTime', 'successRate', 'setupFee', 'supportQuality']
+  const numericFields = ['harga', 'kandunganNutrisi', 'kualitas', 'dampak', 'ramahLingkungan', 'ketersediaan']
   for (const field of numericFields) {
     if (body[field] !== undefined) {
       const val = parseFloat(body[field] as string)
@@ -89,11 +89,12 @@ const name = (body.name as string).trim()
       color: ((body.color as string)?.trim() || '#6366F1'),
       status: 'active',
       description: ((body.description as string)?.trim() || ''),
-      mdrFee: parseFloat(body.mdrFee as string) || 1.5,
-      settlementTime: parseFloat(body.settlementTime as string) || 1.0,
-      successRate: parseFloat(body.successRate as string) || 98.0,
-      setupFee: parseFloat(body.setupFee as string) || 0,
-      supportQuality: parseFloat(body.supportQuality as string) || 7.5,
+      harga: parseFloat(body.harga as string) || 25000,
+      kandunganNutrisi: parseFloat(body.kandunganNutrisi as string) || 80,
+      kualitas: parseFloat(body.kualitas as string) || 8,
+      dampak: parseFloat(body.dampak as string) || 8,
+      ramahLingkungan: parseFloat(body.ramahLingkungan as string) || 8,
+      ketersediaan: parseFloat(body.ketersediaan as string) || 8,
     },
   })
   createAudit((session.user as any).id, 'CREATE', 'provider', provider.id, { name: provider.name })

@@ -80,7 +80,7 @@ export default function DashboardPage() {
       <div className="dashboard-header">
         <div className="dashboard-welcome">
           <h1>Dasbor Analis</h1>
-          <p>Ringkasan aktivitas perbandingan payment gateway Anda</p>
+          <p>Ringkasan aktivitas perbandingan pupuk organik Anda</p>
         </div>
         <Link href="/analyst/compare" className="btn-primary">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

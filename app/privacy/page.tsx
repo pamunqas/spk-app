@@ -22,7 +22,7 @@ export default function PrivacyPage() {
           <section>
             <h2>1. Pendahuluan</h2>
             <p>
-              Kebijakan Privasi ini menjelaskan bagaimana SPK Payment Gateway untuk Startup di Sleman Dengan Metode MOORA 
+              Kebijakan Privasi ini menjelaskan bagaimana SPK Penentuan Pupuk Organik Terbaik pada Ecofarming Dengan Metode MOORA 
               ("kami", "app", atau "sistem kami") mengumpulkan, menggunakan, dan melindungi informasi pribadi Anda ketika 
               menggunakan layanan kami.
             </p>
@@ -33,7 +33,7 @@ export default function PrivacyPage() {
             <p>Kami dapat mengumpulkan informasi berikut:</p>
             <ul>
               <li><strong>Informasi Akun:</strong> Nama, email, dan kata sandi yang Anda berikan saat mendaftar</li>
-              <li><strong>Data Penggunaan:</strong> Riwayat perbandingan payment gateway yang Anda lakukan</li>
+              <li><strong>Data Penggunaan:</strong> Riwayat perbandingan pupuk organik yang Anda lakukan</li>
               <li><strong>Informasi Teknis:</strong> Alamat IP, jenis browser, dan perangkat yang digunakan</li>
             </ul>
           </section>

@@ -1,7 +1,8 @@
 'use client'
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState } from 'react'
 import type { Provider, Criterion } from '@prisma/client'
-import type { MooraResult } from '@/lib/moora'
+import { SUBCRITERIA } from '@/lib/subcriteria'
+import type { MooraComputation } from '@/lib/moora'
 import Toast from '@/components/Toast'
 
 interface Props {
@@ -9,229 +10,330 @@ interface Props {
   criteria: Criterion[]
 }
 
-interface ComputationData {
-  results:    MooraResult[]
-  normalized: Record<string, Record<string, number>>
-  weighted:   Record<string, Record<string, number>>
-  yiScores:   Record<string, number>
-  winner:     string
-}
-
 type ToastState = { msg: string; type: 'green' | 'blue' | 'red' } | null
 
-const CRITERION_COLORS: Record<string, string> = {
-  mdrFee: '#F87171', settlementTime: '#F59E0B',
-  successRate: '#10B981', setupFee: '#A78BFA', supportQuality: '#818CF8',
+interface InputValues {
+  harga: number | null
+  kandunganNutrisi: number | null
+  kualitas: number | null
+  dampak: number | null
+  ramahLingkungan: number | null
+  ketersediaan: number | null
 }
 
-function buildDefaultMatrix(providers: Provider[], criteria: Criterion[]) {
-  const m: Record<string, Record<string, number>> = {}
-  providers.forEach(p => {
-    m[p.id] = {}
-    criteria.forEach(c => { m[p.id][c.key] = 3 })
-  })
-  return m
+type Step = 'select' | 'input' | 'results'
+
+const CRITERION_COLORS: Record<string, string> = {
+  harga: '#F87171', kandunganNutrisi: '#10B981',
+  kualitas: '#818CF8', dampak: '#A78BFA', ramahLingkungan: '#34D399', ketersediaan: '#F59E0B',
+}
+
+function emptyInputValues(): InputValues {
+  return { harga: null, kandunganNutrisi: null, kualitas: null, dampak: null, ramahLingkungan: null, ketersediaan: null }
 }
 
 export default function CompareClient({ providers, criteria }: Props) {
-  const [matrix, setMatrix]       = useState(() => buildDefaultMatrix(providers, criteria))
-  const [data, setData]           = useState<ComputationData | null>(null)
+  const [selectedIds, setSelectedIds] = useState<string[]>([])
+  const [inputs, setInputs] = useState<Record<string, InputValues>>({})
+  const [results, setResults] = useState<MooraComputation | null>(null)
+  const [step, setStep] = useState<Step>('select')
   const [computing, setComputing] = useState(false)
-  const [matrixOpen, setMatrixOpen] = useState(true)
-  const [toast, setToast]         = useState<ToastState>(null)
-  const resultsRef = useRef<HTMLDivElement>(null)
-  const hideToast  = useCallback(() => setToast(null), [])
+  const [toast, setToast] = useState<ToastState>(null)
+  const hideToast = () => setToast(null)
 
-  const setScore = (providerId: string, criterionKey: string, val: number) => {
-    const clamped = Math.min(5, Math.max(1, Math.round(val)))
-    setMatrix(prev => ({ ...prev, [providerId]: { ...prev[providerId], [criterionKey]: clamped } }))
+  const toggleProvider = (id: string) => {
+    setSelectedIds(prev => {
+      if (prev.includes(id)) {
+        const next = prev.filter(x => x !== id)
+        return next
+      }
+      const next = [...prev, id]
+      return next
+    })
   }
 
-  const resetMatrix = () => {
-    setMatrix(buildDefaultMatrix(providers, criteria))
-    setData(null)
-    setMatrixOpen(true)
+  const goToInput = () => {
+    const ids = selectedIds
+    const init: Record<string, InputValues> = {}
+    ids.forEach(id => {
+      init[id] = inputs[id] ?? emptyInputValues()
+    })
+    setInputs(init)
+    setStep('input')
   }
 
-  const runMoora = async () => {
+  const updateInput = (providerId: string, key: keyof InputValues, value: number) => {
+    setInputs(prev => ({
+      ...prev,
+      [providerId]: { ...(prev[providerId] ?? emptyInputValues()), [key]: value },
+    }))
+  }
+
+  const allInputsFilled = () => {
+    return selectedIds.every(id => {
+      const v = inputs[id]
+      if (!v) return false
+      return criteria.every(c => {
+        const val = v[c.key as keyof InputValues]
+        return val != null && !isNaN(val)
+      })
+    })
+  }
+
+  const runAnalysis = async () => {
     setComputing(true)
     try {
+      const providerInputs = selectedIds.map(id => {
+        const v = inputs[id] ?? emptyInputValues()
+        return {
+          id,
+          harga: v.harga ?? 0,
+          kandunganNutrisi: v.kandunganNutrisi ?? 0,
+          kualitas: v.kualitas ?? 0,
+          dampak: v.dampak ?? 0,
+          ramahLingkungan: v.ramahLingkungan ?? 0,
+          ketersediaan: v.ketersediaan ?? 0,
+        }
+      })
       const res = await fetch('/api/comparisons', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ matrix }),
+        body: JSON.stringify({ providerInputs }),
       })
-      const json = await res.json()
+      const json: MooraComputation & { error?: string } = await res.json()
       if (!res.ok) throw new Error(json.error)
-      setData({ results: json.results, normalized: json.normalized, weighted: json.weighted, yiScores: json.yiScores, winner: json.winner })
-      setMatrixOpen(false)
-      setToast({ msg: `Analisis selesai — ${json.winner} menang`, type: 'green' })
-    } catch (e: any) {
-      setToast({ msg: e.message ?? 'Gagal menjalankan analisis', type: 'red' })
+      setResults(json)
+      setStep('results')
+      setToast({ msg: `Analisis MOORA selesai — ${json.results[0].provider.name} peringkat pertama`, type: 'green' })
+    } catch (e: unknown) {
+      setToast({ msg: e instanceof Error ? e.message : 'Gagal menjalankan analisis', type: 'red' })
     } finally {
       setComputing(false)
     }
   }
 
-  useEffect(() => {
-    if (!data) return
-    setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
-  }, [data])
+  const resetAll = () => {
+    setSelectedIds([])
+    setInputs({})
+    setResults(null)
+    setStep('select')
+  }
 
-  const winner = data?.results[0]
+  const selectedProviders = providers.filter(p => selectedIds.includes(p.id))
 
   return (
     <>
-      {/* Active weights */}
+      {/* Bobot Kriteria */}
       <div className="card" style={{ padding: 0 }}>
         <div style={{ padding: '16px 20px 12px', borderBottom: '1px solid var(--border)' }}>
           <div className="card-title">Bobot Kriteria</div>
         </div>
         <div style={{ padding: '16px 20px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
-          {criteria.map(c => (
-            <div key={c.key} style={{ background: 'var(--bg-3)', border: '1px solid var(--border)', borderRadius: 10, padding: 14 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-                <span style={{ width: 8, height: 8, borderRadius: '50%', background: CRITERION_COLORS[c.key], flexShrink: 0 }} />
-                <span style={{ fontSize: 12, fontWeight: 500, color: 'var(--text-2)' }}>{c.label}</span>
+          {criteria.map(c => {
+            const sub = SUBCRITERIA[c.key]
+            return (
+              <div key={c.key} style={{ background: 'var(--bg-3)', border: '1px solid var(--border)', borderRadius: 10, padding: 14 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+                  <span style={{ width: 8, height: 8, borderRadius: '50%', background: CRITERION_COLORS[c.key], flexShrink: 0 }} />
+                  <span style={{ fontSize: 12, fontWeight: 500, color: 'var(--text-2)' }}>{c.label}</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 8 }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.4rem', fontWeight: 600, color: CRITERION_COLORS[c.key] }}>{(c.weight * 100).toFixed(0)}%</span>
+                  {sub && <span style={{ fontSize: 10, color: 'var(--text-3)' }}>({sub.type === 'cost' ? 'Cost' : 'Benefit'})</span>}
+                </div>
+                <div style={{ height: 4, background: 'var(--surface-2)', borderRadius: 2 }}>
+                  <div style={{ width: `${(c.weight * 100)}%`, height: '100%', background: CRITERION_COLORS[c.key], borderRadius: 2 }} />
+                </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 8 }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.4rem', fontWeight: 600, color: CRITERION_COLORS[c.key] }}>{(c.weight * 100).toFixed(0)}%</span>
-              </div>
-              <div style={{ height: 4, background: 'var(--surface-2)', borderRadius: 2 }}>
-                <div style={{ width: `${(c.weight * 100)}%`, height: '100%', background: CRITERION_COLORS[c.key], borderRadius: 2 }} />
-              </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
 
-      {/* Decision Matrix */}
-      <div className="card" style={{ padding: 0, overflow: 'hidden', marginBottom: 16 }}>
-        <div
-          style={{ padding: '14px 20px', borderBottom: matrixOpen ? '1px solid var(--border)' : 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, cursor: 'pointer' }}
-          onClick={() => setMatrixOpen(o => !o)}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <svg
-              width="13" height="13" viewBox="0 0 24 24" fill="none"
-              stroke="var(--text-3)" strokeWidth="2" strokeLinecap="round"
-              style={{ transform: matrixOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s', flexShrink: 0 }}
-            >
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
-            <div className="card-title" style={{ marginBottom: 0 }}>LANGKAH 1 — Matriks Keputusan</div>
+      {/* Step 1 — Select Providers */}
+      {step === 'select' && (
+        <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+          <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)' }}>
+            <div className="card-title" style={{ marginBottom: 4 }}>LANGKAH 1 — Pilih Provider</div>
+            <div style={{ fontSize: 12, color: 'var(--text-3)' }}>Pilih minimal 2 provider untuk dibandingkan menggunakan metode MOORA.</div>
           </div>
-          {matrixOpen && (
-            <button
-              className="btn-ghost"
-              onClick={e => { e.stopPropagation(); resetMatrix() }}
-              style={{ fontSize: 11, flexShrink: 0 }}
-            >
-              Reset ke default
-            </button>
-          )}
+          <div style={{ padding: '16px 20px' }}>
+            <div className="providers-grid">
+              {providers.map(p => {
+                const selected = selectedIds.includes(p.id)
+                return (
+                  <div
+                    key={p.id}
+                    className={`provider-card${selected ? ' selected' : ''}`}
+                    onClick={() => toggleProvider(p.id)}
+                  >
+                    <div className="pcheck">
+                      <svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" /></svg>
+                    </div>
+                    <div className="provider-card-header">
+                      <div className="provider-avatar" style={{ background: p.color }}>{p.initials}</div>
+                      <div>
+                        <div className="provider-name">{p.name}</div>
+                        <div className="provider-desc">{p.description}</div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            <div style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              marginTop: 4, gap: 12, flexWrap: 'wrap',
+            }}>
+              <div style={{ fontSize: 12, color: 'var(--text-3)' }}>
+                {selectedIds.length < 2
+                  ? `Pilih minimal ${2 - selectedIds.length} provider lagi.`
+                  : `${selectedIds.length} provider dipilih.`}
+              </div>
+              <button
+                onClick={goToInput}
+                disabled={selectedIds.length < 2}
+                className={`btn-compare${selectedIds.length >= 2 ? ' ready' : ''}`}
+                style={{ width: 'auto', padding: '10px 24px' }}
+              >
+                Lanjutkan ke Input Data
+                <div className="spinner" />
+              </button>
+            </div>
+          </div>
         </div>
+      )}
 
-        {matrixOpen && (
-          <div style={{ overflowX: 'auto' }}>
-            <table className="data-table" style={{ minWidth: 600 }}>
+      {/* Step 2 — Input Matrix */}
+      {step === 'input' && (
+        <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+          <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)' }}>
+            <div className="card-title" style={{ marginBottom: 4 }}>LANGKAH 2 — Input Data Provider</div>
+            <div style={{ fontSize: 12, color: 'var(--text-3)' }}>Masukkan nilai untuk setiap kriteria dari provider yang dipilih.</div>
+          </div>
+          <div style={{ overflowX: 'auto', padding: '16px 20px' }}>
+            <table className="data-table" style={{ minWidth: selectedProviders.length * 160 + 200 }}>
               <thead>
                 <tr>
-                  <th style={{ minWidth: 160 }}>Penyedia</th>
-                  {criteria.map(c => (
-                    <th key={c.key} style={{ textAlign: 'center', minWidth: 110 }}>
-                      <div style={{ color: CRITERION_COLORS[c.key] }}>{c.label}</div>
-                      <div style={{ fontSize: 9, fontWeight: 400, textTransform: 'none', letterSpacing: 0, color: 'var(--text-3)', marginTop: 2 }}>
-                        {c.type === 'benefit' ? '↑ lebih tinggi = lebih baik' : '5 = terendah (terbaik)'}
+                  <th style={{ minWidth: 160 }}>Kriteria</th>
+                  {selectedProviders.map(p => (
+                    <th key={p.id} style={{ textAlign: 'center', minWidth: 160 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
+                        <div style={{ width: 18, height: 18, borderRadius: 5, background: p.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: 7, color: 'white', flexShrink: 0 }}>{p.initials}</div>
+                        <span style={{ fontSize: 12 }}>{p.name}</span>
                       </div>
                     </th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {providers.map(p => (
-                  <tr key={p.id}>
-                    <td>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
-                        <div style={{ width: 28, height: 28, borderRadius: 7, background: p.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: 9, fontWeight: 500, color: 'white', flexShrink: 0 }}>
-                          {p.initials}
-                        </div>
-                        <span style={{ fontSize: 13, fontWeight: 500 }}>{p.name}</span>
-                      </div>
-                    </td>
-                    {criteria.map(c => {
-                      const val = matrix[p.id]?.[c.key] ?? 3
-                      return (
-                        <td key={c.key} style={{ textAlign: 'center', padding: '8px 10px' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
-                            <button onClick={() => setScore(p.id, c.key, val - 1)} disabled={val <= 1}
-                              style={{ width: 22, height: 22, borderRadius: 4, border: '1px solid var(--border-2)', background: 'var(--bg-3)', color: 'var(--text-2)', cursor: val <= 1 ? 'not-allowed' : 'pointer', fontSize: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: val <= 1 ? 0.3 : 1 }}>
-                              −
-                            </button>
-                            <div style={{
-                              width: 32, height: 28, borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                              fontFamily: 'var(--font-mono)', fontSize: 14, fontWeight: 600,
-                              background: val === 5 ? 'rgba(16,185,129,0.15)' : val === 4 ? 'rgba(16,185,129,0.08)' : val === 3 ? 'var(--surface-2)' : val === 2 ? 'rgba(248,113,113,0.08)' : 'rgba(248,113,113,0.15)',
-                              color: val >= 4 ? 'var(--green)' : val === 3 ? 'var(--text-2)' : 'var(--red)',
-                              border: '1px solid',
-                              borderColor: val >= 4 ? 'rgba(16,185,129,0.25)' : val === 3 ? 'var(--border)' : 'rgba(248,113,113,0.25)',
-                            }}>
-                              {val}
-                            </div>
-                            <button onClick={() => setScore(p.id, c.key, val + 1)} disabled={val >= 5}
-                              style={{ width: 22, height: 22, borderRadius: 4, border: '1px solid var(--border-2)', background: 'var(--bg-3)', color: 'var(--text-2)', cursor: val >= 5 ? 'not-allowed' : 'pointer', fontSize: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: val >= 5 ? 0.3 : 1 }}>
-                              +
-                            </button>
+                {criteria.map(c => {
+                  const sub = SUBCRITERIA[c.key]
+                  return (
+                    <tr key={c.key}>
+                      <td>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <span style={{ width: 8, height: 8, borderRadius: '50%', background: CRITERION_COLORS[c.key], flexShrink: 0 }} />
+                          <div>
+                            <div style={{ fontSize: 13, fontWeight: 500 }}>{c.label}</div>
                           </div>
-                        </td>
-                      )
-                    })}
-                  </tr>
-                ))}
+                        </div>
+                      </td>
+                      {selectedProviders.map(p => {
+                        const currentVal = (inputs[p.id] ?? emptyInputValues())[c.key as keyof InputValues]
+                        return (
+                          <td key={p.id} style={{ textAlign: 'center', verticalAlign: 'middle' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'stretch' }}>
+                              {sub.levels.map(l => {
+                                const selected = currentVal === l.score
+                                return (
+                                  <button
+                                    key={l.score}
+                                    type="button"
+                                    onClick={() => updateInput(p.id, c.key as keyof InputValues, l.score)}
+                                    style={{
+                                      display: 'flex', alignItems: 'center', gap: 6,
+                                      padding: '6px 10px',
+                                      borderRadius: 'var(--r-sm)',
+                                      border: selected ? `1.5px solid ${CRITERION_COLORS[c.key]}` : '1px solid var(--border)',
+                                      background: selected ? `${CRITERION_COLORS[c.key]}11` : 'var(--surface)',
+                                      cursor: 'pointer',
+                                      fontSize: 11, textAlign: 'left',
+                                      color: 'var(--text)',
+                                      fontFamily: 'var(--font-body)',
+                                      transition: 'all 0.15s',
+                                    }}
+                                  >
+                                    <span style={{
+                                      width: 16, height: 16, borderRadius: '50%', flexShrink: 0,
+                                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                      border: selected ? `2px solid ${CRITERION_COLORS[c.key]}` : '2px solid var(--border-2)',
+                                      fontSize: 8, fontWeight: 700,
+                                      color: selected ? CRITERION_COLORS[c.key] : 'transparent',
+                                    }}>
+                                      {selected ? '✓' : ''}
+                                    </span>
+                                    <div>
+                                      <div style={{ fontWeight: 600, fontSize: 11 }}>{l.label}</div>
+                                      <div style={{ fontSize: 9, color: 'var(--text-3)', lineHeight: 1.3 }}>{l.condition}</div>
+                                    </div>
+                                  </button>
+                                )
+                              })}
+                            </div>
+                          </td>
+                        )
+                      })}
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </div>
-        )}
-      </div>
-
-      {/* Scale legend — only when matrix is visible */}
-      {matrixOpen && (
-        <div style={{ display: 'flex', gap: 6, marginBottom: 16, flexWrap: 'wrap' }}>
-          {[
-            { score: 5, label: 'Sangat Baik',  color: 'var(--green)',   bg: 'rgba(16,185,129,0.12)' },
-            { score: 4, label: 'Baik',         color: 'var(--green)',   bg: 'rgba(16,185,129,0.06)' },
-            { score: 3, label: 'Rata-rata',    color: 'var(--text-2)',  bg: 'var(--surface-2)' },
-            { score: 2, label: 'Buruk',        color: 'var(--red)',     bg: 'rgba(248,113,113,0.06)' },
-            { score: 1, label: 'Sangat Buruk', color: 'var(--red)',     bg: 'rgba(248,113,113,0.12)' },
-          ].map(s => (
-            <div key={s.score} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '4px 10px', borderRadius: 6, background: s.bg, border: '1px solid var(--border)', fontSize: 11, color: s.color }}>
-              <strong style={{ fontFamily: 'var(--font-mono)' }}>{s.score}</strong> — {s.label}
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '12px 20px', borderTop: '1px solid var(--border)', gap: 12, flexWrap: 'wrap',
+          }}>
+            <button
+              onClick={() => setStep('select')}
+              className="btn-ghost"
+              style={{ fontSize: 12 }}
+            >
+              Kembali
+            </button>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button
+                onClick={resetAll}
+                className="btn-ghost"
+                style={{ fontSize: 12 }}
+              >
+                Reset
+              </button>
+              <button
+                onClick={runAnalysis}
+                disabled={!allInputsFilled() || computing}
+                className={`btn-compare${allInputsFilled() ? ' ready' : ''}${computing ? ' computing' : ''}`}
+                style={{ width: 'auto', padding: '10px 24px' }}
+              >
+                {computing ? 'Menghitung…' : 'Hitung dengan MOORA'}
+                <div className="spinner" />
+              </button>
             </div>
-          ))}
+          </div>
         </div>
       )}
 
-      {/* Run button */}
-      <button
-        className={`btn-compare ready${computing ? ' computing' : ''}`}
-        onClick={runMoora}
-        disabled={computing}
-      >
-        <span>{computing ? 'Menghitung…' : 'Jalankan Analisis'}</span>
-        <div className="spinner" />
-      </button>
-
-      {/* ==================== RESULTS ==================== */}
-      {data && winner && (
-        <div style={{ marginTop: 28 }} ref={resultsRef}>
+      {/* Step 3 — Results */}
+      {step === 'results' && results && (
+        <div style={{ marginTop: 24 }}>
           <div style={{ height: 1, background: 'linear-gradient(90deg,transparent,var(--border-2),transparent)', marginBottom: 24 }} />
 
           <div className="recalc-bar">
             <div className="recalc-info">
-              Peringkat <strong>{data.results.length}</strong> penyedia berdasarkan <strong>{criteria.length}</strong> kriteria
+              Peringkat <strong>{results.results.length}</strong> provider berdasarkan perhitungan MOORA
             </div>
             <button
-              onClick={resetMatrix}
+              onClick={resetAll}
               style={{
                 display: 'flex', alignItems: 'center', gap: 7,
                 padding: '9px 18px', borderRadius: 'var(--r-sm)',
@@ -242,46 +344,64 @@ export default function CompareClient({ providers, criteria }: Props) {
               onMouseEnter={e => (e.currentTarget.style.background = 'var(--primary-light)')}
               onMouseLeave={e => (e.currentTarget.style.background = 'var(--primary)')}
             >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
-                <path d="M21 3v5h-5"/>
-              </svg>
               Analisis Baru
             </button>
           </div>
 
-          {/* Top 3 */}
+          {/* Winner Card */}
           <div className="results-bento">
             <div className="bento-card winner-card">
               <div className="winner-crown">🏆</div>
-              <div className="winner-badge">Pilihan Optimal</div>
-              <div className="winner-name">{winner.provider.name}</div>
-              <div className="winner-desc">{winner.provider.description}</div>
+              <div className="winner-badge">Peringkat Pertama</div>
+              <div className="winner-name">{results.results[0].provider.name}</div>
+              <div className="winner-desc">{results.results[0].provider.description}</div>
               <div className="winner-score-row">
-                <span className="winner-score-num">{winner.yiScore.toFixed(4)}</span>
-                <span className="winner-score-label">skor yi</span>
+                <span className="winner-score-num">{results.results[0].yiScore.toFixed(2)}</span>
+                <span className="winner-score-label">yiScore</span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.1rem', color: 'var(--gold)', marginLeft: 12 }}>
+                  {results.results[0].scorePercentile.toFixed(1)}%
+                </span>
+                <span style={{ fontSize: 12, color: 'var(--text-3)' }}>percentile</span>
               </div>
-              {winner.strengths.length > 0 && (
-                <ul className="strengths-list">
-                  {winner.strengths.map(s => (
-                    <li key={s} className="strength-item"><span className="strength-dot" />{s}</li>
-                  ))}
-                </ul>
+              {results.results[0].strengths.length > 0 && (
+                <div style={{ marginTop: 12 }}>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--green)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Kelebihan</div>
+                  <ul className="strengths-list">
+                    {results.results[0].strengths.map((s, i) => (
+                      <li key={i} className="strength-item">
+                        <span className="strength-dot" />
+                        {s}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {results.results[0].weaknesses.length > 0 && (
+                <div style={{ marginTop: 8 }}>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--red)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Kelemahan</div>
+                  <ul className="strengths-list">
+                    {results.results[0].weaknesses.map((w, i) => (
+                      <li key={i} className="strength-item">
+                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--red)', flexShrink: 0 }} />
+                        {w}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               )}
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              {data.results.slice(1, 3).map(r => {
-                const medal = r.rank === 2 ? '🥈' : '🥉'
+            {/* Remaining Results */}
+            <div className="rank-list">
+              {results.results.slice(1).map(r => {
                 const accentColor = r.rank === 2 ? '#94A3B8' : '#B4836B'
-                const borderColor = r.rank === 2 ? 'rgba(148,163,184,0.25)' : 'rgba(180,131,107,0.25)'
-                const bgGradient = r.rank === 2
-                  ? 'linear-gradient(135deg, rgba(148,163,184,0.06), var(--surface))'
-                  : 'linear-gradient(135deg, rgba(180,131,107,0.06), var(--surface))'
                 return (
-                  <div key={r.provider.id} className="bento-card" style={{ flex: 1, borderColor, background: bgGradient }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
-                      <span style={{ fontSize: 22 }}>{medal}</span>
+                  <div key={r.provider.id} className="bento-card" style={{
+                    borderColor: r.rank === 2 ? 'rgba(148,163,184,0.25)' : 'rgba(180,131,107,0.25)',
+                    background: r.rank === 2 ? 'linear-gradient(135deg, rgba(148,163,184,0.06), var(--surface))' : 'linear-gradient(135deg, rgba(180,131,107,0.06), var(--surface))',
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+                      <span style={{ fontSize: 22 }}>{r.rank === 2 ? '🥈' : '🥉'}</span>
                       <div>
                         <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: accentColor, marginBottom: 2 }}>
                           Peringkat #{r.rank}
@@ -289,19 +409,41 @@ export default function CompareClient({ providers, criteria }: Props) {
                         <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)' }}>{r.provider.name}</div>
                       </div>
                     </div>
-                    <div style={{ fontSize: 11, color: 'var(--text-3)', lineHeight: 1.5, marginBottom: 10 }}>{r.provider.description}</div>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: r.strengths.length > 0 ? 10 : 0 }}>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 18, fontWeight: 700, color: accentColor }}>{r.yiScore.toFixed(4)}</span>
-                      <span style={{ fontSize: 10, color: 'var(--text-3)' }}>skor yi</span>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 14, fontWeight: 600, color: accentColor }}>
+                        {r.yiScore.toFixed(2)}
+                      </span>
+                      <span style={{ fontSize: 10, color: 'var(--text-3)' }}>yiScore</span>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 14, fontWeight: 600, color: accentColor, marginLeft: 8 }}>
+                        {r.scorePercentile.toFixed(1)}%
+                      </span>
+                      <span style={{ fontSize: 10, color: 'var(--text-3)' }}>percentile</span>
                     </div>
                     {r.strengths.length > 0 && (
-                      <ul className="strengths-list">
-                        {r.strengths.slice(0, 2).map(s => (
-                          <li key={s} className="strength-item">
-                            <span className="strength-dot" style={{ background: accentColor }} />{s}
-                          </li>
-                        ))}
-                      </ul>
+                      <div style={{ marginTop: 8 }}>
+                        <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--green)', marginBottom: 3, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Kelebihan</div>
+                        <ul className="strengths-list">
+                          {r.strengths.map((s, i) => (
+                            <li key={i} className="strength-item">
+                              <span className="strength-dot" />
+                              {s}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {r.weaknesses.length > 0 && (
+                      <div style={{ marginTop: 4 }}>
+                        <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--red)', marginBottom: 3, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Kelemahan</div>
+                        <ul className="strengths-list">
+                          {r.weaknesses.map((w, i) => (
+                            <li key={i} className="strength-item">
+                              <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--red)', flexShrink: 0 }} />
+                              {w}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     )}
                   </div>
                 )
@@ -309,166 +451,77 @@ export default function CompareClient({ providers, criteria }: Props) {
             </div>
           </div>
 
-          {/* ── Computation tables ── */}
-          <ComputationTables data={data} providers={providers} criteria={criteria} />
+          {/* Detail Table — Normalized Values */}
+          <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+            <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)' }}>
+              <div className="card-title" style={{ marginBottom: 4 }}>Detail Nilai Ternormalisasi</div>
+              <div style={{ fontSize: 12, color: 'var(--text-3)' }}>Nilai setelah normalisasi vektor untuk setiap kriteria.</div>
+            </div>
+            <div style={{ overflowX: 'auto' }}>
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Peringkat</th>
+                    <th>Provider</th>
+                    {criteria.map(c => (
+                      <th key={c.key} style={{ textAlign: 'center', color: CRITERION_COLORS[c.key] }}>{c.label}</th>
+                    ))}
+                    <th style={{ textAlign: 'center', color: 'var(--gold)' }}>yiScore</th>
+                    <th style={{ textAlign: 'center' }}>Percentile</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {results.results.map(r => {
+                    const normalized = results.normalized[r.provider.id] ?? {}
+                    return (
+                      <tr key={r.provider.id} style={r.rank === 1 ? { background: 'rgba(245,158,11,0.04)' } : {}}>
+                        <td>
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 600, color: r.rank === 1 ? 'var(--gold)' : 'var(--text-3)' }}>
+                            #{r.rank}
+                          </span>
+                        </td>
+                        <td>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <div style={{ width: 22, height: 22, borderRadius: 5, background: r.provider.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: 8, color: 'white', flexShrink: 0 }}>{r.provider.initials}</div>
+                            <span style={{ fontSize: 12, fontWeight: r.rank === 1 ? 600 : 400 }}>{r.provider.name}</span>
+                            {r.rank === 1 && <span style={{ fontSize: 10 }}>🏆</span>}
+                          </div>
+                        </td>
+                        {criteria.map(c => {
+                          const val = normalized[c.key]
+                          return (
+                            <td key={c.key} style={{ textAlign: 'center' }}>
+                              <span className="cell-mono" style={{ fontWeight: 500 }}>
+                                {val != null ? val.toFixed(4) : '-'}
+                              </span>
+                            </td>
+                          )
+                        })}
+                        <td style={{ textAlign: 'center' }}>
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 700, color: r.rank === 1 ? 'var(--gold)' : 'var(--text)' }}>
+                            {r.yiScore.toFixed(4)}
+                          </span>
+                        </td>
+                        <td style={{ textAlign: 'center' }}>
+                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 600 }}>
+                            {r.scorePercentile.toFixed(1)}%
+                          </span>
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div style={{ padding: 14, background: 'var(--bg-3)', border: '1px solid var(--border)', borderRadius: 'var(--r)', fontSize: 12, color: 'var(--text-3)', lineHeight: 1.7, marginTop: 16 }}>
+            💡 <strong style={{ color: 'var(--text-2)' }}>Cara membaca ini:</strong> Hasil dihitung menggunakan Metode MOORA (Multi-Objective Optimization by Ratio Analysis). Nilai yiScore yang lebih tinggi menandakan performa yang lebih baik secara keseluruhan.
+          </div>
         </div>
       )}
 
       {toast && <Toast message={toast.msg} type={toast.type} onClose={hideToast} />}
     </>
-  )
-}
-
-/* ── Sub-component: three computation tables ── */
-function ComputationTables({
-  data, providers, criteria,
-}: {
-  data: ComputationData
-  providers: Provider[]
-  criteria: Criterion[]
-}) {
-  // sort providers by rank for display
-  const ranked = [...providers].sort((a, b) => {
-    const ra = data.results.find(r => r.provider.id === a.id)?.rank ?? 99
-    const rb = data.results.find(r => r.provider.id === b.id)?.rank ?? 99
-    return ra - rb
-  })
-
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 20 }}>
-
-      {/* 1 – Normalised matrix */}
-      <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-        <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)' }}>
-          <div className="card-title" style={{ marginBottom: 4 }}>Langkah 2 — Matriks Keputusan Ternormalisasi</div>
-          <div style={{ fontSize: 12, color: 'var(--text-3)' }}>x*ij = xij / √(Σ xij²) — setiap nilai dibagi norma Euclidean kolomnya</div>
-        </div>
-        <div style={{ overflowX: 'auto' }}>
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Penyedia</th>
-                {criteria.map(c => (
-                  <th key={c.key} style={{ textAlign: 'right', color: CRITERION_COLORS[c.key] }}>{c.label}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {ranked.map(p => (
-                <tr key={p.id}>
-                  <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <div style={{ width: 22, height: 22, borderRadius: 5, background: p.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: 8, color: 'white', flexShrink: 0 }}>{p.initials}</div>
-                      <span style={{ fontSize: 12 }}>{p.name}</span>
-                    </div>
-                  </td>
-                  {criteria.map(c => (
-                    <td key={c.key} className="cell-mono" style={{ textAlign: 'right', color: 'var(--text-2)' }}>
-                      {(data.normalized[p.id]?.[c.key] ?? 0).toFixed(4)}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* 2 – Weighted matrix */}
-      <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-        <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)' }}>
-          <div className="card-title" style={{ marginBottom: 4 }}>Langkah 3 — Matriks Ternormalisasi Berbobot</div>
-          <div style={{ fontSize: 12, color: 'var(--text-3)' }}>v*ij = wj × x*ij — nilai ternormalisasi dikalikan bobot setiap kriteria</div>
-        </div>
-        <div style={{ overflowX: 'auto' }}>
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Penyedia</th>
-                {criteria.map(c => (
-                  <th key={c.key} style={{ textAlign: 'right' }}>
-                    <span style={{ color: CRITERION_COLORS[c.key] }}>{c.label}</span>
-                    <span style={{ color: 'var(--text-3)', fontWeight: 400, marginLeft: 4 }}>×{(c.weight * 100).toFixed(0)}%</span>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {ranked.map(p => (
-                <tr key={p.id}>
-                  <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <div style={{ width: 22, height: 22, borderRadius: 5, background: p.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: 8, color: 'white', flexShrink: 0 }}>{p.initials}</div>
-                      <span style={{ fontSize: 12 }}>{p.name}</span>
-                    </div>
-                  </td>
-                  {criteria.map(c => (
-                    <td key={c.key} className="cell-mono" style={{ textAlign: 'right', color: 'var(--text-2)' }}>
-                      {(data.weighted[p.id]?.[c.key] ?? 0).toFixed(4)}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* 3 – Yi Score summary */}
-      <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-        <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)' }}>
-          <div className="card-title" style={{ marginBottom: 4 }}>Langkah 4 — Skor Yi & Peringkat Akhir</div>
-          <div style={{ fontSize: 12, color: 'var(--text-3)' }}>yi = Σ nilai berbobot — penyedia dengan skor yi tertinggi adalah pilihan optimal</div>
-        </div>
-        <div style={{ overflowX: 'auto' }}>
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Peringkat</th>
-                <th>Penyedia</th>
-                {criteria.map(c => (
-                  <th key={c.key} style={{ textAlign: 'right', color: CRITERION_COLORS[c.key] }}>{c.label}</th>
-                ))}
-                <th style={{ textAlign: 'right', color: 'var(--gold)' }}>Skor Yi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {ranked.map(p => {
-                const result = data.results.find(r => r.provider.id === p.id)
-                const isWinner = result?.rank === 1
-                return (
-                  <tr key={p.id} style={isWinner ? { background: 'rgba(245,158,11,0.04)' } : {}}>
-                    <td>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 600, color: isWinner ? 'var(--gold)' : result?.rank === 2 ? '#94A3B8' : 'var(--text-3)' }}>
-                        #{result?.rank}
-                      </span>
-                    </td>
-                    <td>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <div style={{ width: 22, height: 22, borderRadius: 5, background: p.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: 8, color: 'white', flexShrink: 0 }}>{p.initials}</div>
-                        <span style={{ fontSize: 12, fontWeight: isWinner ? 600 : 400 }}>{p.name}</span>
-                        {isWinner && <span style={{ fontSize: 10 }}>🏆</span>}
-                      </div>
-                    </td>
-                    {criteria.map(c => (
-                      <td key={c.key} className="cell-mono" style={{ textAlign: 'right', color: 'var(--text-2)', fontSize: 11 }}>
-                        {(data.weighted[p.id]?.[c.key] ?? 0).toFixed(4)}
-                      </td>
-                    ))}
-                    <td className="cell-mono" style={{ textAlign: 'right', fontWeight: 600, color: isWinner ? 'var(--gold)' : 'var(--text)' }}>
-                      {(data.yiScores[p.id] ?? 0).toFixed(4)}
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div style={{ padding: 14, background: 'var(--bg-3)', border: '1px solid var(--border)', borderRadius: 'var(--r)', fontSize: 12, color: 'var(--text-3)', lineHeight: 1.7 }}>
-        💡 <strong style={{ color: 'var(--text-2)' }}>Cara membaca ini:</strong> Skor Yi adalah jumlah semua nilai ternormalisasi berbobot. Karena semua kriteria menggunakan 5 = terbaik, Yi yang lebih tinggi selalu berarti performa keseluruhan yang lebih baik sesuai bobot sistem.
-      </div>
-    </div>
   )
 }

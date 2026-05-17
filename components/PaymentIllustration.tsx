@@ -49,8 +49,8 @@ export default function PaymentIllustration() {
         <circle cx={330} cy={72} r={17} fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" strokeWidth="1"/>
         <circle cx={313} cy={72} r={17} fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.16)" strokeWidth="1"/>
         {/* label */}
-        <text x="32" y="195" fill="rgba(255,255,255,0.52)" fontSize="11" fontFamily="monospace" letterSpacing="2.5">XENDIT</text>
-        <text x="32" y="212" fill="rgba(255,255,255,0.28)" fontSize="9" fontFamily="monospace">Payment Gateway</text>
+        <text x="32" y="195" fill="rgba(255,255,255,0.52)" fontSize="11" fontFamily="monospace" letterSpacing="2.5">KOMPOS</text>
+        <text x="32" y="212" fill="rgba(255,255,255,0.28)" fontSize="9" fontFamily="monospace">Pupuk Organik</text>
       </g>
 
       {/* ── Credit Card 2 – bottom-left (HitPay / Prismalink purple) ── */}
@@ -66,8 +66,8 @@ export default function PaymentIllustration() {
         ))}
         <circle cx={298} cy={68} r={15} fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.15)" strokeWidth="1"/>
         <circle cx={284} cy={68} r={15} fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.12)" strokeWidth="1"/>
-        <text x="30" y="175" fill="rgba(255,255,255,0.48)" fontSize="10" fontFamily="monospace" letterSpacing="2">HITPAY</text>
-        <text x="30" y="190" fill="rgba(255,255,255,0.25)" fontSize="8" fontFamily="monospace">SME Gateway</text>
+        <text x="30" y="175" fill="rgba(255,255,255,0.48)" fontSize="10" fontFamily="monospace" letterSpacing="2">ORGANIK</text>
+        <text x="30" y="190" fill="rgba(255,255,255,0.25)" fontSize="8" fontFamily="monospace">Kompos Organik</text>
       </g>
 
       {/* ── Credit Card 3 – bottom-right (Durianpay gold) ── */}
@@ -81,7 +81,7 @@ export default function PaymentIllustration() {
         {[26,38,50,62,78,90,102,114,130,142,154,166,182,194,206,218].map((x,i) => (
           <circle key={i} cx={x} cy={120} r={3} fill="rgba(255,255,255,0.3)"/>
         ))}
-        <text x="26" y="158" fill="rgba(255,255,255,0.45)" fontSize="9" fontFamily="monospace" letterSpacing="2">DURIANPAY</text>
+        <text x="26" y="158" fill="rgba(255,255,255,0.45)" fontSize="9" fontFamily="monospace" letterSpacing="2">ECOFARM</text>
       </g>
 
       {/* ── Connection lines ── */}
@@ -105,73 +105,73 @@ export default function PaymentIllustration() {
       <circle cx="1110" cy="152" r="36" fill="rgba(0,87,255,0.1)" stroke="rgba(0,87,255,0.25)" strokeWidth="1.5"/>
       <circle cx="1110" cy="152" r="23" fill="rgba(0,87,255,0.18)" stroke="rgba(0,87,255,0.42)" strokeWidth="1"/>
       <text x="1110" y="157" textAnchor="middle" fill="rgba(100,165,255,0.95)" fontSize="11" fontWeight="600" fontFamily="monospace">XD</text>
-      <text x="1110" y="198" textAnchor="middle" fill="rgba(100,165,255,0.38)" fontSize="8" fontFamily="monospace">Xendit</text>
+        <text x="1110" y="198" textAnchor="middle" fill="rgba(100,165,255,0.38)" fontSize="8" fontFamily="monospace">Kompos</text>
 
       {/* Midtrans */}
       <circle cx="968" cy="85" r="31" fill="rgba(0,61,122,0.14)" stroke="rgba(0,90,200,0.28)" strokeWidth="1.5"/>
       <circle cx="968" cy="85" r="20" fill="rgba(0,61,122,0.22)" stroke="rgba(0,90,200,0.42)" strokeWidth="1"/>
       <text x="968" y="90" textAnchor="middle" fill="rgba(120,175,255,0.95)" fontSize="10" fontWeight="600" fontFamily="monospace">MT</text>
-      <text x="968" y="126" textAnchor="middle" fill="rgba(120,175,255,0.38)" fontSize="8" fontFamily="monospace">Midtrans</text>
+        <text x="968" y="126" textAnchor="middle" fill="rgba(120,175,255,0.38)" fontSize="8" fontFamily="monospace">Kandang</text>
 
       {/* Durianpay */}
       <circle cx="1255" cy="295" r="33" fill="rgba(243,156,18,0.11)" stroke="rgba(243,156,18,0.28)" strokeWidth="1.5"/>
       <circle cx="1255" cy="295" r="21" fill="rgba(243,156,18,0.18)" stroke="rgba(243,156,18,0.42)" strokeWidth="1"/>
       <text x="1255" y="300" textAnchor="middle" fill="rgba(243,156,18,0.95)" fontSize="10" fontWeight="600" fontFamily="monospace">DP</text>
-      <text x="1255" y="338" textAnchor="middle" fill="rgba(243,156,18,0.38)" fontSize="8" fontFamily="monospace">Durianpay</text>
+        <text x="1255" y="338" textAnchor="middle" fill="rgba(243,156,18,0.38)" fontSize="8" fontFamily="monospace">Organik Cair</text>
 
       {/* HitPay */}
       <circle cx="1358" cy="175" r="29" fill="rgba(108,92,231,0.12)" stroke="rgba(108,92,231,0.28)" strokeWidth="1.5"/>
       <circle cx="1358" cy="175" r="18" fill="rgba(108,92,231,0.2)" stroke="rgba(108,92,231,0.42)" strokeWidth="1"/>
       <text x="1358" y="180" textAnchor="middle" fill="rgba(160,145,255,0.95)" fontSize="10" fontWeight="600" fontFamily="monospace">HP</text>
-      <text x="1358" y="214" textAnchor="middle" fill="rgba(160,145,255,0.35)" fontSize="8" fontFamily="monospace">HitPay</text>
+        <text x="1358" y="214" textAnchor="middle" fill="rgba(160,145,255,0.35)" fontSize="8" fontFamily="monospace">Vermikompos</text>
 
       {/* OY! Indonesia */}
       <circle cx="158" cy="178" r="31" fill="rgba(0,170,91,0.12)" stroke="rgba(0,170,91,0.27)" strokeWidth="1.5"/>
       <circle cx="158" cy="178" r="20" fill="rgba(0,170,91,0.18)" stroke="rgba(0,170,91,0.4)" strokeWidth="1"/>
       <text x="158" y="183" textAnchor="middle" fill="rgba(0,215,125,0.95)" fontSize="10" fontWeight="600" fontFamily="monospace">OY</text>
-      <text x="158" y="219" textAnchor="middle" fill="rgba(0,215,125,0.35)" fontSize="8" fontFamily="monospace">OY!</text>
+        <text x="158" y="219" textAnchor="middle" fill="rgba(0,215,125,0.35)" fontSize="8" fontFamily="monospace">Bokashi</text>
 
       {/* DOKU */}
       <circle cx="265" cy="348" r="33" fill="rgba(0,82,155,0.12)" stroke="rgba(0,82,155,0.26)" strokeWidth="1.5"/>
       <circle cx="265" cy="348" r="21" fill="rgba(0,82,155,0.2)" stroke="rgba(0,82,155,0.4)" strokeWidth="1"/>
       <text x="265" y="353" textAnchor="middle" fill="rgba(100,165,255,0.88)" fontSize="10" fontWeight="600" fontFamily="monospace">DK</text>
-      <text x="265" y="391" textAnchor="middle" fill="rgba(100,165,255,0.32)" fontSize="8" fontFamily="monospace">DOKU</text>
+        <text x="265" y="391" textAnchor="middle" fill="rgba(100,165,255,0.32)" fontSize="8" fontFamily="monospace">Hijau Daun</text>
 
       {/* Faspay */}
       <circle cx="108" cy="398" r="29" fill="rgba(232,70,26,0.12)" stroke="rgba(232,70,26,0.26)" strokeWidth="1.5"/>
       <circle cx="108" cy="398" r="18" fill="rgba(232,70,26,0.2)" stroke="rgba(232,70,26,0.4)" strokeWidth="1"/>
       <text x="108" y="403" textAnchor="middle" fill="rgba(255,125,85,0.95)" fontSize="10" fontWeight="600" fontFamily="monospace">FP</text>
-      <text x="108" y="436" textAnchor="middle" fill="rgba(255,125,85,0.32)" fontSize="8" fontFamily="monospace">Faspay</text>
+        <text x="108" y="436" textAnchor="middle" fill="rgba(255,125,85,0.32)" fontSize="8" fontFamily="monospace">EM4 Kompos</text>
 
       {/* Nicepay */}
       <circle cx="1355" cy="595" r="31" fill="rgba(255,102,0,0.12)" stroke="rgba(255,102,0,0.26)" strokeWidth="1.5"/>
       <circle cx="1355" cy="595" r="19" fill="rgba(255,102,0,0.2)" stroke="rgba(255,102,0,0.4)" strokeWidth="1"/>
       <text x="1355" y="600" textAnchor="middle" fill="rgba(255,145,65,0.95)" fontSize="10" fontWeight="600" fontFamily="monospace">NP</text>
-      <text x="1355" y="636" textAnchor="middle" fill="rgba(255,145,65,0.32)" fontSize="8" fontFamily="monospace">Nicepay</text>
+        <text x="1355" y="636" textAnchor="middle" fill="rgba(255,145,65,0.32)" fontSize="8" fontFamily="monospace">Kascing</text>
 
       {/* iPaymu */}
       <circle cx="218" cy="648" r="29" fill="rgba(45,156,219,0.12)" stroke="rgba(45,156,219,0.26)" strokeWidth="1.5"/>
       <circle cx="218" cy="648" r="18" fill="rgba(45,156,219,0.2)" stroke="rgba(45,156,219,0.4)" strokeWidth="1"/>
       <text x="218" y="653" textAnchor="middle" fill="rgba(80,185,245,0.95)" fontSize="10" fontWeight="600" fontFamily="monospace">IP</text>
-      <text x="218" y="686" textAnchor="middle" fill="rgba(80,185,245,0.32)" fontSize="8" fontFamily="monospace">iPaymu</text>
+        <text x="218" y="686" textAnchor="middle" fill="rgba(80,185,245,0.32)" fontSize="8" fontFamily="monospace">Tricokom</text>
 
       {/* Winpay */}
       <circle cx="1140" cy="715" r="31" fill="rgba(39,174,96,0.12)" stroke="rgba(39,174,96,0.26)" strokeWidth="1.5"/>
       <circle cx="1140" cy="715" r="20" fill="rgba(39,174,96,0.2)" stroke="rgba(39,174,96,0.4)" strokeWidth="1"/>
       <text x="1140" y="720" textAnchor="middle" fill="rgba(65,215,125,0.95)" fontSize="10" fontWeight="600" fontFamily="monospace">WP</text>
-      <text x="1140" y="756" textAnchor="middle" fill="rgba(65,215,125,0.32)" fontSize="8" fontFamily="monospace">Winpay</text>
+        <text x="1140" y="756" textAnchor="middle" fill="rgba(65,215,125,0.32)" fontSize="8" fontFamily="monospace">Guano</text>
 
       {/* Prismalink */}
       <circle cx="388" cy="128" r="31" fill="rgba(123,47,190,0.12)" stroke="rgba(123,47,190,0.28)" strokeWidth="1.5"/>
       <circle cx="388" cy="128" r="20" fill="rgba(123,47,190,0.2)" stroke="rgba(123,47,190,0.42)" strokeWidth="1"/>
       <text x="388" y="133" textAnchor="middle" fill="rgba(185,145,255,0.95)" fontSize="10" fontWeight="600" fontFamily="monospace">PL</text>
-      <text x="388" y="169" textAnchor="middle" fill="rgba(185,145,255,0.32)" fontSize="8" fontFamily="monospace">Prismalink</text>
+        <text x="388" y="169" textAnchor="middle" fill="rgba(185,145,255,0.32)" fontSize="8" fontFamily="monospace">Humus</text>
 
       {/* Espay */}
       <circle cx="88" cy="715" r="27" fill="rgba(230,126,34,0.12)" stroke="rgba(230,126,34,0.26)" strokeWidth="1.5"/>
       <circle cx="88" cy="715" r="17" fill="rgba(230,126,34,0.2)" stroke="rgba(230,126,34,0.4)" strokeWidth="1"/>
       <text x="88" y="720" textAnchor="middle" fill="rgba(255,165,85,0.95)" fontSize="10" fontWeight="600" fontFamily="monospace">EP</text>
-      <text x="88" y="752" textAnchor="middle" fill="rgba(255,165,85,0.32)" fontSize="8" fontFamily="monospace">Espay</text>
+        <text x="88" y="752" textAnchor="middle" fill="rgba(255,165,85,0.32)" fontSize="8" fontFamily="monospace">Cacing</text>
 
       {/* Floating micro-dots */}
       <circle cx="590" cy="225" r="2.5" fill="rgba(99,102,241,0.35)"/>
