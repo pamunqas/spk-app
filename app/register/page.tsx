@@ -4,10 +4,11 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import PaymentIllustration from '@/components/PaymentIllustration'
 import AuthBrand from '@/components/AuthBrand'
+import EcofarmingBg from '@/components/EcofarmingBg'
 
 export default function RegisterPage() {
   const router = useRouter()
-  const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '', company: '', title: '' })
+  const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '' })
   const [acceptPolicy, setAcceptPolicy] = useState(false)
   const [error, setError]     = useState('')
   const [loading, setLoading] = useState(false)
@@ -25,7 +26,7 @@ export default function RegisterPage() {
     const res = await fetch('/api/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: form.name, email: form.email, password: form.password, company: form.company, title: form.title }),
+      body: JSON.stringify({ name: form.name, email: form.email, password: form.password }),
     })
     setLoading(false)
     if (!res.ok) {
@@ -39,8 +40,7 @@ export default function RegisterPage() {
   if (done) {
     return (
       <div className="login-page">
-        <div className="login-bg" />
-        <div className="login-grid" />
+        <EcofarmingBg />
         <div className="login-wrap" style={{ position: 'relative', zIndex: 1 }}>
           <AuthBrand />
           <div className="login-card" style={{ textAlign: 'center' }}>
@@ -62,9 +62,8 @@ export default function RegisterPage() {
 
   return (
     <div className="login-page">
-      <div className="login-bg" />
+      <EcofarmingBg />
       <PaymentIllustration />
-      <div className="login-grid" />
       <div className="login-wrap" style={{ position: 'relative', zIndex: 1, maxWidth: 460 }}>
         <AuthBrand />
 
@@ -93,17 +92,6 @@ export default function RegisterPage() {
                 <input type="password" value={form.confirm} onChange={f('confirm')} placeholder="Ulangi kata sandi" required />
               </div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-              <div className="form-group">
-                <label>Perusahaan <span style={{ color: 'var(--text-3)', fontWeight: 400 }}>(opsional)</span></label>
-                <input value={form.company} onChange={f('company')} placeholder="Nama perusahaan" />
-              </div>
-              <div className="form-group">
-                <label>Jabatan <span style={{ color: 'var(--text-3)', fontWeight: 400 }}>(opsional)</span></label>
-                <input value={form.title} onChange={f('title')} placeholder="Misal: Analis" />
-              </div>
-            </div>
-
             {error && <div className="login-error">{error}</div>}
 
             <label className="policy-checkbox">

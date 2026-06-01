@@ -2,13 +2,13 @@
 import Link from 'next/link'
 import LandingNav from '@/components/LandingNav'
 import PaymentIllustration from '@/components/PaymentIllustration'
+import EcofarmingBg from '@/components/EcofarmingBg'
 
 export default function LandingPage() {
   return (
     <div className="landing-page">
-      <div className="landing-bg" />
+      <EcofarmingBg />
       <PaymentIllustration />
-      <div className="landing-grid" />
 
       <LandingNav />
 

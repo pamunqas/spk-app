@@ -3,6 +3,7 @@ import { useState } from 'react'
 import type { Provider, Criterion } from '@prisma/client'
 import { SUBCRITERIA } from '@/lib/subcriteria'
 import type { MooraComputation } from '@/lib/moora'
+import { getProviderIcon } from '@/lib/icons'
 import Toast from '@/components/Toast'
 
 interface Props {
@@ -123,32 +124,6 @@ export default function CompareClient({ providers, criteria }: Props) {
 
   return (
     <>
-      {/* Bobot Kriteria */}
-      <div className="card" style={{ padding: 0 }}>
-        <div style={{ padding: '16px 20px 12px', borderBottom: '1px solid var(--border)' }}>
-          <div className="card-title">Bobot Kriteria</div>
-        </div>
-        <div style={{ padding: '16px 20px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
-          {criteria.map(c => {
-            const sub = SUBCRITERIA[c.key]
-            return (
-              <div key={c.key} style={{ background: 'var(--bg-3)', border: '1px solid var(--border)', borderRadius: 10, padding: 14 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-                  <span style={{ width: 8, height: 8, borderRadius: '50%', background: CRITERION_COLORS[c.key], flexShrink: 0 }} />
-                  <span style={{ fontSize: 12, fontWeight: 500, color: 'var(--text-2)' }}>{c.label}</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, marginBottom: 8 }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.4rem', fontWeight: 600, color: CRITERION_COLORS[c.key] }}>{(c.weight * 100).toFixed(0)}%</span>
-                  {sub && <span style={{ fontSize: 10, color: 'var(--text-3)' }}>({sub.type === 'cost' ? 'Cost' : 'Benefit'})</span>}
-                </div>
-                <div style={{ height: 4, background: 'var(--surface-2)', borderRadius: 2 }}>
-                  <div style={{ width: `${(c.weight * 100)}%`, height: '100%', background: CRITERION_COLORS[c.key], borderRadius: 2 }} />
-                </div>
-              </div>
-            )
-          })}
-        </div>
-      </div>
 
       {/* Step 1 — Select Providers */}
       {step === 'select' && (
@@ -171,7 +146,7 @@ export default function CompareClient({ providers, criteria }: Props) {
                       <svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" /></svg>
                     </div>
                     <div className="provider-card-header">
-                      <div className="provider-avatar" style={{ background: p.color }}>{p.initials}</div>
+                      <div className="provider-avatar" style={{ background: p.color }}><span style={{ fontSize: 18 }}>{getProviderIcon(p.name)}</span></div>
                       <div>
                         <div className="provider-name">{p.name}</div>
                         <div className="provider-desc">{p.description}</div>
@@ -219,7 +194,7 @@ export default function CompareClient({ providers, criteria }: Props) {
                   {selectedProviders.map(p => (
                     <th key={p.id} style={{ textAlign: 'center', minWidth: 160 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
-                        <div style={{ width: 18, height: 18, borderRadius: 5, background: p.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: 7, color: 'white', flexShrink: 0 }}>{p.initials}</div>
+                        <span style={{ fontSize: 16 }}>{getProviderIcon(p.name)}</span>
                         <span style={{ fontSize: 12 }}>{p.name}</span>
                       </div>
                     </th>
@@ -326,8 +301,6 @@ export default function CompareClient({ providers, criteria }: Props) {
       {/* Step 3 — Results */}
       {step === 'results' && results && (
         <div style={{ marginTop: 24 }}>
-          <div style={{ height: 1, background: 'linear-gradient(90deg,transparent,var(--border-2),transparent)', marginBottom: 24 }} />
-
           <div className="recalc-bar">
             <div className="recalc-info">
               Peringkat <strong>{results.results.length}</strong> provider berdasarkan perhitungan MOORA
@@ -349,105 +322,14 @@ export default function CompareClient({ providers, criteria }: Props) {
           </div>
 
           {/* Winner Card */}
-          <div className="results-bento">
-            <div className="bento-card winner-card">
-              <div className="winner-crown">🏆</div>
-              <div className="winner-badge">Peringkat Pertama</div>
-              <div className="winner-name">{results.results[0].provider.name}</div>
-              <div className="winner-desc">{results.results[0].provider.description}</div>
-              <div className="winner-score-row">
-                <span className="winner-score-num">{results.results[0].yiScore.toFixed(2)}</span>
-                <span className="winner-score-label">yiScore</span>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.1rem', color: 'var(--gold)', marginLeft: 12 }}>
-                  {results.results[0].scorePercentile.toFixed(1)}%
-                </span>
-                <span style={{ fontSize: 12, color: 'var(--text-3)' }}>percentile</span>
-              </div>
-              {results.results[0].strengths.length > 0 && (
-                <div style={{ marginTop: 12 }}>
-                  <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--green)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Kelebihan</div>
-                  <ul className="strengths-list">
-                    {results.results[0].strengths.map((s, i) => (
-                      <li key={i} className="strength-item">
-                        <span className="strength-dot" />
-                        {s}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              {results.results[0].weaknesses.length > 0 && (
-                <div style={{ marginTop: 8 }}>
-                  <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--red)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Kelemahan</div>
-                  <ul className="strengths-list">
-                    {results.results[0].weaknesses.map((w, i) => (
-                      <li key={i} className="strength-item">
-                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--red)', flexShrink: 0 }} />
-                        {w}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-
-            {/* Remaining Results */}
-            <div className="rank-list">
-              {results.results.slice(1).map(r => {
-                const accentColor = r.rank === 2 ? '#94A3B8' : '#B4836B'
-                return (
-                  <div key={r.provider.id} className="bento-card" style={{
-                    borderColor: r.rank === 2 ? 'rgba(148,163,184,0.25)' : 'rgba(180,131,107,0.25)',
-                    background: r.rank === 2 ? 'linear-gradient(135deg, rgba(148,163,184,0.06), var(--surface))' : 'linear-gradient(135deg, rgba(180,131,107,0.06), var(--surface))',
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-                      <span style={{ fontSize: 22 }}>{r.rank === 2 ? '🥈' : '🥉'}</span>
-                      <div>
-                        <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: accentColor, marginBottom: 2 }}>
-                          Peringkat #{r.rank}
-                        </div>
-                        <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)' }}>{r.provider.name}</div>
-                      </div>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 14, fontWeight: 600, color: accentColor }}>
-                        {r.yiScore.toFixed(2)}
-                      </span>
-                      <span style={{ fontSize: 10, color: 'var(--text-3)' }}>yiScore</span>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 14, fontWeight: 600, color: accentColor, marginLeft: 8 }}>
-                        {r.scorePercentile.toFixed(1)}%
-                      </span>
-                      <span style={{ fontSize: 10, color: 'var(--text-3)' }}>percentile</span>
-                    </div>
-                    {r.strengths.length > 0 && (
-                      <div style={{ marginTop: 8 }}>
-                        <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--green)', marginBottom: 3, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Kelebihan</div>
-                        <ul className="strengths-list">
-                          {r.strengths.map((s, i) => (
-                            <li key={i} className="strength-item">
-                              <span className="strength-dot" />
-                              {s}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    {r.weaknesses.length > 0 && (
-                      <div style={{ marginTop: 4 }}>
-                        <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--red)', marginBottom: 3, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Kelemahan</div>
-                        <ul className="strengths-list">
-                          {r.weaknesses.map((w, i) => (
-                            <li key={i} className="strength-item">
-                              <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--red)', flexShrink: 0 }} />
-                              {w}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                )
-              })}
+          <div className="bento-card winner-card" style={{ maxWidth: 420, margin: '0 auto' }}>
+            <div className="winner-crown">🏆</div>
+            <div className="winner-badge">Peringkat Pertama</div>
+            <div className="winner-name">{results.results[0].provider.name}</div>
+            <div className="winner-desc">{results.results[0].provider.description}</div>
+            <div className="winner-score-row">
+              <span className="winner-score-num">{results.results[0].yiScore.toFixed(2)}</span>
+              <span className="winner-score-label">yiScore</span>
             </div>
           </div>
 
@@ -467,7 +349,6 @@ export default function CompareClient({ providers, criteria }: Props) {
                       <th key={c.key} style={{ textAlign: 'center', color: CRITERION_COLORS[c.key] }}>{c.label}</th>
                     ))}
                     <th style={{ textAlign: 'center', color: 'var(--gold)' }}>yiScore</th>
-                    <th style={{ textAlign: 'center' }}>Percentile</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -482,7 +363,7 @@ export default function CompareClient({ providers, criteria }: Props) {
                         </td>
                         <td>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                            <div style={{ width: 22, height: 22, borderRadius: 5, background: r.provider.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: 8, color: 'white', flexShrink: 0 }}>{r.provider.initials}</div>
+                            <span style={{ fontSize: 18 }}>{getProviderIcon(r.provider.name)}</span>
                             <span style={{ fontSize: 12, fontWeight: r.rank === 1 ? 600 : 400 }}>{r.provider.name}</span>
                             {r.rank === 1 && <span style={{ fontSize: 10 }}>🏆</span>}
                           </div>
@@ -500,11 +381,6 @@ export default function CompareClient({ providers, criteria }: Props) {
                         <td style={{ textAlign: 'center' }}>
                           <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 700, color: r.rank === 1 ? 'var(--gold)' : 'var(--text)' }}>
                             {r.yiScore.toFixed(4)}
-                          </span>
-                        </td>
-                        <td style={{ textAlign: 'center' }}>
-                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 600 }}>
-                            {r.scorePercentile.toFixed(1)}%
                           </span>
                         </td>
                       </tr>

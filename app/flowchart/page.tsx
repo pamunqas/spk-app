@@ -2,12 +2,12 @@
 import Link from 'next/link'
 import LandingNav from '@/components/LandingNav'
 import SystemDiagrams from '@/components/SystemDiagrams'
+import EcofarmingBg from '@/components/EcofarmingBg'
 
 export default function FlowchartPage() {
   return (
     <div className="landing-page">
-      <div className="landing-bg" />
-      <div className="landing-grid" />
+      <EcofarmingBg />
       <LandingNav />
 
       <div className="doc-container">

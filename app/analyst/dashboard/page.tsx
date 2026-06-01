@@ -1,9 +1,9 @@
 'use client'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import BarChart from '@/components/BarChart'
 import Toast from '@/components/Toast'
+import { getProviderIcon } from '@/lib/icons'
 
 interface DashboardData {
   totalComparisons: number
@@ -129,11 +129,7 @@ export default function DashboardPage() {
                 return (
                   <div key={r.rank} className="ranking-item">
                     <span className="ranking-medal" style={{ color }}>{medal}</span>
-                    {p?.logo ? (
-                      <Image src={p.logo} alt={p.name} width={24} height={24} className="ranking-logo" />
-                    ) : (
-                      <div className="ranking-badge" style={{ background: p?.color || '#666' }}>{p?.initials || '??'}</div>
-                    )}
+                    <span style={{ fontSize: 18 }}>{getProviderIcon(r.name)}</span>
                     <span className="ranking-name">{r.name}</span>
                     <span className="ranking-score">{Number(r.yiScore).toFixed(4)}</span>
                   </div>
@@ -150,7 +146,7 @@ export default function DashboardPage() {
 
         <div className="dashboard-card">
           <div className="dashboard-card-header">
-            <h2>Trending di Sleman</h2>
+            <h2>Trending</h2>
           </div>
           {trendingProviders.length > 0 ? (
             <div className="trending-list">

@@ -1,6 +1,7 @@
 'use client'
 import { useState, useCallback } from 'react'
 import type { Provider } from '@prisma/client'
+import { getProviderIcon } from '@/lib/icons'
 import Modal from '@/components/Modal'
 import Toast from '@/components/Toast'
 
@@ -96,9 +97,7 @@ export default function ProvidersClient({ initialProviders }: Props) {
               <tr key={p.id}>
                 <td>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <div style={{ width: 30, height: 30, borderRadius: 7, background: p.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 500, color: 'white', flexShrink: 0 }}>
-                      {p.initials}
-                    </div>
+                    <span style={{ fontSize: 22 }}>{getProviderIcon(p.name)}</span>
                     <div>
                       <div style={{ fontSize: 13, fontWeight: 500 }}>{p.name}</div>
                       <div style={{ fontSize: 11, color: 'var(--text-3)' }}>/{p.slug}</div>

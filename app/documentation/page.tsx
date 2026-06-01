@@ -2,8 +2,48 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import LandingNav from '@/components/LandingNav'
+import EcofarmingBg from '@/components/EcofarmingBg'
 
 const sections = [
+  {
+    id: 'features',
+    title: 'Fitur Utama',
+    icon: '⚙️',
+    content: (
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16 }}>
+        <div className="feature-card">
+          <div className="feature-card-icon">📊</div>
+          <h4>Analisis MOORA</h4>
+          <p>Perhitungan multi-kriteria menggunakan metode MOORA untuk hasil yang objektif dan terukur.</p>
+        </div>
+        <div className="feature-card">
+          <div className="feature-card-icon">⚖️</div>
+          <h4>Kriteria Terukur</h4>
+          <p>Enam kriteria penilaian: Harga, Kandungan Nutrisi, Kualitas, Dampak Lingkungan, Ramah Lingkungan, dan Ketersediaan.</p>
+        </div>
+        <div className="feature-card">
+          <div className="feature-card-icon">📈</div>
+          <h4>Visualisasi Data</h4>
+          <p>Hasil analisis ditampilkan dalam bentuk grafik dan peringkat yang mudah dipahami.</p>
+        </div>
+        <div className="feature-card">
+          <div className="feature-card-icon">📱</div>
+          <h4>Mudah Digunakan</h4>
+          <p>Antarmuka yang sederhana dan intuitif, dapat digunakan oleh siapa saja tanpa pelatihan khusus.</p>
+        </div>
+        <div className="feature-card">
+          <div className="feature-card-icon">📋</div>
+          <h4>Riwayat Analisis</h4>
+          <p>Semua hasil perbandingan tersimpan dan dapat dilihat kembali kapan saja.</p>
+        </div>
+        <div className="feature-card">
+          <div className="feature-card-icon">🔐</div>
+          <h4>Manajemen Pengguna</h4>
+          <p>Sistem login dan role-based access untuk pengalaman yang aman dan personal.</p>
+        </div>
+      </div>
+    ),
+  },
   {
     id: 'register',
     title: 'Cara Daftar',
@@ -45,22 +85,6 @@ const sections = [
     ),
   },
   {
-    id: 'system',
-    title: 'Tentang Sistem',
-    icon: '🏢',
-    content: (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <p>Sistem Pendukung Keputusan (SPK) Penentuan Pupuk Organik Terbaik pada Ecofarming adalah aplikasi berbasis web yang membantu dalam menentukan pupuk organik yang paling sesuai dengan kebutuhan ecofarming.</p>
-        <p>Sistem ini menggunakan metode MOORA untuk memberikan rekomendasi pupuk organik berdasarkan kriteria yang ditentukan pengguna.</p>
-        <ul style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <li><strong>Tujuan:</strong> Membantu menentukan pupuk organik terbaik untuk ecofarming</li>
-          <li><strong>Metode:</strong> MOORA (Multi-Objective Optimization on the basis of Ratio Analysis)</li>
-          <li><strong>Target User:</strong> Petani dan pelaku ecofarming</li>
-        </ul>
-      </div>
-    ),
-  },
-  {
     id: 'compare',
     title: 'Membandingkan Pupuk Organik',
     icon: '⚖️',
@@ -77,22 +101,6 @@ const sections = [
         <div style={{ marginTop: 16, padding: 12, background: 'var(--primary-dim)', borderRadius: 'var(--r-sm)', fontSize: 13, color: 'var(--text-2)' }}>
           <strong>Tips:</strong> Anda dapat menyesuaikan bobot kriteria sesuai kebutuhan ecofarming Anda.
         </div>
-      </div>
-    ),
-  },
-  {
-    id: 'algorithm',
-    title: 'Tentang Metode MOORA',
-    icon: '📊',
-    content: (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <p>MOORA (Multi-Objective Optimization on the basis of Ratio Analysis) adalah metode pengambilan keputusan multikriteria yang dikembangkan oleh Brauers dan Zavadskas.</p>
-        <ol style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <li><strong>Normalisasi:</strong> Mengubah semua nilai kriteria ke skala comparable</li>
-          <li><strong>Pembobotan:</strong> Memberikan bobot pada setiap kriteria berdasarkan prioritas</li>
-          <li><strong>Perhitungan:</strong> Menghitung nilai optimasi untuk setiap alternatif</li>
-          <li><strong>Ranking:</strong> Mengurutkan alternatif berdasarkan nilai optimasi</li>
-        </ol>
       </div>
     ),
   },
@@ -126,8 +134,7 @@ export default function DocumentationPage() {
 
   return (
     <div className="landing-page">
-      <div className="landing-bg" />
-      <div className="landing-grid" />
+      <EcofarmingBg />
       <LandingNav />
 
       <div className="doc-container-wide">

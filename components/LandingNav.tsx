@@ -32,9 +32,10 @@ export default function LandingNav() {
         </Link>
       </div>
       <div className="landing-nav-links">
+        <Link href="/about" className={isActive('/about') ? 'active' : ''}>Tentang Proyek</Link>
         <Link href="/criteria" className={isActive('/criteria') ? 'active' : ''}>Pupuk Organik</Link>
         <Link href="/documentation" className={isActive('/documentation') ? 'active' : ''}>Dokumentasi</Link>
-        <Link href="/developer" className={isActive('/developer') ? 'active' : ''}>Tentang Kami</Link>
+        <Link href="/developer" className={isActive('/developer') ? 'active' : ''}>Pengembang</Link>
         <Link href="/login" className="btn-login-nav">Masuk</Link>
       </div>
     </div>

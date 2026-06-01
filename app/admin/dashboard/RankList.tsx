@@ -1,20 +1,22 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import type { MooraResult } from '@/lib/moora'
+import { getProviderIcon } from '@/lib/icons'
 
 export default function RankList({ results }: { results: MooraResult[] }) {
   const refs = useRef<(HTMLDivElement | null)[]>([])
   const barRefs = useRef<(HTMLDivElement | null)[]>([])
+  const maxYi = Math.max(...results.map(r => r.yiScore))
 
   useEffect(() => {
     results.forEach((_, i) => {
-      setTimeout(() => {
-        refs.current[i]?.classList.add('in')
-        const bar = barRefs.current[i]
-        if (bar) bar.style.width = bar.dataset.pct + '%'
-      }, i * 60 + 80)
+      const el = refs.current[i]
+      if (el) { el.style.transform = 'translateY(0)'; el.style.opacity = '1' }
+      const bar = barRefs.current[i]
+      const pct = ((results[i].yiScore / maxYi) * 100).toFixed(1)
+      if (bar) bar.style.width = pct + '%'
     })
-  }, [results])
+  }, [results, maxYi])
 
   if (results.length === 0) {
     return <div className="empty-state"><div className="empty-state-icon">⚙️</div><div className="empty-state-title">Tambahkan minimal 2 penyedia aktif untuk melihat peringkat</div></div>
@@ -30,7 +32,7 @@ export default function RankList({ results }: { results: MooraResult[] }) {
         >
           <div className="rank-num">{r.rank}</div>
           <div className="rank-info">
-            <div className="rank-avatar" style={{ background: r.provider.color }}>{r.provider.initials}</div>
+            <span style={{ fontSize: 22 }}>{getProviderIcon(r.provider.name)}</span>
             <div>
               <div className="rank-name">{r.provider.name}</div>
               <div className="rank-tags">
@@ -49,7 +51,6 @@ export default function RankList({ results }: { results: MooraResult[] }) {
               <div
                 className="rank-bar"
                 ref={el => { barRefs.current[i] = el }}
-                data-pct={r.scorePercentile.toFixed(1)}
               />
             </div>
           </div>

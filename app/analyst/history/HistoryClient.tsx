@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { getProviderIcon } from '@/lib/icons'
 
 interface MooraResult {
   rank: number
@@ -84,6 +85,7 @@ export default function HistoryClient({ comparisons }: { comparisons: Comparison
                         border: `1px solid ${p.border}`, background: p.bg,
                       }}>
                         <span style={{ fontSize: 14 }}>{p.medal}</span>
+                        <span style={{ fontSize: 14 }}>{getProviderIcon(r.provider.name)}</span>
                         <span style={{ fontSize: 11, fontWeight: 500, color: p.color, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {r.provider.name}
                         </span>
@@ -128,13 +130,7 @@ export default function HistoryClient({ comparisons }: { comparisons: Comparison
                               #{r.rank}
                             </span>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
-                              <div style={{
-                                width: 24, height: 24, borderRadius: 6, background: r.provider.color, flexShrink: 0,
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                fontFamily: 'var(--font-mono)', fontSize: 9, color: 'white',
-                              }}>
-                                {r.provider.initials}
-                              </div>
+                              <span style={{ fontSize: 20 }}>{getProviderIcon(r.provider.name)}</span>
                               <span style={{ fontSize: 13, fontWeight: isWinner ? 600 : 400, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                 {r.provider.name}
                               </span>

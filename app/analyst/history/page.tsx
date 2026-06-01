@@ -20,10 +20,15 @@ export default async function HistoryPage() {
     id:        c.id,
     createdAt: c.createdAt.toISOString(),
     winner:    c.winner,
-    results:   ((c.results as any[]) ?? []).map((r: any) => ({
-      ...r,
-      yiScore: Number(r.yiScore ?? 0),
+    results:   ((c.results as any)?.moora?.results ?? []).map((r: any) => ({
       rank:    Number(r.rank ?? 0),
+      yiScore: Number(r.yiScore ?? 0),
+      provider: {
+        id:        r.provider.id,
+        name:      r.provider.name,
+        initials:  r.provider.initials,
+        color:     r.provider.color,
+      },
     })),
   }))
 

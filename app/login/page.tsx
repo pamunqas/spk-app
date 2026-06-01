@@ -5,6 +5,7 @@ import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import PaymentIllustration from '@/components/PaymentIllustration'
 import AuthBrand from '@/components/AuthBrand'
+import EcofarmingBg from '@/components/EcofarmingBg'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -35,9 +36,8 @@ export default function LoginPage() {
 
   return (
     <div className="login-page">
-      <div className="login-bg" />
+      <EcofarmingBg />
       <PaymentIllustration />
-      <div className="login-grid" />
       <div className="login-wrap">
         <AuthBrand />
 

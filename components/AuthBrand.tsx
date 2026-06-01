@@ -57,17 +57,10 @@ export default function AuthBrand() {
         </div>
       </Link>
 
-      <div className="auth-pills">
-        <span className="auth-pill">Startup</span>
-        <span className="auth-pill-dot"/>
-        <span className="auth-pill">Sleman</span>
-        <span className="auth-pill-dot"/>
-        <span className="auth-pill">MOORA</span>
-      </div>
-
       <p className="auth-tagline-text">
         Sistem Pendukung Keputusan Penentuan<br/>
-        Pupuk Organik Terbaik pada Ecofarming
+        Pupuk Organik Terbaik pada Ecofarming<br/>
+        <span style={{ fontSize: '0.82em', opacity: 0.72 }}>dengan Metode MOORA</span>
       </p>
     </div>
   )

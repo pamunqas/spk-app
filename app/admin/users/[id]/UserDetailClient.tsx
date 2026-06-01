@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
+import { getProviderIcon } from '@/lib/icons'
 
 interface MooraResult {
   rank: number
@@ -145,6 +146,7 @@ export default function UserDetailClient({ user }: { user: UserProfile }) {
                           overflow: 'hidden', minWidth: 0,
                         }}>
                           <span style={{ fontSize: 15, flexShrink: 0 }}>{p.medal}</span>
+                          <span style={{ fontSize: 16 }}>{getProviderIcon(r.provider.name)}</span>
                           <div style={{ minWidth: 0, flex: 1 }}>
                             <div style={{
                               fontSize: 12, fontWeight: 600, color: p.color,
@@ -198,13 +200,7 @@ export default function UserDetailClient({ user }: { user: UserProfile }) {
                                 #{r.rank}
                               </span>
                               <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
-                                <div style={{
-                                  width: 24, height: 24, borderRadius: 6, background: r.provider.color, flexShrink: 0,
-                                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                  fontFamily: 'var(--font-mono)', fontSize: 9, color: 'white',
-                                }}>
-                                  {r.provider.initials}
-                                </div>
+                                <span style={{ fontSize: 20 }}>{getProviderIcon(r.provider.name)}</span>
                                 <span style={{ fontSize: 13, fontWeight: isWinner ? 600 : 400, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                   {r.provider.name}
                                 </span>

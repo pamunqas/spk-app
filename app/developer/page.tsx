@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import LandingNav from '@/components/LandingNav'
+import EcofarmingBg from '@/components/EcofarmingBg'
 
 export default function DeveloperPage() {
   const team = [
@@ -21,20 +22,19 @@ export default function DeveloperPage() {
       name: 'Muhammad Gifari Fitryanor',
       nim: '23330043',
       email: 'mgifaaf7@gmail.com',
-      image: '/images/gifari.jpg',
+      image: '/images/gifari.jpeg',
     },
     {
       name: 'Yumarlin MZ, S.Kom., M.Kom.',
       nim: '-',
       email: 'yumarlin@janabadra.ac.id',
-      image: '/images/yumarlin.jpg',
+      image: '/images/yumarlin.jpeg',
     },
   ]
 
   return (
     <div className="landing-page">
-      <div className="landing-bg" />
-      <div className="landing-grid" />
+      <EcofarmingBg />
 
       <LandingNav />
 

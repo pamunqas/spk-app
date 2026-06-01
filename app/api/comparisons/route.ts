@@ -107,11 +107,7 @@ export async function POST(req: Request) {
     const session = await auth()
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-    const userEmail = (session.user as any).email
-    const dbUser = await prisma.user.findUnique({ where: { email: userEmail } })
-    if (!dbUser) {
-      return NextResponse.json({ error: 'Sesi tidak valid. Silakan login ulang.' }, { status: 401 })
-    }
+    const userId = (session.user as any).id
 
     let body: { providerInputs: { id: string; harga: number; kandunganNutrisi: number; kualitas: number; dampak: number; ramahLingkungan: number; ketersediaan: number }[] }
     try {
@@ -164,7 +160,7 @@ export async function POST(req: Request) {
 
     const comparison = await prisma.comparison.create({
       data: {
-        userId: dbUser.id,
+        userId,
         providerIds: mooraInputs.map(p => p.id),
         winner: result.results[0].provider.name,
         results: {
@@ -185,7 +181,7 @@ export async function POST(req: Request) {
 
     prisma.auditLog.create({
       data: {
-        userId: dbUser.id,
+        userId,
         action: 'CREATE',
         entity: 'comparison',
         entityId: comparison.id,
