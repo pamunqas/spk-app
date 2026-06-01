@@ -1,0 +1,257 @@
+%% ====================================================================
+%% SPK Ecofarming - System Diagrams
+%% File: spk-diagrams.mmd
+%% Generator: System Inventory (Phase 1)
+%% ====================================================================
+
+%% ====================================================================
+%% 1. SITEMAP
+%% ====================================================================
+
+flowchart LR
+  title 1. Sitemap - SPK Pemupukan Organik
+
+  root(["SPK Ecofarming"]) --> public(["🌐 PUBLIC"])
+  root --> auth(["🔐 AUTH"])
+  root --> analyst(["👤 ANALYST"])
+  root --> admin(["⚙️ ADMIN"])
+  root --> db(["📦 DATABASE"])
+
+  public --> L[Landing /]
+  public --> LOGIN[/login\\]
+  public --> REG[/register\\]
+  public --> CRIT[/criteria\\]
+  public --> DOCS[/documentation\\]
+  public --> DEV[/developer\\]
+  public --> FLOW[/flowchart\\]
+  public --> PRIV[/privacy\\]
+  public --> TERMS[/terms\\]
+
+  auth --> JWT[JWT Strategy]
+  auth --> CRED[Credentials Provider]
+  auth --> ADT[Audit: LOGIN/LOGOUT]
+
+  analyst --> ADASH[/analyst/dashboard\\]
+  analyst --> ACOMP[/analyst/compare\\]
+  analyst --> AHIST[/analyst/history\\]
+  analyst --> APROF[/analyst/profile\\]
+
+  admin --> AD_DASH[/admin/dashboard\\]
+  admin --> AD_AN[/admin/analytics\\]
+  admin --> AD_PROV[/admin/providers\\]
+  admin --> AD_W[/admin/weights\\]
+  admin --> AD_USR[/admin/users\\]
+  admin --> AD_AUD[/admin/audit\\]
+
+  db --> U[User]
+  db --> P[Provider]
+  db --> C[Criterion]
+  db --> COMP[Comparison]
+  db --> AL[AuditLog]
+
+
+%% ====================================================================
+%% 2. SYSTEM FLOWCHART
+%% ====================================================================
+
+flowchart TD
+  title 2. System Flowchart - End-to-End Flow
+
+  S([VISIT]) --> A[Public Pages<br/>/, /criteria, /docs, /developer]
+  A --> B{Register?}
+  B -->|Yes| C[Register Form<br/>POST /api/register]
+  C --> D{Login?}
+  B -->|No| D
+  D -->|Not yet| A
+  D -->|Yes| E[Credentials Login<br/>POST /api/auth/...nextauth]
+  E --> F{bcrypt valid?}
+  F -->|No| G[LOGIN_FAILED audit]
+  G --> D
+  F -->|Yes| H[JWT Token issued<br/>id + role embedded]
+  H --> I{Middleware proxy.ts<br/>check role}
+  I -->|role = admin| J[Admin Dashboard<br/>redirect /admin/dashboard]
+  I -->|role = analyst| K[Analyst Compare<br/>redirect /analyst/compare]
+  J --> L[Admin features:<br/>Analytics, Providers,<br/>Weights, Users, Audit]
+  K --> M[Analyst features:<br/>Dashboard, Compare,<br/>History, Profile]
+  M --> N{MOORA Compare?}
+  N -->|Yes| O[3-Step Wizard:<br/>1. Select Providers<br/>2. Input Fuzzy Scores<br/>3. POST /api/comparisons]
+  O --> P[computeMoora()<br/>Normalization → Weight → Yi → Rank]
+  P --> Q[Save to DB<br/>+ Audit Log]
+  Q --> N
+  N -->|No| R([END])
+
+
+%% ====================================================================
+%% 3. ADMIN FLOWCHART
+%% ====================================================================
+
+flowchart TD
+  title 3. Admin Flowchart
+
+  S([START /admin/]) --> M1{Middleware proxy.ts<br/>isAdmin?}
+  M1 --> M2{Layout auth.ts<br/>role === admin?}
+  M2 -->|No| R1[redirect /login]
+  M2 -->|Yes| SH[AdminShell + Sidebar<br/>6 nav items]
+
+  SH --> DASH[📊 Dashboard<br/>/admin/dashboard]
+
+  DASH --> D1[Stat: Total Provider<br/>prisma.provider.findMany]
+  DASH --> D2[Stat: Active Users<br/>prisma.user.findMany role=analyst]
+  DASH --> D3[Stat: Comparisons Run<br/>prisma.comparison.count]
+  DASH --> D4[Top Ranked Provider<br/>computeMoora all active]
+  DASH --> D5[Recent 5 Comparisons<br/>prisma.comparison.findMany take:5]
+  DASH --> D6[Weight Distribution Bars<br/>prisma.criterion.findMany]
+
+  SH --> ANALYTICS[📈 Analytics<br/>/admin/analytics]
+
+  ANALYTICS --> A1[Win Frequency Bar Chart<br/>Chart.js BarChart]
+  ANALYTICS --> A2[Win Rate % per Provider]
+  ANALYTICS --> A3[Criteria Weight Impact Cards]
+  ANALYTICS --> A4[Data Source: last 100 comparisons<br/>prisma.comparison.findMany take:100]
+
+  SH --> PROV[🏭 Providers<br/>/admin/providers]
+
+  PROV --> P1[GET: List all providers<br/>prisma.provider.findMany]
+  PROV --> P2[POST: Create provider<br/>validate → generate slug → audit]
+  PROV --> P3[PUT: Edit scores/color/desc<br/>validate numeric scores → audit]
+  PROV --> P4[PATCH: Toggle active/inactive<br/>status validation → audit]
+  PROV --> P5[DELETE: Remove provider<br/>prisma.provider.delete → audit]
+
+  SH --> W[⚖️ Weights<br/>/admin/weights]
+
+  W --> W1[GET: List 6 criteria + weights<br/>prisma.criterion.findMany]
+  W --> W2[Slider UI: adjust per criterion]
+  W --> W3[Validation: Σ weights = 1.00<br/>tolerance ±0.001]
+  W --> W4[PUT: Bulk update weights<br/>prisma.criterion.updateMany → audit]
+
+  SH --> USERS[👥 Users<br/>/admin/users]
+
+  USERS --> U1[List all analysts<br/>prisma.user.findMany]
+  USERS --> U2[Stats: total users, avg comps,<br/>most active]
+  USERS --> U3[User Detail /admin/users/:id<br/>profile + full comparison history]
+
+  SH --> AUDIT[📋 Audit Trail<br/>/admin/audit]
+
+  AUDIT --> AU1[Last 50 entries<br/>prisma.auditLog.findMany take:50]
+  AUDIT --> AU2[Columns: Waktu, User,<br/>Aksi, Entitas, Detail]
+  AUDIT --> AU3[Action types: LOGIN, LOGOUT,<br/>LOGIN_FAILED, CREATE, UPDATE, DELETE]
+
+  SH --> LOGOUT[🚪 Logout<br/>POST /api/auth/logout<br/>Sidebar.tsx]
+  LOGOUT --> E([END])
+
+
+%% ====================================================================
+%% 4. ANALYST FLOWCHART
+%% ====================================================================
+
+flowchart TD
+  title 4. Analyst Flowchart
+
+  S([START /analyst/]) --> M1{Middleware proxy.ts<br/>isAuthenticated?}
+  M1 --> M2{Layout auth.ts<br/>session exists?}
+  M2 -->|No| R1[redirect /login]
+  M2 -->|Yes| SH[AnalystShell + Sidebar<br/>3 nav items + docs link]
+
+  SH --> DASH[📊 Dashboard<br/>/analyst/dashboard]
+
+  DASH --> D1[Stat: Total Comparisons<br/>own userId scope]
+  DASH --> D2[Stat: This Month Count]
+  DASH --> D3[Stat: Most Chosen Provider]
+  DASH --> D4[Last Comparison Ranking<br/>with medal/crown display]
+  DASH --> D5[Trending Providers List]
+  DASH --> D6[4-Month Activity Chart<br/>Chart.js BarChart]
+  DASH --> D7[Data: PATCH /api/comparisons<br/>aggregate response]
+
+  SH --> COMP[🔄 Compare<br/>/analyst/compare]
+
+  COMP --> C1[Server: fetch active providers<br/>+ all criteria + weights]
+  COMP --> C2[Step 1: Select 2+ providers<br/>from active list]
+  COMP --> C3[Step 2: Input Fuzzy Values<br/>per criterion per provider<br/>values: 1 / 3 / 5]
+  COMP --> C4[Step 3: POST /api/comparisons<br/>→ computeMoora()]
+  COMP --> C5[Show Results:<br/>Ranked list, Winner badge,<br/>Normalized matrix,<br/>Weighted scores,<br/>Strength/Weakness tags]
+
+  SH --> HIST[📜 History<br/>/analyst/history]
+
+  HIST --> H1[Stat: Total Analyses Done]
+  HIST --> H2[Stat: Favorite Provider<br/>most frequent winner]
+  HIST --> H3[Last 30 Comparisons<br/>prisma.comparison.findMany<br/>where: {userId}, take:30]
+  HIST --> H4[Expandable Row per Comparison<br/>show rank details + yi scores]
+
+  SH --> PROF[👤 Profile<br/>/analyst/profile]
+
+  PROF --> P1[Server: fetch user + stats<br/>prisma.user.findUnique]
+  PROF --> P2[Edit Fields:<br/>name, email, company, title]
+  PROF --> P3[Preferences:<br/>market focus, business type,<br/>settlement speed, notifications]
+  PROF --> P4[Account Stats:<br/>join date, analyses count,<br/>win rate, favorite provider]
+
+  SH --> LOGOUT[🚪 Logout<br/>POST /api/auth/logout<br/>Sidebar.tsx]
+  LOGOUT --> E([END])
+
+
+%% ====================================================================
+%% 5. MOORA CALCULATION FLOWCHART
+%% ====================================================================
+
+flowchart TD
+  title 5. MOORA Calculation Flowchart
+
+  S([START: User submits comparison<br/>POST /api/comparisons]) --> INPUT[📥 INPUT]
+
+  INPUT --> I1[providerInputs[]:<br/>selected provider IDs<br/>+ fuzzy scores 1/3/5<br/>per criterion]
+  INPUT --> I2[Fetch providers from DB<br/>prisma.provider.findMany]
+  INPUT --> I3[Fetch criteria + weights<br/>prisma.criterion.findMany]
+
+  I1 --> M1[📊 STEP 1: BUILD DECISION MATRIX]
+  I2 --> M1
+  I3 --> M1
+
+  M1 --> M1a[Extract raw values<br/>per provider per criterion]
+  M1 --> M1b[Label columns:<br/>benefit = + , cost = -]
+
+  M1a --> M2[📐 STEP 2: VECTOR NORMALIZATION]
+  M1b --> M2
+
+  M2 --> M2a[For each criterion column j:<br/>sqrt_sum = √(Σ xij²)]
+  M2 --> M2b[Nij = xij / sqrt_sum<br/>Result: normalized matrix<br/>all values in [0, 1]]
+
+  M2a --> M3[⚖️ STEP 3: APPLY WEIGHTS]
+  M2b --> M3
+
+  M3 --> M3a[For each cell:<br/>Vij = Nij × Wj]
+  M3 --> M3b[Wj from admin config<br/>Σ Wj = 1.00 (100%)]
+
+  M3a --> M4[🔢 STEP 4: COMPUTE Yi SCORE]
+  M3b --> M4
+
+  M4 --> M4a[For each provider i:<br/>Yi = Σ V(benefit) - Σ V(cost)]
+  M4 --> M4b[Benefit criteria (+):<br/>KandunganNutrisi<br/>Kualitas<br/>Dampak<br/>RamahLingkungan<br/>Ketersediaan]
+  M4 --> M4c[Cost criteria (-):<br/>Harga]
+
+  M4a --> M5[🏆 STEP 5: RANKING]
+  M4b --> M5
+  M4c --> M5
+
+  M5 --> M5a[Sort by Yi score descending]
+  M5 --> M5b[Rank 1 = highest Yi]
+  M5 --> M5c[Compute percentile (0-100)]
+  M5 --> M5d[Identify strengths:<br/>provider with max in criterion]
+  M5 --> M5e[Identify weaknesses:<br/>provider with min in criterion]
+
+  M5a --> OUT[📤 OUTPUT]
+  M5b --> OUT
+  M5c --> OUT
+  M5d --> OUT
+  M5e --> OUT
+
+  OUT --> O1[Ranked Provider List<br/>with Yi scores]
+  OUT --> O2[Normalized Matrix Table<br/>Nij values]
+  OUT --> O3[Weighted Score Table<br/>Vij values]
+  OUT --> O4[Winner Crown Badge<br/>Rank 1 provider]
+  OUT --> O5[Strength / Weakness Tags<br/>per provider]
+
+  O1 --> SAVE[💾 SAVE TO DATABASE]
+
+  SAVE --> SA1[Create Comparison record<br/>prisma.comparison.create]
+  SA1 --> SA2[Store providerIds + winner<br/>+ full results JSON]
+  SA2 --> SA3[Create Audit Log entry<br/>action: COMPARISON<br/>entity: comparison]
+  SA3 --> E([END])

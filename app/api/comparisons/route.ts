@@ -4,6 +4,92 @@ import { prisma } from '@/lib/prisma'
 import { computeMoora } from '@/lib/moora'
 import type { ProviderInput, Criterion as MooraCriterion } from '@/lib/moora'
 
+export async function PATCH() {
+  const session = await auth()
+  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const userId = (session.user as any).id
+
+  const now = new Date()
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+
+  const [comparisons, totalComparisons, monthlyCount, providers] = await Promise.all([
+    prisma.comparison.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+      take: 1,
+    }),
+    prisma.comparison.count({ where: { userId } }),
+    prisma.comparison.count({ where: { userId, createdAt: { gte: startOfMonth } } }),
+    prisma.provider.findMany({ where: { status: 'active' } }),
+  ])
+
+  const winnerCounts: Record<string, number> = {}
+  const allComparisons = totalComparisons > 0
+    ? await prisma.comparison.findMany({ where: { userId }, orderBy: { createdAt: 'desc' } })
+    : []
+  for (const c of allComparisons) {
+    winnerCounts[c.winner] = (winnerCounts[c.winner] || 0) + 1
+  }
+
+  let mostChosen: string | null = null
+  let mostChosenCount = 0
+  for (const [name, count] of Object.entries(winnerCounts)) {
+    if (count > mostChosenCount) { mostChosen = name; mostChosenCount = count }
+  }
+
+  const monthlyActivity: { label: string; value: number }[] = []
+  for (let i = 3; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1)
+    const monthEnd = new Date(now.getFullYear(), now.getMonth() - i + 1, 1)
+    const count = await prisma.comparison.count({
+      where: { userId, createdAt: { gte: d, lt: monthEnd } },
+    })
+    const label = d.toLocaleDateString('id-ID', { month: 'short' })
+    monthlyActivity.push({ label, value: count })
+  }
+
+  const trendingCounts: Record<string, number> = {}
+  for (const c of allComparisons) {
+    trendingCounts[c.winner] = (trendingCounts[c.winner] || 0) + 1
+  }
+  const trendingProviders = Object.entries(trendingCounts)
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5)
+
+  const lastResult = comparisons[0]
+    ? {
+        winner: comparisons[0].winner,
+        providerIds: comparisons[0].providerIds,
+        createdAt: comparisons[0].createdAt.toISOString(),
+        results: ((comparisons[0].results as any)?.moora?.results || []).map((r: any) => ({
+          rank: r.rank,
+          name: r.provider.name,
+          yiScore: r.yiScore,
+          logo: providers.find(p => p.name === r.provider.name)?.logo,
+        })),
+      }
+    : null
+
+  return NextResponse.json({
+    totalComparisons,
+    lastComparison: comparisons[0]?.createdAt.toISOString() ?? null,
+    monthlyCount,
+    mostChosen,
+    mostChosenCount,
+    monthlyActivity,
+    trendingProviders,
+    lastResult,
+    providers: providers.map(p => ({
+      id: p.id,
+      name: p.name,
+      initials: p.initials,
+      color: p.color,
+      logo: p.logo,
+    })),
+  })
+}
+
 export async function GET() {
   const session = await auth()
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })

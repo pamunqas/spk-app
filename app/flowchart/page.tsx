@@ -1,6 +1,7 @@
 'use client'
 import Link from 'next/link'
 import LandingNav from '@/components/LandingNav'
+import SystemDiagrams from '@/components/SystemDiagrams'
 
 export default function FlowchartPage() {
   return (
@@ -14,6 +15,8 @@ export default function FlowchartPage() {
           <h1>System Flowchart</h1>
           <p>Alur sistem SPK Penentuan Pupuk Organik pada Ecofarming</p>
         </div>
+
+        <SystemDiagrams />
 
         {/* USER FLOW */}
         <section className="flow-section">
