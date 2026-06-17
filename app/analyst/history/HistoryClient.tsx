@@ -29,7 +29,7 @@ export default function HistoryClient({ comparisons }: { comparisons: Comparison
     <div className="card" style={{ padding: 0 }}>
       <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div className="card-title">Riwayat Perbandingan</div>
-        <span style={{ fontSize: 11, color: 'var(--text-3)' }}>{comparisons.length} item</span>
+        <span style={{ color: 'var(--text-3)' }}>{comparisons.length} item</span>
       </div>
 
       {comparisons.length === 0 ? (
@@ -65,12 +65,12 @@ export default function HistoryClient({ comparisons }: { comparisons: Comparison
                   }}
                 >
                   {/* ID */}
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: 'var(--text-3)' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-3)' }}>
                     #{c.id.slice(-6).toUpperCase()}
                   </span>
                   
                   {/* Date */}
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--text-3)' }}>
+                  <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-3)' }}>
                     {new Date(c.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
                   </span>
 
@@ -86,7 +86,7 @@ export default function HistoryClient({ comparisons }: { comparisons: Comparison
                       }}>
                         <span style={{ fontSize: 14 }}>{p.medal}</span>
                         <span style={{ fontSize: 14 }}>{getProviderIcon(r.provider.name)}</span>
-                        <span style={{ fontSize: 11, fontWeight: 500, color: p.color, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        <span style={{ fontWeight: 500, color: p.color, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {r.provider.name}
                         </span>
                       </div>
@@ -106,7 +106,7 @@ export default function HistoryClient({ comparisons }: { comparisons: Comparison
                 {/* ── Expanded Yi scores ── */}
                 {isOpen && (
                   <div style={{ borderBottom: '1px solid var(--border)', background: 'var(--bg-3)', padding: '12px 20px 16px' }}>
-                    <div style={{ fontSize: 10, fontWeight: 500, color: 'var(--text-3)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 10 }}>
+                    <div style={{ fontWeight: 500, color: 'var(--text-3)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 10 }}>
                       Peringkat Skor Yi — {sorted.length} Penyedia
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -126,17 +126,17 @@ export default function HistoryClient({ comparisons }: { comparisons: Comparison
                             background: isWinner ? 'rgba(245,158,11,0.06)' : 'var(--surface)',
                             border: `1px solid ${isWinner ? 'rgba(245,158,11,0.2)' : 'var(--border)'}`,
                           }}>
-                            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 700, color: rankColor }}>
+                            <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: rankColor }}>
                               #{r.rank}
                             </span>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
                               <span style={{ fontSize: 20 }}>{getProviderIcon(r.provider.name)}</span>
-                              <span style={{ fontSize: 13, fontWeight: isWinner ? 600 : 400, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              <span style={{ fontWeight: isWinner ? 600 : 400, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                 {r.provider.name}
                               </span>
                               {isWinner && <span style={{ fontSize: 10, flexShrink: 0 }}>🏆</span>}
                             </div>
-                            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 600, color: isWinner ? 'var(--gold)' : 'var(--text)', textAlign: 'right' }}>
+                            <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600, color: isWinner ? 'var(--gold)' : 'var(--text)', textAlign: 'right' }}>
                               {Number(r.yiScore).toFixed(4)}
                             </span>
                             <div style={{ height: 5, background: 'var(--surface-2)', borderRadius: 3, overflow: 'hidden' }}>

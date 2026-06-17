@@ -4,7 +4,7 @@ export default function AuthBrand() {
   return (
     <div className="auth-brand">
       <Link href="/" className="auth-brand-link">
-        {/* Logo mark: hexagon + MOORA ranking bars + decision network */}
+        {/* Logo mark: hexagon + ranking bars + decision network */}
         <svg className="auth-logo-mark" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="spk-logo-bg" x1="0" y1="0" x2="1" y2="1">
@@ -33,7 +33,7 @@ export default function AuthBrand() {
           <path d="M28 6 L47.5 17 L47.5 39 L28 50 L8.5 39 L8.5 17 Z"
                 stroke="rgba(255,255,255,0.14)" strokeWidth="1" fill="none"/>
 
-          {/* Ranking bars (MOORA podium) */}
+          {/* Ranking bars */}
           <rect x="13" y="31" width="7" height="12" rx="2.5" fill="url(#spk-logo-bar-lo)"/>
           <rect x="25" y="19" width="7" height="24" rx="2.5" fill="url(#spk-logo-bar-hi)"/>
           <rect x="37" y="26" width="7" height="17" rx="2.5" fill="url(#spk-logo-bar-lo)"/>
@@ -60,7 +60,6 @@ export default function AuthBrand() {
       <p className="auth-tagline-text">
         Sistem Pendukung Keputusan Penentuan<br/>
         Pupuk Organik Terbaik pada Ecofarming<br/>
-        <span style={{ fontSize: '0.82em', opacity: 0.72 }}>dengan Metode MOORA</span>
       </p>
     </div>
   )

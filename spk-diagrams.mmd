@@ -44,18 +44,18 @@ flowchart LR
   admin --> AD_AUD[/admin/audit\\]
 
   db --> U[User]
-  db --> P[Provider]
+  db --> P[Pupuk]
   db --> C[Criterion]
   db --> COMP[Comparison]
   db --> AL[AuditLog]
 
 
 %% ====================================================================
-%% 2. SYSTEM FLOWCHART
+%% 2. SYSTEM FLOWCHART (High-Level)
 %% ====================================================================
 
 flowchart TD
-  title 2. System Flowchart - End-to-End Flow
+  title 2. System Flowchart - High-Level End-to-End Flow
 
   S([VISIT]) --> A[Public Pages<br/>/, /criteria, /docs, /developer]
   A --> B{Register?}
@@ -69,16 +69,15 @@ flowchart TD
   G --> D
   F -->|Yes| H[JWT Token issued<br/>id + role embedded]
   H --> I{Middleware proxy.ts<br/>check role}
-  I -->|role = admin| J[Admin Dashboard<br/>redirect /admin/dashboard]
-  I -->|role = analyst| K[Analyst Compare<br/>redirect /analyst/compare]
-  J --> L[Admin features:<br/>Analytics, Providers,<br/>Weights, Users, Audit]
-  K --> M[Analyst features:<br/>Dashboard, Compare,<br/>History, Profile]
-  M --> N{MOORA Compare?}
-  N -->|Yes| O[3-Step Wizard:<br/>1. Select Providers<br/>2. Input Fuzzy Scores<br/>3. POST /api/comparisons]
-  O --> P[computeMoora()<br/>Normalization → Weight → Yi → Rank]
-  P --> Q[Save to DB<br/>+ Audit Log]
-  Q --> N
-  N -->|No| R([END])
+  I -->|role = admin| J[Admin Dashboard<br/>/admin/dashboard]
+  I -->|role = analyst| K[Analyst Dashboard<br/>/analyst/dashboard]
+  J --> L[Logout]
+  K --> L
+  L --> M([END])
+
+  %% Detail menu Admin → lihat diagram 3
+  %% Detail menu Analyst → lihat diagram 4
+  %% Detail perhitungan MOORA → lihat diagram 5
 
 
 %% ====================================================================
@@ -95,27 +94,27 @@ flowchart TD
 
   SH --> DASH[📊 Dashboard<br/>/admin/dashboard]
 
-  DASH --> D1[Stat: Total Provider<br/>prisma.provider.findMany]
+  DASH --> D1[Stat: Total Pupuk<br/>prisma.provider.findMany]
   DASH --> D2[Stat: Active Users<br/>prisma.user.findMany role=analyst]
   DASH --> D3[Stat: Comparisons Run<br/>prisma.comparison.count]
-  DASH --> D4[Top Ranked Provider<br/>computeMoora all active]
+  DASH --> D4[Pupuk Peringkat Teratas<br/>computeMoora all active]
   DASH --> D5[Recent 5 Comparisons<br/>prisma.comparison.findMany take:5]
   DASH --> D6[Weight Distribution Bars<br/>prisma.criterion.findMany]
 
   SH --> ANALYTICS[📈 Analytics<br/>/admin/analytics]
 
   ANALYTICS --> A1[Win Frequency Bar Chart<br/>Chart.js BarChart]
-  ANALYTICS --> A2[Win Rate % per Provider]
+  ANALYTICS --> A2[Win Rate % per Pupuk]
   ANALYTICS --> A3[Criteria Weight Impact Cards]
   ANALYTICS --> A4[Data Source: last 100 comparisons<br/>prisma.comparison.findMany take:100]
 
-  SH --> PROV[🏭 Providers<br/>/admin/providers]
+  SH --> PROV[🏭 Pupuk<br/>/admin/providers]
 
-  PROV --> P1[GET: List all providers<br/>prisma.provider.findMany]
-  PROV --> P2[POST: Create provider<br/>validate → generate slug → audit]
+  PROV --> P1[GET: Daftar semua pupuk<br/>prisma.provider.findMany]
+  PROV --> P2[POST: Buat pupuk baru<br/>validate → generate slug → audit]
   PROV --> P3[PUT: Edit scores/color/desc<br/>validate numeric scores → audit]
   PROV --> P4[PATCH: Toggle active/inactive<br/>status validation → audit]
-  PROV --> P5[DELETE: Remove provider<br/>prisma.provider.delete → audit]
+  PROV --> P5[DELETE: Hapus pupuk<br/>prisma.provider.delete → audit]
 
   SH --> W[⚖️ Weights<br/>/admin/weights]
 
@@ -156,24 +155,24 @@ flowchart TD
 
   DASH --> D1[Stat: Total Comparisons<br/>own userId scope]
   DASH --> D2[Stat: This Month Count]
-  DASH --> D3[Stat: Most Chosen Provider]
+  DASH --> D3[Stat: Pupuk Paling Sering Dipilih]
   DASH --> D4[Last Comparison Ranking<br/>with medal/crown display]
-  DASH --> D5[Trending Providers List]
+  DASH --> D5[Daftar Pupuk Trending]
   DASH --> D6[4-Month Activity Chart<br/>Chart.js BarChart]
   DASH --> D7[Data: PATCH /api/comparisons<br/>aggregate response]
 
   SH --> COMP[🔄 Compare<br/>/analyst/compare]
 
-  COMP --> C1[Server: fetch active providers<br/>+ all criteria + weights]
-  COMP --> C2[Step 1: Select 2+ providers<br/>from active list]
-  COMP --> C3[Step 2: Input Fuzzy Values<br/>per criterion per provider<br/>values: 1 / 3 / 5]
+  COMP --> C1[Server: ambil pupuk aktif<br/>+ semua kriteria + bobot]
+  COMP --> C2[Step 1: Pilih 2+ pupuk<br/>dari daftar aktif]
+  COMP --> C3[Step 2: Input Fuzzy Values<br/>per kriteria per pupuk<br/>values: 1 / 3 / 5]
   COMP --> C4[Step 3: POST /api/comparisons<br/>→ computeMoora()]
   COMP --> C5[Show Results:<br/>Ranked list, Winner badge,<br/>Normalized matrix,<br/>Weighted scores,<br/>Strength/Weakness tags]
 
   SH --> HIST[📜 History<br/>/analyst/history]
 
   HIST --> H1[Stat: Total Analyses Done]
-  HIST --> H2[Stat: Favorite Provider<br/>most frequent winner]
+  HIST --> H2[Stat: Pupuk Favorit<br/>most frequent winner]
   HIST --> H3[Last 30 Comparisons<br/>prisma.comparison.findMany<br/>where: {userId}, take:30]
   HIST --> H4[Expandable Row per Comparison<br/>show rank details + yi scores]
 
@@ -182,30 +181,30 @@ flowchart TD
   PROF --> P1[Server: fetch user + stats<br/>prisma.user.findUnique]
   PROF --> P2[Edit Fields:<br/>name, email, company, title]
   PROF --> P3[Preferences:<br/>market focus, business type,<br/>settlement speed, notifications]
-  PROF --> P4[Account Stats:<br/>join date, analyses count,<br/>win rate, favorite provider]
+  PROF --> P4[Account Stats:<br/>join date, analyses count,<br/>win rate, pupuk favorit]
 
   SH --> LOGOUT[🚪 Logout<br/>POST /api/auth/logout<br/>Sidebar.tsx]
   LOGOUT --> E([END])
 
 
 %% ====================================================================
-%% 5. MOORA CALCULATION FLOWCHART
+%% 5. CALCULATION FLOWCHART
 %% ====================================================================
 
 flowchart TD
-  title 5. MOORA Calculation Flowchart
+  title 5. Calculation Flowchart
 
   S([START: User submits comparison<br/>POST /api/comparisons]) --> INPUT[📥 INPUT]
 
-  INPUT --> I1[providerInputs[]:<br/>selected provider IDs<br/>+ fuzzy scores 1/3/5<br/>per criterion]
-  INPUT --> I2[Fetch providers from DB<br/>prisma.provider.findMany]
+  INPUT --> I1[providerInputs[]:<br/>ID pupuk dipilih<br/>+ fuzzy scores 1/3/5<br/>per criterion]
+  INPUT --> I2[Ambil pupuk dari DB<br/>prisma.provider.findMany]
   INPUT --> I3[Fetch criteria + weights<br/>prisma.criterion.findMany]
 
   I1 --> M1[📊 STEP 1: BUILD DECISION MATRIX]
   I2 --> M1
   I3 --> M1
 
-  M1 --> M1a[Extract raw values<br/>per provider per criterion]
+  M1 --> M1a[Extract raw values<br/>per pupuk per kriteria]
   M1 --> M1b[Label columns:<br/>benefit = + , cost = -]
 
   M1a --> M2[📐 STEP 2: VECTOR NORMALIZATION]
@@ -223,7 +222,7 @@ flowchart TD
   M3a --> M4[🔢 STEP 4: COMPUTE Yi SCORE]
   M3b --> M4
 
-  M4 --> M4a[For each provider i:<br/>Yi = Σ V(benefit) - Σ V(cost)]
+  M4 --> M4a[Untuk setiap pupuk i:<br/>Yi = Σ V(benefit) - Σ V(cost)]
   M4 --> M4b[Benefit criteria (+):<br/>KandunganNutrisi<br/>Kualitas<br/>Dampak<br/>RamahLingkungan<br/>Ketersediaan]
   M4 --> M4c[Cost criteria (-):<br/>Harga]
 
@@ -234,8 +233,8 @@ flowchart TD
   M5 --> M5a[Sort by Yi score descending]
   M5 --> M5b[Rank 1 = highest Yi]
   M5 --> M5c[Compute percentile (0-100)]
-  M5 --> M5d[Identify strengths:<br/>provider with max in criterion]
-  M5 --> M5e[Identify weaknesses:<br/>provider with min in criterion]
+  M5 --> M5d[Identify strengths:<br/>pupuk dengan max kriteria]
+  M5 --> M5e[Identify weaknesses:<br/>pupuk dengan min kriteria]
 
   M5a --> OUT[📤 OUTPUT]
   M5b --> OUT
@@ -243,15 +242,15 @@ flowchart TD
   M5d --> OUT
   M5e --> OUT
 
-  OUT --> O1[Ranked Provider List<br/>with Yi scores]
+  OUT --> O1[Daftar Peringkat Pupuk<br/>with Yi scores]
   OUT --> O2[Normalized Matrix Table<br/>Nij values]
   OUT --> O3[Weighted Score Table<br/>Vij values]
-  OUT --> O4[Winner Crown Badge<br/>Rank 1 provider]
-  OUT --> O5[Strength / Weakness Tags<br/>per provider]
+  OUT --> O4[Winner Crown Badge<br/>Pupuk peringkat 1]
+  OUT --> O5[Strength / Weakness Tags<br/>per pupuk]
 
   O1 --> SAVE[💾 SAVE TO DATABASE]
 
   SAVE --> SA1[Create Comparison record<br/>prisma.comparison.create]
-  SA1 --> SA2[Store providerIds + winner<br/>+ full results JSON]
+  SA1 --> SA2[Simpan ID pupuk + pemenang<br/>+ full results JSON]
   SA2 --> SA3[Create Audit Log entry<br/>action: COMPARISON<br/>entity: comparison]
   SA3 --> E([END])

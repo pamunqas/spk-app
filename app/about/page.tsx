@@ -61,7 +61,7 @@ export default function AboutPage() {
       <div className="doc-container">
         <div className="doc-header">
           <h1>Tentang Proyek</h1>
-          <p>Sistem Pendukung Keputusan Penentuan Pupuk Organik Terbaik pada Ecofarming Menggunakan Metode MOORA</p>
+          <p>Sistem Pendukung Keputusan Penentuan Pupuk Organik Terbaik pada Ecofarming</p>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
@@ -82,7 +82,7 @@ export default function AboutPage() {
             <h2><span className="doc-icon">💡</span> Tujuan</h2>
             <ul style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 8 }}>
               <li>Membangun sistem pendukung keputusan untuk menentukan pupuk organik terbaik pada ecofarming</li>
-              <li>Menerapkan metode MOORA dalam proses pengambilan keputusan</li>
+              <li>Menerapkan sistem pendukung keputusan dalam proses pemilihan pupuk</li>
               <li>Membantu petani dan pelaku ecofarming dalam memilih pupuk organik yang sesuai</li>
               <li>Menyediakan platform yang mudah digunakan untuk analisis perbandingan pupuk organik</li>
             </ul>
@@ -129,13 +129,12 @@ export default function AboutPage() {
           </section>
 
           <section className="doc-section-card">
-            <h2><span className="doc-icon">📚</span> Metode MOORA</h2>
+            <h2><span className="doc-icon">📚</span> Metode Pengambilan Keputusan</h2>
             <p>
-              MOORA (Multi-Objective Optimization on the basis of Ratio Analysis) adalah metode pengambilan keputusan
-              multikriteria yang dikembangkan oleh Brauers dan Zavadskas. Metode ini bekerja dengan menghitung rasio
+              Sistem ini menggunakan metode pengambilan keputusan multikriteria yang bekerja dengan menghitung rasio
               antara nilai alternatif terhadap nilai normalisasi vektor, sehingga menghasilkan peringkat yang objektif.
             </p>
-            <p>Tahapan metode MOORA:</p>
+            <p>Tahapan metode:</p>
             <ol style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 8 }}>
               <li><strong>Normalisasi Vektor</strong> — Mengubah nilai kriteria ke dalam skala yang sebanding</li>
               <li><strong>Pembobotan</strong> — Memberikan bobot pada setiap kriteria sesuai prioritas</li>

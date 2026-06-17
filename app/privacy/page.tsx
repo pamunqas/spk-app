@@ -22,7 +22,7 @@ export default function PrivacyPage() {
           <section>
             <h2>1. Pendahuluan</h2>
             <p>
-              Kebijakan Privasi ini menjelaskan bagaimana SPK Penentuan Pupuk Organik Terbaik pada Ecofarming Dengan Metode MOORA 
+              Kebijakan Privasi ini menjelaskan bagaimana SPK Penentuan Pupuk Organik Terbaik pada Ecofarming 
               ("kami", "app", atau "sistem kami") mengumpulkan, menggunakan, dan melindungi informasi pribadi Anda ketika 
               menggunakan layanan kami.
             </p>

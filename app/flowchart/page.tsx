@@ -53,7 +53,7 @@ export default function FlowchartPage() {
                 <div className="flow-node-box">
                   <span>Dasbor → /admin/dashboard</span>
                   <span>Analitik → /admin/analytics</span>
-                  <span>Providers → /admin/providers</span>
+                  <span>Pupuk → /admin/providers</span>
                   <span>Kriteria & Bobot → /admin/weights</span>
                   <span>Users → /admin/users</span>
                 </div>
@@ -70,9 +70,9 @@ export default function FlowchartPage() {
             <div className="flow-arrow">↓</div>
             <div className="flow-row branch-row">
               <div className="flow-node-col" style={{flex:1}}>
-                <div className="flow-node purple">MOORA COMPARISON</div>
+                <div className="flow-node purple">PERBANDINGAN</div>
                 <div className="flow-node-box process">
-                  <span>1. Select Providers (dari DB)</span>
+                  <span>1. Pilih Pupuk (dari DB)</span>
                   <span>2. Fill Fuzzy Value per Criteria</span>
                   <span>3. Hitung Normalization</span>
                   <span>4. Apply Weights (dari Admin)</span>
@@ -121,7 +121,7 @@ export default function FlowchartPage() {
             <div className="flow-arrow">↓</div>
             <div className="flow-row branch-row">
               <div className="flow-node-col">
-                <div className="flow-node purple">MOORA ALGORITHM</div>
+                <div className="flow-node purple">ALGORITMA SPK</div>
                 <div className="flow-node-box process">
                   <span>lib/moora.ts</span>
                   <span>Normalization</span>
@@ -134,7 +134,7 @@ export default function FlowchartPage() {
                 <div className="flow-node-box result">
                   <span>PostgreSQL</span>
                   <span>Prisma ORM</span>
-                  <span>Providers Table</span>
+                  <span>Tabel Pupuk</span>
                   <span>Criteria Table</span>
                   <span>Comparisons Table</span>
                   <span>Users Table</span>
@@ -170,7 +170,7 @@ export default function FlowchartPage() {
               </div>
               <div className="stack-item">
                 <span className="stack-title">Algorithm</span>
-                <span>MOORA Method</span>
+                <span>Metode SPK</span>
               </div>
             </div>
           </div>

@@ -45,12 +45,12 @@ const flow: FlowItem[] = [
     type: 'split',
     admin: {
       label: 'ADMIN MANAGEMENT',
-      items: ['CRUD Provider → /admin/providers', 'Bobot Kriteria → /admin/weights', 'Kelola Users → /admin/users'],
+      items: ['CRUD Pupuk → /admin/providers', 'Bobot Kriteria → /admin/weights', 'Kelola Users → /admin/users'],
     },
     analyst: {
-      label: 'MOORA COMPARISON',
+      label: 'PERBANDINGAN',
       items: [
-        '1. Pilih Provider (dari DB)',
+        '1. Pilih Pupuk (dari DB)',
         '2. Input Fuzzy Value per Kriteria',
         '3. Hitung Normalisasi',
         '4. Terapkan Bobot',

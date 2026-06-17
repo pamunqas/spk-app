@@ -13,8 +13,8 @@ const sections = [
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16 }}>
         <div className="feature-card">
           <div className="feature-card-icon">📊</div>
-          <h4>Analisis MOORA</h4>
-          <p>Perhitungan multi-kriteria menggunakan metode MOORA untuk hasil yang objektif dan terukur.</p>
+          <h4>Analisis Multikriteria</h4>
+          <p>Perhitungan multi-kriteria untuk hasil yang objektif dan terukur.</p>
         </div>
         <div className="feature-card">
           <div className="feature-card-icon">⚖️</div>
@@ -95,7 +95,7 @@ const sections = [
           <li>Pilih menu &ldquo;Bandingkan Pupuk&rdquo;</li>
           <li>Pilih kriteria yang ingin dibandingkan</li>
           <li>Klik &ldquo;Bandingkan&rdquo;</li>
-          <li>Lihat hasil ranking dari metode MOORA</li>
+          <li>Lihat hasil ranking</li>
           <li>Simpan hasil jika diperlukan</li>
         </ol>
         <div style={{ marginTop: 16, padding: 12, background: 'var(--primary-dim)', borderRadius: 'var(--r-sm)', fontSize: 13, color: 'var(--text-2)' }}>
@@ -140,7 +140,7 @@ export default function DocumentationPage() {
       <div className="doc-container-wide">
         <div className="doc-header">
           <h1>Dokumentasi</h1>
-          <p>Panduan lengkap penggunaan Sistem Pendukung Keputusan Penentuan Pupuk Organik Terbaik pada Ecofarming Menggunakan Metode MOORA.</p>
+          <p>Panduan lengkap penggunaan Sistem Pendukung Keputusan Penentuan Pupuk Organik Terbaik pada Ecofarming.</p>
         </div>
 
         <div className="doc-layout">

@@ -43,8 +43,8 @@ export default function WeightsClient({ initialCriteria }: { initialCriteria: Cr
       <div className="card-row">
         <div className="card">
           <div className="card-title">Sesuaikan Bobot Kriteria</div>
-          <p style={{ fontSize: 12, color: 'var(--text-3)', marginBottom: 18, lineHeight: 1.6 }}>
-            Bobot harus berjumlah 1,00 (100%). Perubahan akan mempengaruhi semua perhitungan MOORA ke depannya.
+          <p style={{ color: 'var(--text-3)', marginBottom: 18, lineHeight: 1.6 }}>
+            Bobot harus berjumlah 1,00 (100%). Perubahan akan mempengaruhi semua perhitungan ke depannya.
           </p>
           <div className="weight-editor">
             {criteria.map((c, i) => (
@@ -62,7 +62,7 @@ export default function WeightsClient({ initialCriteria }: { initialCriteria: Cr
             ))}
           </div>
           <div className="weight-total" style={{ marginTop: 16 }}>
-            <span style={{ fontSize: 13, color: 'var(--text-2)' }}>Total bobot</span>
+            <span style={{ color: 'var(--text-2)' }}>Total bobot</span>
             <span className={`weight-total-num ${ok ? 'ok' : 'err'}`}>{total.toFixed(2)}</span>
           </div>
           <button className="btn-primary" style={{ marginTop: 14, width: '100%', padding: 10 }} onClick={save}>
@@ -77,10 +77,10 @@ export default function WeightsClient({ initialCriteria }: { initialCriteria: Cr
               <div key={c.id} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
                 <div style={{ width: 8, height: 8, borderRadius: '50%', background: c.color, flexShrink: 0, marginTop: 6 }} />
                 <div>
-                  <div style={{ fontSize: 13, fontWeight: 500, marginBottom: 3 }}>
-                    {c.label} <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-3)' }}>{c.unit}</span>
+                  <div style={{ fontWeight: 500, marginBottom: 3 }}>
+                    {c.label} <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-3)' }}>{c.unit}</span>
                   </div>
-                  <div style={{ fontSize: 12, color: 'var(--text-3)', lineHeight: 1.5 }}>{c.desc}</div>
+                  <div style={{ color: 'var(--text-3)', lineHeight: 1.5 }}>{c.desc}</div>
                   <span className={`badge ${c.type}`} style={{ marginTop: 5, display: 'inline-block' }}>
                     {c.type === 'benefit' ? 'Maksimalkan' : 'Minimalkan'}
                   </span>

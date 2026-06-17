@@ -50,7 +50,7 @@ export default function Sidebar({ items, userName, userRole, initials }: Sidebar
           </svg>
           <div>
             <div className="sidebar-brand-name"><span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.15em', color: 'var(--primary-light)' }}>SPK</span><span style={{ fontStyle: 'italic' }}> Ecofarming</span></div>
-            <div className="sidebar-brand-tag">Pupuk Organik · MOORA</div>
+            <div className="sidebar-brand-tag">Pupuk Organik</div>
           </div>
         </div>
       </div>

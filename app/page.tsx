@@ -15,17 +15,10 @@ export default function LandingPage() {
       <div className="landing-hero">
         <div className="landing-hero-content">
           <div className="landing-badge">Sistem Pendukung Keputusan</div>
-          <h1>Penentuan Pupuk Organik Terbaik<br/>pada Ecofarming Dengan Metode MOORA</h1>
-          <p>
-            Membantu Anda menentukan pupuk organik yang paling tepat untuk kegiatan ecofarming 
-            menggunakan metode MOORA (Multi-Objective Optimization on the basis of Ratio Analysis).
-          </p>
+          <h1>Penentuan Pupuk Organik Terbaik<br/>pada Ecofarming</h1>
           <div className="landing-hero-btns">
             <Link href="/login" className="btn-primary-landing">
               Mulai Sekarang →
-            </Link>
-            <Link href="/documentation" className="btn-ghost-landing">
-              Pelajari Lebih Lanjut
             </Link>
           </div>
         </div>

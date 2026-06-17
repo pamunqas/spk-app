@@ -51,10 +51,10 @@ export default async function AdminDashboard() {
         </div>
         <div className="stat-card">
           <div className="stat-card-label">Peringkat Teratas</div>
-          <div className="stat-card-num" style={{ color: 'var(--accent)', fontSize: '1.3rem', paddingTop: 4 }}>
+          <div className="stat-card-num" style={{ color: 'var(--accent)', paddingTop: 4 }}>
             {topProvider}
           </div>
-          <div className="stat-card-delta">Pemenang MOORA semua penyedia</div>
+          <div className="stat-card-delta">Pemenang semua penyedia</div>
         </div>
       </div>
 
@@ -68,13 +68,13 @@ export default async function AdminDashboard() {
             </div>
           ) : comparisons.map(c => (
             <div key={c.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 0', borderBottom: '1px solid var(--border)' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-3)', width: 80, flexShrink: 0 }}>
+              <div style={{ fontFamily: 'var(--font-mono)', color: 'var(--text-3)', width: 80, flexShrink: 0 }}>
                 {new Date(c.createdAt).toLocaleDateString('id-ID', { month: 'short', day: 'numeric' })}
               </div>
-              <div style={{ flex: 1, fontSize: 12, color: 'var(--text-2)' }}>
+              <div style={{ flex: 1, color: 'var(--text-2)' }}>
                 {c.providerIds.length} penyedia dibandingkan
               </div>
-              <div style={{ fontSize: 12, fontWeight: 500, color: 'var(--gold)' }}>🏆 {c.winner}</div>
+              <div style={{ fontWeight: 500, color: 'var(--gold)' }}>🏆 {c.winner}</div>
             </div>
           ))}
         </div>
@@ -110,7 +110,7 @@ export default async function AdminDashboard() {
       </div>
 
       <div className="card">
-        <div className="card-title">Peringkat MOORA Penuh — Semua Penyedia Aktif</div>
+        <div className="card-title">Peringkat Penuh — Semua Penyedia Aktif</div>
         <RankList results={results} />
       </div>
     </>

@@ -42,7 +42,7 @@
     "runtime": null
   },
   "build": {
-    "buildCommand": "npm run build",
+    "buildCommand": "npx tsc --noEmit 2>&1 | head -30",
     "testCommand": null,
     "lintCommand": "npm run lint",
     "devCommand": "npm run dev",
@@ -148,6 +148,211 @@
       "keyFiles": []
     }
   },
-  "hotPaths": [],
+  "hotPaths": [
+    {
+      "path": "app/register/page.tsx",
+      "accessCount": 9,
+      "lastAccessed": 1780348099286,
+      "type": "file"
+    },
+    {
+      "path": "components/PaymentIllustration.tsx",
+      "accessCount": 6,
+      "lastAccessed": 1780346972093,
+      "type": "file"
+    },
+    {
+      "path": "app/login/page.tsx",
+      "accessCount": 5,
+      "lastAccessed": 1780348099164,
+      "type": "file"
+    },
+    {
+      "path": "app/page.tsx",
+      "accessCount": 4,
+      "lastAccessed": 1780346049934,
+      "type": "file"
+    },
+    {
+      "path": "app/about/page.tsx",
+      "accessCount": 4,
+      "lastAccessed": 1780346050885,
+      "type": "file"
+    },
+    {
+      "path": "app/criteria/page.tsx",
+      "accessCount": 4,
+      "lastAccessed": 1780346051356,
+      "type": "file"
+    },
+    {
+      "path": "app/documentation/page.tsx",
+      "accessCount": 4,
+      "lastAccessed": 1780346052443,
+      "type": "file"
+    },
+    {
+      "path": "app/developer/page.tsx",
+      "accessCount": 4,
+      "lastAccessed": 1780346053477,
+      "type": "file"
+    },
+    {
+      "path": "app/globals.css",
+      "accessCount": 3,
+      "lastAccessed": 1780345888047,
+      "type": "file"
+    },
+    {
+      "path": "app/privacy/page.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1780346057220,
+      "type": "file"
+    },
+    {
+      "path": "app/terms/page.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1780346057692,
+      "type": "file"
+    },
+    {
+      "path": "app/flowchart/page.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1780346100924,
+      "type": "file"
+    },
+    {
+      "path": "components/AuthBrand.tsx",
+      "accessCount": 2,
+      "lastAccessed": 1780346865343,
+      "type": "file"
+    },
+    {
+      "path": "app/layout.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1780345018163,
+      "type": "file"
+    },
+    {
+      "path": "components/LandingNav.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1780345018562,
+      "type": "file"
+    },
+    {
+      "path": "app/analyst/layout.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1780345022361,
+      "type": "file"
+    },
+    {
+      "path": "app/admin/layout.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1780345022540,
+      "type": "file"
+    },
+    {
+      "path": "components/EcofarmingBg.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1780345878091,
+      "type": "file"
+    },
+    {
+      "path": "auth.ts",
+      "accessCount": 1,
+      "lastAccessed": 1780348094550,
+      "type": "file"
+    },
+    {
+      "path": "auth.config.ts",
+      "accessCount": 1,
+      "lastAccessed": 1780348094701,
+      "type": "file"
+    },
+    {
+      "path": "app/api/register/route.ts",
+      "accessCount": 1,
+      "lastAccessed": 1780348099538,
+      "type": "file"
+    },
+    {
+      "path": "app/analyst/compare/CompareClient.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1780348099670,
+      "type": "file"
+    },
+    {
+      "path": "app/analyst/history/HistoryClient.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1780348099779,
+      "type": "file"
+    },
+    {
+      "path": "app/admin/dashboard/page.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1780348103558,
+      "type": "file"
+    },
+    {
+      "path": "app/admin/users/[id]/UserDetailClient.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1780348103820,
+      "type": "file"
+    },
+    {
+      "path": "app/admin/providers/ProvidersClient.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1780348104047,
+      "type": "file"
+    },
+    {
+      "path": "prisma/schema.prisma",
+      "accessCount": 1,
+      "lastAccessed": 1780348104400,
+      "type": "file"
+    },
+    {
+      "path": "app/api/comparisons/route.ts",
+      "accessCount": 1,
+      "lastAccessed": 1780348104422,
+      "type": "file"
+    },
+    {
+      "path": "lib/moora.ts",
+      "accessCount": 1,
+      "lastAccessed": 1780348108311,
+      "type": "file"
+    },
+    {
+      "path": "app/analyst/dashboard/page.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1780348108951,
+      "type": "file"
+    },
+    {
+      "path": "app/admin/AdminShell.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1780348112853,
+      "type": "file"
+    },
+    {
+      "path": "app/api/weights/route.ts",
+      "accessCount": 1,
+      "lastAccessed": 1780348113098,
+      "type": "file"
+    },
+    {
+      "path": "app/api/providers/route.ts",
+      "accessCount": 1,
+      "lastAccessed": 1780348113264,
+      "type": "file"
+    },
+    {
+      "path": "app/api/auth/logout/route.ts",
+      "accessCount": 1,
+      "lastAccessed": 1780348113432,
+      "type": "file"
+    }
+  ],
   "userDirectives": []
 }

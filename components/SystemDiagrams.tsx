@@ -37,7 +37,7 @@ const sitemap: FlowNode[] = [
   { type: 'arrow', label: '' },
   { type: 'branch', label: '👤 ANALYST (role = analyst)', color: 'analyst', items: [
     { label: 'Dashboard', source: 'app/analyst/dashboard/page.tsx' },
-    { label: 'Compare (MOORA)', source: 'app/analyst/compare/page.tsx' },
+    { label: 'Compare', source: 'app/analyst/compare/page.tsx' },
     { label: 'History', source: 'app/analyst/history/page.tsx' },
     { label: 'Profile', source: 'app/analyst/profile/page.tsx' },
   ]},
@@ -45,7 +45,7 @@ const sitemap: FlowNode[] = [
   { type: 'branch', label: '⚙️ ADMIN (role = admin)', color: 'admin', items: [
     { label: 'Dashboard', source: 'app/admin/dashboard/page.tsx' },
     { label: 'Analytics', source: 'app/admin/analytics/page.tsx' },
-    { label: 'Providers (CRUD)', source: 'app/admin/providers/page.tsx' },
+    { label: 'Pupuk (CRUD)', source: 'app/admin/providers/page.tsx' },
     { label: 'Criteria Weights', source: 'app/admin/weights/page.tsx' },
     { label: 'Users', source: 'app/admin/users/page.tsx' },
     { label: 'Audit Trail', source: 'app/admin/audit/page.tsx' },
@@ -53,61 +53,40 @@ const sitemap: FlowNode[] = [
   { type: 'arrow', label: '' },
   { type: 'branch', label: '📦 DATABASE (Prisma)', color: 'purple', items: [
     { label: 'User', source: 'prisma/schema.prisma:9' },
-    { label: 'Provider', source: 'prisma/schema.prisma:23' },
+    { label: 'Pupuk', source: 'prisma/schema.prisma:23' },
     { label: 'Criterion', source: 'prisma/schema.prisma:41' },
     { label: 'Comparison', source: 'prisma/schema.prisma:51' },
     { label: 'AuditLog', source: 'prisma/schema.prisma:61' },
   ]},
 ]
 
-/* ─── 2. SYSTEM FLOWCHART ─── */
+/* ─── 2. SYSTEM FLOWCHART (High-Level) ─── */
 const systemFlow: FlowNode[] = [
   { type: 'node', label: 'VISIT', color: 'start', source: 'app/page.tsx' },
   { type: 'arrow', label: '' },
-  { type: 'branch', label: 'PUBLIC PAGES', color: 'green', items: [
-    { label: 'Landing /', source: 'app/page.tsx:6' },
-    { label: 'Kriteria /criteria', source: 'app/criteria/page.tsx:6' },
-    { label: 'Dokumentasi /documentation', source: 'app/documentation/page.tsx:6' },
-    { label: 'Developer /developer', source: 'app/developer/page.tsx:6' },
-  ]},
+  { type: 'node', label: 'Public Pages', color: 'green' },
   { type: 'arrow', label: '' },
   { type: 'node', label: 'Register?', color: 'diamond', source: 'app/register/page.tsx' },
   { type: 'arrow', label: '' },
-  { type: 'branch', label: 'REGISTER FORM', color: 'blue', items: [
-    { label: 'name, email, password', source: 'app/register/page.tsx:30-36' },
-    { label: 'company, title (optional)', source: 'app/register/page.tsx:38-39' },
-    { label: 'POST /api/register', source: 'app/api/register/route.ts:11-50' },
-    { label: 'bcrypt → User (role=analyst)', source: 'app/api/register/route.ts:44' },
-  ]},
+  { type: 'node', label: 'Register Form', color: 'blue', source: 'app/api/register/route.ts' },
   { type: 'arrow', label: '' },
-  { type: 'node', label: 'Login', color: 'diamond', source: 'app/login/page.tsx' },
+  { type: 'node', label: 'Login?', color: 'diamond', source: 'app/login/page.tsx' },
   { type: 'arrow', label: '' },
-  { type: 'branch', label: 'LOGIN FLOW', color: 'blue', items: [
-    { label: 'POST credentials', source: 'auth.ts:23-47' },
-    { label: 'bcrypt compare', source: 'auth.ts:38' },
-    { label: 'JWT token (id + role)', source: 'auth.config.ts:9-11' },
-    { label: 'Audit: LOGIN', source: 'auth.ts:43' },
-  ]},
+  { type: 'node', label: 'Login → bcrypt → JWT', color: 'blue', source: 'auth.ts' },
   { type: 'arrow', label: '' },
   { type: 'node', label: 'Middleware: Check Role', color: 'diamond', source: 'proxy.ts:7-28' },
   { type: 'arrow', label: '' },
   { type: 'branch', label: 'ROLE = ADMIN', color: 'admin', items: [
-    { label: '→ /admin/dashboard', source: 'proxy.ts:20' },
-    { label: 'Server guard: auth() role check', source: 'app/admin/layout.tsx:5-12' },
+    { label: '→ /admin/dashboard' },
+    { label: '▼ Detail ada di diagram 3' },
   ]},
   { type: 'arrow', label: '' },
   { type: 'branch', label: 'ROLE = ANALYST', color: 'analyst', items: [
-    { label: '→ /analyst/compare', source: 'proxy.ts:20' },
-    { label: 'Server guard: auth() only', source: 'app/analyst/layout.tsx:5-12' },
+    { label: '→ /analyst/dashboard' },
+    { label: '▼ Detail ada di diagram 4' },
   ]},
   { type: 'arrow', label: '' },
-  { type: 'branch', label: 'MOORA COMPARISON', color: 'purple', items: [
-    { label: 'Pilih Provider', source: 'app/analyst/compare/page.tsx:8-15' },
-    { label: 'Input Fuzzy Values', source: 'app/analyst/compare/page.tsx:18-30' },
-    { label: 'POST /api/comparisons', source: 'app/api/comparisons/route.ts:20-50' },
-    { label: 'computeMoora()', source: 'lib/moora.ts:10-80' },
-    { label: 'Save to DB → Audit', source: 'app/api/comparisons/route.ts:48' },
-  ]},
+  { type: 'node', label: 'Logout', color: 'end' },
   { type: 'arrow', label: '' },
   { type: 'node', label: 'END', color: 'end' },
 ]
@@ -123,10 +102,10 @@ const adminFlow: FlowNode[] = [
   { type: 'node', label: 'AdminShell + Sidebar', color: 'blue', source: 'app/admin/AdminShell.tsx:6-30' },
   { type: 'arrow', label: '' },
   { type: 'branch', label: 'DASHBOARD /admin/dashboard', color: 'green', items: [
-    { label: 'Stat: Total Provider', source: 'app/admin/dashboard/page.tsx:15-20' },
+    { label: 'Stat: Total Pupuk', source: 'app/admin/dashboard/page.tsx:15-20' },
     { label: 'Stat: Active Users', source: 'app/admin/dashboard/page.tsx:22-25' },
     { label: 'Stat: Total Comparisons', source: 'app/admin/dashboard/page.tsx:27-30' },
-    { label: 'MOORA Ranklist (all providers)', source: 'app/admin/dashboard/page.tsx:35-50' },
+    { label: 'Peringkat (semua pupuk)', source: 'app/admin/dashboard/page.tsx:35-50' },
     { label: 'Recent 5 comparisons', source: 'app/admin/dashboard/page.tsx:18' },
   ]},
   { type: 'arrow', label: '' },
@@ -137,12 +116,12 @@ const adminFlow: FlowNode[] = [
     { label: 'Data: last 100 comparisons', source: 'app/admin/analytics/page.tsx:12' },
   ]},
   { type: 'arrow', label: '' },
-  { type: 'branch', label: 'PROVIDERS /admin/providers', color: 'green', items: [
-    { label: 'List all providers', source: 'app/admin/providers/page.tsx | GET /api/providers' },
-    { label: 'POST: Create new provider', source: 'app/api/providers/route.ts:8-30' },
+  { type: 'branch', label: 'PUPUK /admin/providers', color: 'green', items: [
+    { label: 'Daftar semua pupuk', source: 'app/admin/providers/page.tsx | GET /api/providers' },
+    { label: 'POST: Buat pupuk baru', source: 'app/api/providers/route.ts:8-30' },
     { label: 'PUT: Edit scores & color', source: 'app/api/providers/[id]/route.ts:10-35' },
     { label: 'PATCH: Toggle active/inactive', source: 'app/api/providers/[id]/route.ts:40-55' },
-    { label: 'DELETE: Remove provider', source: 'app/api/providers/[id]/route.ts:58-70' },
+    { label: 'DELETE: Hapus pupuk', source: 'app/api/providers/[id]/route.ts:58-70' },
     { label: 'Audit: all mutations logged', source: 'app/api/providers/route.ts:28' },
   ]},
   { type: 'arrow', label: '' },
@@ -183,24 +162,24 @@ const analystFlow: FlowNode[] = [
   { type: 'branch', label: 'DASHBOARD /analyst/dashboard', color: 'green', items: [
     { label: 'Stat: Total comparisons', source: 'app/analyst/dashboard/page.tsx:15-20' },
     { label: 'Stat: This month count', source: 'app/analyst/dashboard/page.tsx:22-25' },
-    { label: 'Stat: Most chosen provider', source: 'app/analyst/dashboard/page.tsx:27-30' },
+    { label: 'Stat: Pupuk paling sering dipilih', source: 'app/analyst/dashboard/page.tsx:27-30' },
     { label: 'Last ranking + medal', source: 'app/analyst/dashboard/page.tsx:32-40' },
-    { label: 'Trending providers list', source: 'app/analyst/dashboard/page.tsx:42-48' },
+    { label: 'Daftar pupuk trending', source: 'app/analyst/dashboard/page.tsx:42-48' },
     { label: '4-month activity chart (BarChart)', source: 'app/analyst/dashboard/page.tsx:50-60' },
     { label: 'PATCH /api/comparisons (aggregate)', source: 'app/analyst/dashboard/page.tsx:12' },
   ]},
   { type: 'arrow', label: '' },
   { type: 'branch', label: 'COMPARE /analyst/compare', color: 'purple', items: [
-    { label: 'Server: fetch active providers + criteria', source: 'app/analyst/compare/page.tsx:8-12' },
-    { label: 'Step 1: Select 2+ providers', source: 'app/analyst/compare/page.tsx-client' },
+    { label: 'Server: ambil pupuk aktif + kriteria', source: 'app/analyst/compare/page.tsx:8-12' },
+    { label: 'Step 1: Pilih 2+ pupuk', source: 'app/analyst/compare/page.tsx-client' },
     { label: 'Step 2: Input fuzzy values (1/3/5)', source: 'app/analyst/compare/page.tsx-client' },
-    { label: 'Step 3: Compute MOORA', source: 'app/api/comparisons/route.ts:20-50' },
+    { label: 'Step 3: Compute', source: 'app/api/comparisons/route.ts:20-50' },
     { label: 'Show: ranked results + strengths', source: 'app/analyst/compare/page.tsx-client' },
   ]},
   { type: 'arrow', label: '' },
   { type: 'branch', label: 'HISTORY /analyst/history', color: 'blue', items: [
     { label: 'Stat: total analyses', source: 'app/analyst/history/page.tsx:10-15' },
-    { label: 'Stat: favorite provider', source: 'app/analyst/history/page.tsx:12-18' },
+    { label: 'Stat: pupuk favorit', source: 'app/analyst/history/page.tsx:12-18' },
     { label: 'Last 30 comparisons list', source: 'app/analyst/history/page.tsx:20-30' },
     { label: 'Expandable rank details', source: 'app/analyst/history/page.tsx-client' },
     { label: 'Own userId scope', source: 'app/api/comparisons/route.ts:10-15' },
@@ -222,19 +201,19 @@ const analystFlow: FlowNode[] = [
   { type: 'node', label: 'END', color: 'end' },
 ]
 
-/* ─── 5. MOORA CALCULATION FLOWCHART ─── */
+/* ─── 5. CALCULATION FLOWCHART ─── */
 const mooraFlow: FlowNode[] = [
   { type: 'node', label: 'START: User submits comparison', color: 'start', source: 'app/analyst/compare/page.tsx-client' },
   { type: 'arrow', label: '' },
   { type: 'branch', label: 'INPUT', color: 'green', items: [
-    { label: 'providerInputs[]: selected IDs + fuzzy scores', source: 'app/api/comparisons/route.ts:30-35' },
-    { label: 'Fetch providers from DB', source: 'app/api/comparisons/route.ts:36' },
+    { label: 'providerInputs[]: ID pupuk + fuzzy scores', source: 'app/api/comparisons/route.ts:30-35' },
+    { label: 'Ambil pupuk dari DB', source: 'app/api/comparisons/route.ts:36' },
     { label: 'Fetch criteria + weights from DB', source: 'app/api/comparisons/route.ts:37' },
   ]},
   { type: 'arrow', label: '' },
   { type: 'branch', label: 'STEP 1: BUILD MATRIX', color: 'blue', items: [
     { label: 'Extract raw values per criterion', source: 'lib/moora.ts:25' },
-    { label: 'Map provider → [harga, nutrisi, kualitas, ...]', source: 'lib/moora.ts:28-35' },
+    { label: 'Map pupuk → [harga, nutrisi, kualitas, ...]', source: 'lib/moora.ts:28-35' },
     { label: 'Split: benefit cols vs cost cols', source: 'lib/moora.ts:38-42' },
   ]},
   { type: 'arrow', label: '' },
@@ -252,21 +231,21 @@ const mooraFlow: FlowNode[] = [
   ]},
   { type: 'arrow', label: '' },
   { type: 'branch', label: 'STEP 4: YI SCORE', color: 'green', items: [
-    { label: 'For each provider i:', source: 'lib/moora.ts:58' },
+    { label: 'Untuk setiap pupuk i:', source: 'lib/moora.ts:58' },
     { label: 'Yi = ΣV(benefit) − ΣV(cost)', source: 'lib/moora.ts:60' },
     { label: 'Benefit (+): nutrisi, kualitas, dampak, ...', source: 'lib/moora.ts:62' },
     { label: 'Cost (−): harga', source: 'lib/moora.ts:64' },
   ]},
   { type: 'arrow', label: '' },
   { type: 'branch', label: 'STEP 5: RANKING', color: 'purple', items: [
-    { label: 'Sort providers by Yi desc', source: 'lib/moora.ts:67' },
+    { label: 'Urut pupuk berdasarkan Yi desc', source: 'lib/moora.ts:67' },
     { label: 'Rank 1 = highest Yi score', source: 'lib/moora.ts:69' },
     { label: 'Compute percentile 0–100', source: 'lib/moora.ts:71' },
     { label: 'Identify strengths & weaknesses', source: 'lib/moora.ts:74-80' },
   ]},
   { type: 'arrow', label: '' },
   { type: 'branch', label: 'OUTPUT', color: 'gold', items: [
-    { label: 'Ranked provider list', source: 'app/analyst/compare/page.tsx-client' },
+    { label: 'Daftar peringkat pupuk', source: 'app/analyst/compare/page.tsx-client' },
     { label: 'Normalized matrix table', source: 'app/analyst/compare/page.tsx-client' },
     { label: 'Weighted scores', source: 'app/analyst/compare/page.tsx-client' },
     { label: 'Winner + crown badge', source: 'app/analyst/compare/page.tsx-client' },
@@ -339,7 +318,7 @@ export default function SystemDiagrams() {
       <hr style={{ border: 'none', borderTop: '1px solid var(--border)' }} />
       <DiagramBlock title="4. Analyst Flowchart" nodes={analystFlow} />
       <hr style={{ border: 'none', borderTop: '1px solid var(--border)' }} />
-      <DiagramBlock title="5. MOORA Calculation Flowchart" nodes={mooraFlow} />
+      <DiagramBlock title="5. Calculation Flowchart" nodes={mooraFlow} />
     </div>
   )
 }

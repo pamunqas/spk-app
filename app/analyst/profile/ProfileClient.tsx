@@ -56,9 +56,9 @@ export default function ProfileClient({ user, stats }: { user: User; stats: Stat
           {[
             'Kirim email saat bobot diperbarui',
             'Beri tahu saat penyedia baru ditambahkan',
-            'Ringkasan peringkat MOORA mingguan',
+            'Ringkasan peringkat mingguan',
           ].map(n => (
-            <label key={n} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 13, color: 'var(--text-2)', cursor: 'pointer', marginBottom: 10 }}>
+            <label key={n} style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--text-2)', cursor: 'pointer', marginBottom: 10 }}>
               <input type="checkbox" defaultChecked style={{ accentColor: 'var(--primary)' }} /> {n}
             </label>
           ))}
@@ -77,10 +77,10 @@ export default function ProfileClient({ user, stats }: { user: User; stats: Stat
             { val: stats.joined,      label: 'Anggota Sejak', color: 'var(--accent)', small: true },
           ].map(s => (
             <div key={s.label} style={{ textAlign: 'center', padding: 14, background: 'var(--bg-3)', borderRadius: 'var(--r)' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: s.small ? '1.1rem' : '1.6rem', fontWeight: 500, color: s.color, paddingTop: s.small ? 4 : 0 }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 500, color: s.color, paddingTop: s.small ? 4 : 0 }}>
                 {s.val}
               </div>
-              <div style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 4, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+              <div style={{ color: 'var(--text-3)', marginTop: 4, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                 {s.label}
               </div>
             </div>

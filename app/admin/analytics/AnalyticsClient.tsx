@@ -43,14 +43,14 @@ export default function AnalyticsClient({ stats, popLabels, popData, criteria }:
         </div>
         <div className="stat-card">
           <div className="stat-card-label">Paling Banyak Dibandingkan</div>
-          <div className="stat-card-num" style={{ color: 'var(--gold)', fontSize: '1.2rem', paddingTop: 6 }}>
+          <div className="stat-card-num" style={{ color: 'var(--gold)', paddingTop: 6 }}>
             {stats.mostCompared}
           </div>
           <div className="stat-card-delta">{stats.winRate}% sesi</div>
         </div>
         <div className="stat-card">
           <div className="stat-card-label">Pemimpin Tingkat Kemenangan</div>
-          <div className="stat-card-num" style={{ color: 'var(--green)', fontSize: '1.2rem', paddingTop: 6 }}>
+          <div className="stat-card-num" style={{ color: 'var(--green)', paddingTop: 6 }}>
             {stats.winLeader}
           </div>
           <div className="stat-card-delta up">↑ {stats.winRate}% tingkat kemenangan</div>
@@ -62,7 +62,7 @@ export default function AnalyticsClient({ stats, popLabels, popData, criteria }:
           <div className="card-title">Frekuensi Kemenangan Penyedia</div>
           <div className="analytics-chart-wrap">
             {popLabels.length === 0 ? (
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--text-3)', fontSize: 13 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--text-3)' }}>
                 Belum ada data perbandingan
               </div>
             ) : (
@@ -81,11 +81,11 @@ export default function AnalyticsClient({ stats, popLabels, popData, criteria }:
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 4 }}>
             {popLabels.slice(0, 6).map((name, i) => (
               <div key={name} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ width: 100, fontSize: 12, color: 'var(--text-2)' }}>{name}</div>
+                <div style={{ width: 100, color: 'var(--text-2)' }}>{name}</div>
                 <div style={{ flex: 1, height: 5, background: 'var(--surface-2)', borderRadius: 3, overflow: 'hidden' }}>
                   <div style={{ width: `${popData[i]}%`, height: '100%', background: colors[i]?.replace('88', ''), borderRadius: 3 }} />
                 </div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 12, width: 36, textAlign: 'right' }}>
+                <div style={{ fontFamily: 'var(--font-mono)', width: 36, textAlign: 'right' }}>
                   {popData[i]}%
                 </div>
               </div>
@@ -99,13 +99,13 @@ export default function AnalyticsClient({ stats, popLabels, popData, criteria }:
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 12, width: '100%' }}>
           {criteria.map(c => (
             <div key={c.key} style={{ background: 'var(--bg-3)', border: '1px solid var(--border)', borderRadius: 'var(--r)', padding: 14 }}>
-              <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--text-3)', marginBottom: 6 }}>
+              <div style={{ textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--text-3)', marginBottom: 6 }}>
                 {c.label}
               </div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1.4rem', fontWeight: 500, color: c.color }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 500, color: c.color }}>
                 {(c.weight * 100).toFixed(0)}%
               </div>
-              <div style={{ fontSize: 11, marginTop: 4, color: c.type === 'benefit' ? 'var(--green)' : 'var(--red)' }}>
+              <div style={{ marginTop: 4, color: c.type === 'benefit' ? 'var(--green)' : 'var(--red)' }}>
                 {c.type === 'benefit' ? 'Kriteria keuntungan' : 'Kriteria biaya'}
               </div>
               <div style={{ marginTop: 8, height: 3, background: 'var(--surface-2)', borderRadius: 2 }}>

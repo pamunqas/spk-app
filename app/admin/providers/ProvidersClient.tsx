@@ -78,7 +78,7 @@ export default function ProvidersClient({ initialProviders }: Props) {
   return (
     <>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
-        <div style={{ fontSize: 13, color: 'var(--text-2)' }}>
+        <div style={{ color: 'var(--text-2)' }}>
           <strong style={{ color: 'var(--text)' }}>{providers.length}</strong> penyedia dalam database
         </div>
         <button className="btn-primary" onClick={openAdd}>+ Tambah Penyedia</button>
@@ -99,8 +99,8 @@ export default function ProvidersClient({ initialProviders }: Props) {
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                     <span style={{ fontSize: 22 }}>{getProviderIcon(p.name)}</span>
                     <div>
-                      <div style={{ fontSize: 13, fontWeight: 500 }}>{p.name}</div>
-                      <div style={{ fontSize: 11, color: 'var(--text-3)' }}>/{p.slug}</div>
+                      <div style={{ fontWeight: 500 }}>{p.name}</div>
+                      <div style={{ color: 'var(--text-3)' }}>/{p.slug}</div>
                     </div>
                   </div>
                 </td>

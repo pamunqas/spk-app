@@ -21,7 +21,7 @@ export default async function AdminAudit() {
 
   const ENTITY_LABELS: Record<string, string> = {
     'user': 'User',
-    'provider': 'Provider',
+    'provider': 'Pupuk',
     'criterion': 'Kriteria',
     'weight': 'Bobot',
     'comparison': 'Perbandingan',

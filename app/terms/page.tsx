@@ -22,7 +22,7 @@ export default function TermsPage() {
           <section>
             <h2>1. Penerimaan Ketentuan</h2>
             <p>
-              Dengan mengakses dan menggunakan SPK Penentuan Pupuk Organik Terbaik pada Ecofarming Dengan Metode MOORA, 
+              Dengan mengakses dan menggunakan SPK Penentuan Pupuk Organik Terbaik pada Ecofarming, 
               Anda setuju untuk terikat oleh Ketentuan Layanan ini. Jika Anda tidak setuju dengan salah satu 
               bagian dari ketentuan ini, maka Anda tidak diperkenankan menggunakan layanan kami.
             </p>
@@ -62,7 +62,7 @@ export default function TermsPage() {
           <section>
             <h2>5. Layanan dan Konten</h2>
             <p>
-              Layanan ini menyediakan sistem pendukung keputusan berbasis metode MOORA untuk penentuan pupuk organik. 
+              Layanan ini menyediakan sistem pendukung keputusan untuk penentuan pupuk organik. 
               Kami tidak memberikan jaminan bahwa hasil rekomendasi akan selalu sesuai ekspektasi Anda. 
               Keputusan bisnis akhir tetap menjadi tanggung jawab Anda.
             </p>
