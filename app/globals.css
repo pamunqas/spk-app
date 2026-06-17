@@ -19,7 +19,7 @@
   --sidebar-w: 240px;
 }
 html { scroll-behavior: smooth; }
-body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; font-size: 18px; }
+body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; font-size: 22px; }
 
 /* ======== LOGIN ======== */
 .login-page {
