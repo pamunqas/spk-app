@@ -131,7 +131,7 @@ export default function CompareClient({ providers, criteria }: Props) {
         <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
           <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)' }}>
             <div className="card-title" style={{ marginBottom: 4 }}>LANGKAH 1 — Pilih Pupuk</div>
-            <div style={{ fontSize: 12, color: 'var(--text-3)' }}>Pilih minimal 2 pupuk untuk dibandingkan.</div>
+            <div style={{ fontSize: 14, color: 'var(--text-3)' }}>Pilih minimal 2 pupuk untuk dibandingkan.</div>
           </div>
           <div style={{ padding: '16px 20px' }}>
             <div className="providers-grid">
@@ -147,7 +147,7 @@ export default function CompareClient({ providers, criteria }: Props) {
                       <svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3" /></svg>
                     </div>
                     <div className="provider-card-header">
-                      <div className="provider-avatar" style={{ background: p.color }}><span style={{ fontSize: 18 }}>{getProviderIcon(p.name)}</span></div>
+                      <div className="provider-avatar" style={{ background: p.color }}><span style={{ fontSize: 22 }}>{getProviderIcon(p.name)}</span></div>
                       <div>
                         <div className="provider-name">{p.name}</div>
                         <div className="provider-desc">{p.description}</div>
@@ -161,7 +161,7 @@ export default function CompareClient({ providers, criteria }: Props) {
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               marginTop: 4, gap: 12, flexWrap: 'wrap',
             }}>
-              <div style={{ fontSize: 12, color: 'var(--text-3)' }}>
+              <div style={{ fontSize: 14, color: 'var(--text-3)' }}>
                 {selectedIds.length < 2
                   ? `Pilih minimal ${2 - selectedIds.length} pupuk lagi.`
                   : `${selectedIds.length} pupuk dipilih.`}
@@ -185,7 +185,7 @@ export default function CompareClient({ providers, criteria }: Props) {
         <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
           <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)' }}>
             <div className="card-title" style={{ marginBottom: 4 }}>LANGKAH 2 — Input Data Pupuk</div>
-            <div style={{ fontSize: 12, color: 'var(--text-3)' }}>Masukkan nilai untuk setiap kriteria dari pupuk yang dipilih.</div>
+            <div style={{ fontSize: 14, color: 'var(--text-3)' }}>Masukkan nilai untuk setiap kriteria dari pupuk yang dipilih.</div>
           </div>
           <div style={{ overflowX: 'auto', padding: '16px 20px' }}>
             <table className="data-table" style={{ minWidth: selectedProviders.length * 160 + 200 }}>
@@ -195,8 +195,8 @@ export default function CompareClient({ providers, criteria }: Props) {
                   {selectedProviders.map(p => (
                     <th key={p.id} style={{ textAlign: 'center', minWidth: 160 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
-                        <span style={{ fontSize: 16 }}>{getProviderIcon(p.name)}</span>
-                        <span style={{ fontSize: 12 }}>{p.name}</span>
+                        <span style={{ fontSize: 20 }}>{getProviderIcon(p.name)}</span>
+                        <span style={{ fontSize: 14 }}>{p.name}</span>
                       </div>
                     </th>
                   ))}
@@ -211,7 +211,7 @@ export default function CompareClient({ providers, criteria }: Props) {
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                           <span style={{ width: 8, height: 8, borderRadius: '50%', background: CRITERION_COLORS[c.key], flexShrink: 0 }} />
                           <div>
-                            <div style={{ fontSize: 13, fontWeight: 500 }}>{c.label}</div>
+                            <div style={{ fontSize: 15, fontWeight: 500 }}>{c.label}</div>
                           </div>
                         </div>
                       </td>
@@ -234,7 +234,7 @@ export default function CompareClient({ providers, criteria }: Props) {
                                       border: selected ? `1.5px solid ${CRITERION_COLORS[c.key]}` : '1px solid var(--border)',
                                       background: selected ? `${CRITERION_COLORS[c.key]}11` : 'var(--surface)',
                                       cursor: 'pointer',
-                                      fontSize: 11, textAlign: 'left',
+                                      fontSize: 13, textAlign: 'left',
                                       color: 'var(--text)',
                                       fontFamily: 'var(--font-body)',
                                       transition: 'all 0.15s',
@@ -244,14 +244,14 @@ export default function CompareClient({ providers, criteria }: Props) {
                                       width: 16, height: 16, borderRadius: '50%', flexShrink: 0,
                                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                                       border: selected ? `2px solid ${CRITERION_COLORS[c.key]}` : '2px solid var(--border-2)',
-                                      fontSize: 8, fontWeight: 700,
+                                      fontSize: 10, fontWeight: 700,
                                       color: selected ? CRITERION_COLORS[c.key] : 'transparent',
                                     }}>
                                       {selected ? '✓' : ''}
                                     </span>
                                     <div>
-                                      <div style={{ fontWeight: 600, fontSize: 11 }}>{l.label}</div>
-                                      <div style={{ fontSize: 9, color: 'var(--text-3)', lineHeight: 1.3 }}>{l.condition}</div>
+                                      <div style={{ fontWeight: 600, fontSize: 13 }}>{l.label}</div>
+                                      <div style={{ fontSize: 11, color: 'var(--text-3)', lineHeight: 1.3 }}>{l.condition}</div>
                                     </div>
                                   </button>
                                 )
@@ -273,7 +273,7 @@ export default function CompareClient({ providers, criteria }: Props) {
             <button
               onClick={() => setStep('select')}
               className="btn-ghost"
-              style={{ fontSize: 12 }}
+              style={{ fontSize: 14 }}
             >
               Kembali
             </button>
@@ -281,7 +281,7 @@ export default function CompareClient({ providers, criteria }: Props) {
               <button
                 onClick={resetAll}
                 className="btn-ghost"
-                style={{ fontSize: 12 }}
+                style={{ fontSize: 14 }}
               >
                 Reset
               </button>
@@ -382,13 +382,13 @@ export default function CompareClient({ providers, criteria }: Props) {
           </div>
 
           {/* Info */}
-          <div style={{ padding: 14, background: 'var(--bg-3)', border: '1px solid var(--border)', borderRadius: 'var(--r)', fontSize: 12, color: 'var(--text-3)', lineHeight: 1.7, marginTop: 20 }}>
+          <div style={{ padding: 14, background: 'var(--bg-3)', border: '1px solid var(--border)', borderRadius: 'var(--r)', fontSize: 14, color: 'var(--text-3)', lineHeight: 1.7, marginTop: 20 }}>
             💡 <strong style={{ color: 'var(--text-2)' }}>Cara membaca:</strong> Nilai yiScore yang lebih tinggi menandakan performa yang lebih baik secara keseluruhan.
           </div>
 
           {/* Recalc */}
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: 24 }}>
-            <button onClick={resetAll} className="btn-compare ready" style={{ width: 'auto', padding: '12px 32px', fontSize: 14 }}>
+            <button onClick={resetAll} className="btn-compare ready" style={{ width: 'auto', padding: '12px 32px', fontSize: 16 }}>
               Analisis Baru
             </button>
           </div>
