@@ -19,7 +19,7 @@
   --sidebar-w: 240px;
 }
 html { scroll-behavior: smooth; }
-body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; font-size: 15px; }
+body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; font-size: 18px; }
 
 /* ======== LOGIN ======== */
 .login-page {
@@ -434,6 +434,32 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 .winner-score-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 10px; }
 .winner-score-num { font-family: var(--font-mono); font-size: 1.2rem; color: var(--gold); }
 .winner-score-label { font-size: 13px; color: var(--text-3); }
+
+/* ======== RESULT HERO ======== */
+.result-hero {
+  position: relative; overflow: hidden;
+  background: linear-gradient(135deg, var(--primary) 0%, #3A4A22 100%);
+  border-radius: var(--r-lg); padding: 40px 32px; text-align: center; isolation: isolate;
+}
+.result-hero-glow {
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(212,149,106,0.25) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 80% 80%, rgba(255,255,255,0.06) 0%, transparent 50%);
+}
+.result-hero-content { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.result-hero-icon { font-size: 52px; line-height: 1; margin-bottom: 4px; }
+.result-hero-badge {
+  display: inline-block; background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.85);
+  border: 1px solid rgba(255,255,255,0.2); border-radius: 100px; padding: 4px 14px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  backdrop-filter: blur(4px);
+}
+.result-hero-name { font-family: var(--font-display); font-size: 2.2rem; color: white; line-height: 1.2; margin: 4px 0; }
+.result-hero-desc { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.5; max-width: 360px; margin: 0 auto; }
+.result-hero-score { display: flex; align-items: baseline; gap: 8px; margin-top: 12px; }
+.result-hero-score-num { font-family: var(--font-mono); font-size: 2rem; font-weight: 500; color: var(--gold); }
+.result-hero-score-label { font-size: 12px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.1em; }
 .strengths-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
 .strength-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--text-2); }
 .strength-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }

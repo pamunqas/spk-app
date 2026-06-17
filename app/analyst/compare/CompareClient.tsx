@@ -5,6 +5,7 @@ import { SUBCRITERIA } from '@/lib/subcriteria'
 import type { MooraComputation } from '@/lib/moora'
 import { getProviderIcon } from '@/lib/icons'
 import Toast from '@/components/Toast'
+import BarChart from '@/components/BarChart'
 
 interface Props {
   providers: Provider[]
@@ -105,7 +106,7 @@ export default function CompareClient({ providers, criteria }: Props) {
       if (!res.ok) throw new Error(json.error)
       setResults(json)
       setStep('results')
-      setToast({ msg: `Analisis MOORA selesai — ${json.results[0].provider.name} peringkat pertama`, type: 'green' })
+      setToast({ msg: `Analisis selesai — ${json.results[0].provider.name} peringkat pertama`, type: 'green' })
     } catch (e: unknown) {
       setToast({ msg: e instanceof Error ? e.message : 'Gagal menjalankan analisis', type: 'red' })
     } finally {
@@ -125,12 +126,12 @@ export default function CompareClient({ providers, criteria }: Props) {
   return (
     <>
 
-      {/* Step 1 — Select Providers */}
+      {/* Step 1 — Pilih Pupuk */}
       {step === 'select' && (
         <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
           <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)' }}>
-            <div className="card-title" style={{ marginBottom: 4 }}>LANGKAH 1 — Pilih Provider</div>
-            <div style={{ fontSize: 12, color: 'var(--text-3)' }}>Pilih minimal 2 provider untuk dibandingkan menggunakan metode MOORA.</div>
+            <div className="card-title" style={{ marginBottom: 4 }}>LANGKAH 1 — Pilih Pupuk</div>
+            <div style={{ fontSize: 12, color: 'var(--text-3)' }}>Pilih minimal 2 pupuk untuk dibandingkan.</div>
           </div>
           <div style={{ padding: '16px 20px' }}>
             <div className="providers-grid">
@@ -162,8 +163,8 @@ export default function CompareClient({ providers, criteria }: Props) {
             }}>
               <div style={{ fontSize: 12, color: 'var(--text-3)' }}>
                 {selectedIds.length < 2
-                  ? `Pilih minimal ${2 - selectedIds.length} provider lagi.`
-                  : `${selectedIds.length} provider dipilih.`}
+                  ? `Pilih minimal ${2 - selectedIds.length} pupuk lagi.`
+                  : `${selectedIds.length} pupuk dipilih.`}
               </div>
               <button
                 onClick={goToInput}
@@ -183,8 +184,8 @@ export default function CompareClient({ providers, criteria }: Props) {
       {step === 'input' && (
         <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
           <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)' }}>
-            <div className="card-title" style={{ marginBottom: 4 }}>LANGKAH 2 — Input Data Provider</div>
-            <div style={{ fontSize: 12, color: 'var(--text-3)' }}>Masukkan nilai untuk setiap kriteria dari provider yang dipilih.</div>
+            <div className="card-title" style={{ marginBottom: 4 }}>LANGKAH 2 — Input Data Pupuk</div>
+            <div style={{ fontSize: 12, color: 'var(--text-3)' }}>Masukkan nilai untuk setiap kriteria dari pupuk yang dipilih.</div>
           </div>
           <div style={{ overflowX: 'auto', padding: '16px 20px' }}>
             <table className="data-table" style={{ minWidth: selectedProviders.length * 160 + 200 }}>
@@ -290,7 +291,7 @@ export default function CompareClient({ providers, criteria }: Props) {
                 className={`btn-compare${allInputsFilled() ? ' ready' : ''}${computing ? ' computing' : ''}`}
                 style={{ width: 'auto', padding: '10px 24px' }}
               >
-                {computing ? 'Menghitung…' : 'Hitung dengan MOORA'}
+                {computing ? 'Menghitung…' : 'Hitung'}
                 <div className="spinner" />
               </button>
             </div>
@@ -301,98 +302,95 @@ export default function CompareClient({ providers, criteria }: Props) {
       {/* Step 3 — Results */}
       {step === 'results' && results && (
         <div style={{ marginTop: 24 }}>
-          <div className="recalc-bar">
-            <div className="recalc-info">
-              Peringkat <strong>{results.results.length}</strong> provider berdasarkan perhitungan MOORA
+
+          {/* Rekomendasi Pupuk — Hero Winner */}
+          <div className="result-hero">
+            <div className="result-hero-glow" />
+            <div className="result-hero-content">
+              <span className="result-hero-icon">{getProviderIcon(results.results[0].provider.name)}</span>
+              <span className="result-hero-badge">Rekomendasi Pupuk</span>
+              <h2 className="result-hero-name">{results.results[0].provider.name}</h2>
+              <div className="result-hero-score">
+                <span className="result-hero-score-num">{results.results[0].yiScore.toFixed(4)}</span>
+                <span className="result-hero-score-label">yiScore</span>
+              </div>
             </div>
-            <button
-              onClick={resetAll}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 7,
-                padding: '9px 18px', borderRadius: 'var(--r-sm)',
-                background: 'var(--primary)', color: 'white', border: 'none',
-                fontFamily: 'var(--font-body)', fontSize: 13, fontWeight: 500,
-                cursor: 'pointer', transition: 'background 0.2s',
-              }}
-              onMouseEnter={e => (e.currentTarget.style.background = 'var(--primary-light)')}
-              onMouseLeave={e => (e.currentTarget.style.background = 'var(--primary)')}
-            >
+          </div>
+
+          {/* Skor Yi — Bar Chart */}
+          <div className="bento-card chart-card" style={{ marginTop: 20 }}>
+            <div className="chart-card-title">Perbandingan Skor Yi</div>
+            <div className="chart-wrap" style={{ height: 260 }}>
+              <BarChart
+                labels={results.results.map(r => r.provider.name)}
+                data={results.results.map(r => r.yiScore)}
+                colors={results.results.map((r, i) => i === 0 ? '#D4956A' : '#8A9478')}
+                tooltipLabel={(v) => `Yi: ${v.toFixed(4)}`}
+              />
+            </div>
+          </div>
+
+          {/* Ranking List */}
+          <div style={{ marginTop: 16 }}>
+            <div className="card-title" style={{ marginBottom: 12 }}>Peringkat Lengkap</div>
+            <div className="rank-list">
+              {results.results.map((r, i) => (
+                <div
+                  key={r.provider.id}
+                  className={`rank-item in${i === 0 ? ' r1' : ''}${i === 1 ? ' r2' : ''}`}
+                  style={{ transitionDelay: `${i * 0.08}s` }}
+                >
+                  <span className="rank-num">#{r.rank}</span>
+                  <div className="rank-info">
+                    <div
+                      className="rank-avatar"
+                      style={{ background: r.provider.color || 'var(--primary)' }}
+                    >
+                      {r.provider.initials || getProviderIcon(r.provider.name)}
+                    </div>
+                    <div>
+                      <div className="rank-name">{r.provider.name}</div>
+                      {r.strengths.length > 0 && (
+                        <div className="rank-tags">
+                          {r.strengths.map((s, si) => (
+                            <span key={si} className="tag s">{s}</span>
+                          ))}
+                          {r.weaknesses.map((w, wi) => (
+                            <span key={wi} className="tag w">{w}</span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="rank-score-col">
+                    <div className="rank-yi" style={{ color: i === 0 ? 'var(--gold)' : 'var(--text)' }}>
+                      {r.yiScore.toFixed(4)}
+                    </div>
+                    <div className="rank-bar-wrap">
+                      <div
+                        className="rank-bar"
+                        style={{
+                          width: `${r.scorePercentile}%`,
+                          animationDelay: `${0.3 + i * 0.1}s`,
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Info */}
+          <div style={{ padding: 14, background: 'var(--bg-3)', border: '1px solid var(--border)', borderRadius: 'var(--r)', fontSize: 12, color: 'var(--text-3)', lineHeight: 1.7, marginTop: 20 }}>
+            💡 <strong style={{ color: 'var(--text-2)' }}>Cara membaca:</strong> Nilai yiScore yang lebih tinggi menandakan performa yang lebih baik secara keseluruhan.
+          </div>
+
+          {/* Recalc */}
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: 24 }}>
+            <button onClick={resetAll} className="btn-compare ready" style={{ width: 'auto', padding: '12px 32px', fontSize: 14 }}>
               Analisis Baru
             </button>
-          </div>
-
-          {/* Winner Card */}
-          <div className="bento-card winner-card" style={{ maxWidth: 420, margin: '0 auto' }}>
-            <div className="winner-crown">🏆</div>
-            <div className="winner-badge">Peringkat Pertama</div>
-            <div className="winner-name">{results.results[0].provider.name}</div>
-            <div className="winner-desc">{results.results[0].provider.description}</div>
-            <div className="winner-score-row">
-              <span className="winner-score-num">{results.results[0].yiScore.toFixed(2)}</span>
-              <span className="winner-score-label">yiScore</span>
-            </div>
-          </div>
-
-          {/* Detail Table — Normalized Values */}
-          <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-            <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)' }}>
-              <div className="card-title" style={{ marginBottom: 4 }}>Detail Nilai Ternormalisasi</div>
-              <div style={{ fontSize: 12, color: 'var(--text-3)' }}>Nilai setelah normalisasi vektor untuk setiap kriteria.</div>
-            </div>
-            <div style={{ overflowX: 'auto' }}>
-              <table className="data-table">
-                <thead>
-                  <tr>
-                    <th>Peringkat</th>
-                    <th>Provider</th>
-                    {criteria.map(c => (
-                      <th key={c.key} style={{ textAlign: 'center', color: CRITERION_COLORS[c.key] }}>{c.label}</th>
-                    ))}
-                    <th style={{ textAlign: 'center', color: 'var(--gold)' }}>yiScore</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {results.results.map(r => {
-                    const normalized = results.normalized[r.provider.id] ?? {}
-                    return (
-                      <tr key={r.provider.id} style={r.rank === 1 ? { background: 'rgba(245,158,11,0.04)' } : {}}>
-                        <td>
-                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 600, color: r.rank === 1 ? 'var(--gold)' : 'var(--text-3)' }}>
-                            #{r.rank}
-                          </span>
-                        </td>
-                        <td>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                            <span style={{ fontSize: 18 }}>{getProviderIcon(r.provider.name)}</span>
-                            <span style={{ fontSize: 12, fontWeight: r.rank === 1 ? 600 : 400 }}>{r.provider.name}</span>
-                            {r.rank === 1 && <span style={{ fontSize: 10 }}>🏆</span>}
-                          </div>
-                        </td>
-                        {criteria.map(c => {
-                          const val = normalized[c.key]
-                          return (
-                            <td key={c.key} style={{ textAlign: 'center' }}>
-                              <span className="cell-mono" style={{ fontWeight: 500 }}>
-                                {val != null ? val.toFixed(4) : '-'}
-                              </span>
-                            </td>
-                          )
-                        })}
-                        <td style={{ textAlign: 'center' }}>
-                          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 700, color: r.rank === 1 ? 'var(--gold)' : 'var(--text)' }}>
-                            {r.yiScore.toFixed(4)}
-                          </span>
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div style={{ padding: 14, background: 'var(--bg-3)', border: '1px solid var(--border)', borderRadius: 'var(--r)', fontSize: 12, color: 'var(--text-3)', lineHeight: 1.7, marginTop: 16 }}>
-            💡 <strong style={{ color: 'var(--text-2)' }}>Cara membaca ini:</strong> Hasil dihitung menggunakan Metode MOORA (Multi-Objective Optimization by Ratio Analysis). Nilai yiScore yang lebih tinggi menandakan performa yang lebih baik secara keseluruhan.
           </div>
         </div>
       )}
