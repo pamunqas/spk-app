@@ -303,6 +303,13 @@ export default function CompareClient({ providers, criteria }: Props) {
       {step === 'results' && results && (
         <div style={{ marginTop: 24 }}>
 
+          {/* Recalc */}
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
+            <button onClick={resetAll} className="btn-compare ready" style={{ width: 'auto', padding: '12px 32px', }}>
+              Analisis Baru
+            </button>
+          </div>
+
           {/* Rekomendasi Pupuk — Hero Winner */}
           <div className="result-hero">
             <div className="result-hero-glow" />
@@ -320,7 +327,7 @@ export default function CompareClient({ providers, criteria }: Props) {
           {/* Skor Yi — Bar Chart */}
           <div className="bento-card chart-card" style={{ marginTop: 20 }}>
             <div className="chart-card-title">Perbandingan Skor Yi</div>
-            <div className="chart-wrap" style={{ height: 400 }}>
+            <div className="chart-wrap" style={{ height: 500 }}>
               <BarChart
                 labels={results.results.map(r => r.provider.name)}
                 data={results.results.map(r => r.yiScore)}
@@ -328,13 +335,6 @@ export default function CompareClient({ providers, criteria }: Props) {
                 tooltipLabel={(v) => `Yi: ${v.toFixed(4)}`}
               />
             </div>
-          </div>
-
-          {/* Recalc */}
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: 24 }}>
-            <button onClick={resetAll} className="btn-compare ready" style={{ width: 'auto', padding: '12px 32px', }}>
-              Analisis Baru
-            </button>
           </div>
         </div>
       )}

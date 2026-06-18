@@ -473,7 +473,7 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 .strength-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
 .chart-card { display: flex; flex-direction: column; }
 .chart-card-title { font-size: var(--fs-base); font-weight: 500; color: var(--text-3); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.08em; }
-.chart-wrap { position: relative; flex: 1; min-height: 240px; }
+.chart-wrap { position: relative; height: 100%; width: 100%; }
 
 /* ======== RANK LIST ======== */
 .rank-list { display: flex; flex-direction: column; gap: 8px; }
