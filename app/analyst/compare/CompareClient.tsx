@@ -320,7 +320,7 @@ export default function CompareClient({ providers, criteria }: Props) {
           {/* Skor Yi — Bar Chart */}
           <div className="bento-card chart-card" style={{ marginTop: 20 }}>
             <div className="chart-card-title">Perbandingan Skor Yi</div>
-            <div className="chart-wrap" style={{ height: 260 }}>
+            <div className="chart-wrap" style={{ height: 400 }}>
               <BarChart
                 labels={results.results.map(r => r.provider.name)}
                 data={results.results.map(r => r.yiScore)}
@@ -328,11 +328,6 @@ export default function CompareClient({ providers, criteria }: Props) {
                 tooltipLabel={(v) => `Yi: ${v.toFixed(4)}`}
               />
             </div>
-          </div>
-
-          {/* Info */}
-          <div style={{ padding: 14, background: 'var(--bg-3)', border: '1px solid var(--border)', borderRadius: 'var(--r)', color: 'var(--text-3)', lineHeight: 1.7, marginTop: 20 }}>
-            💡 <strong style={{ color: 'var(--text-2)' }}>Cara membaca:</strong> Nilai yiScore yang lebih tinggi menandakan performa yang lebih baik secara keseluruhan.
           </div>
 
           {/* Recalc */}
