@@ -129,7 +129,7 @@ export default function DashboardPage() {
                 return (
                   <div key={r.rank} className="ranking-item">
                     <span className="ranking-medal" style={{ color }}>{medal}</span>
-                    <span style={{ fontSize: 18 }}>{getProviderIcon(r.name)}</span>
+                    <span style={{ fontSize: 28 }}>{getProviderIcon(r.name)}</span>
                     <span className="ranking-name">{r.name}</span>
                     <span className="ranking-score">{Number(r.yiScore).toFixed(4)}</span>
                   </div>

@@ -32,7 +32,7 @@ export default function RankList({ results }: { results: MooraResult[] }) {
         >
           <div className="rank-num">{r.rank}</div>
           <div className="rank-info">
-            <span style={{ fontSize: 22 }}>{getProviderIcon(r.provider.name)}</span>
+            <span style={{ fontSize: 28 }}>{getProviderIcon(r.provider.name)}</span>
             <div>
               <div className="rank-name">{r.provider.name}</div>
               <div className="rank-tags">
