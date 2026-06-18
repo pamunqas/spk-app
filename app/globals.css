@@ -372,7 +372,7 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 .action-btn.danger:hover { border-color: var(--red); color: var(--red); }
 
 /* ======== PROVIDER CARDS ======== */
-.providers-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.providers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 20px; }
 .provider-card {
   background: var(--surface); border: 1px solid var(--border); border-radius: var(--r);
   padding: 16px; cursor: pointer; transition: all 0.2s; position: relative;
@@ -1120,7 +1120,7 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
   display: flex; align-items: flex-start; gap: 10px; font-size: var(--fs-sm); color: var(--text-2); cursor: pointer;
 }
 .policy-checkbox input { margin-top: 3px; accent-color: var(--primary); }
-.providers-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+.providers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
 .provider-card {
   background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 20px;
 }
