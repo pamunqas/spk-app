@@ -330,57 +330,6 @@ export default function CompareClient({ providers, criteria }: Props) {
             </div>
           </div>
 
-          {/* Ranking List */}
-          <div style={{ marginTop: 16 }}>
-            <div className="card-title" style={{ marginBottom: 12 }}>Peringkat Lengkap</div>
-            <div className="rank-list">
-              {results.results.map((r, i) => (
-                <div
-                  key={r.provider.id}
-                  className={`rank-item in${i === 0 ? ' r1' : ''}${i === 1 ? ' r2' : ''}`}
-                  style={{ transitionDelay: `${i * 0.08}s` }}
-                >
-                  <span className="rank-num">#{r.rank}</span>
-                  <div className="rank-info">
-                    <div
-                      className="rank-avatar"
-                      style={{ background: r.provider.color || 'var(--primary)' }}
-                    >
-                      {r.provider.initials || getProviderIcon(r.provider.name)}
-                    </div>
-                    <div>
-                      <div className="rank-name">{r.provider.name}</div>
-                      {r.strengths.length > 0 && (
-                        <div className="rank-tags">
-                          {r.strengths.map((s, si) => (
-                            <span key={si} className="tag s">{s}</span>
-                          ))}
-                          {r.weaknesses.map((w, wi) => (
-                            <span key={wi} className="tag w">{w}</span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="rank-score-col">
-                    <div className="rank-yi" style={{ color: i === 0 ? 'var(--gold)' : 'var(--text)' }}>
-                      {r.yiScore.toFixed(4)}
-                    </div>
-                    <div className="rank-bar-wrap">
-                      <div
-                        className="rank-bar"
-                        style={{
-                          width: `${r.scorePercentile}%`,
-                          animationDelay: `${0.3 + i * 0.1}s`,
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
           {/* Info */}
           <div style={{ padding: 14, background: 'var(--bg-3)', border: '1px solid var(--border)', borderRadius: 'var(--r)', color: 'var(--text-3)', lineHeight: 1.7, marginTop: 20 }}>
             💡 <strong style={{ color: 'var(--text-2)' }}>Cara membaca:</strong> Nilai yiScore yang lebih tinggi menandakan performa yang lebih baik secara keseluruhan.
