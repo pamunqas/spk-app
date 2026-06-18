@@ -211,7 +211,7 @@ export default function CompareClient({ providers, criteria }: Props) {
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                           <span style={{ width: 8, height: 8, borderRadius: '50%', background: CRITERION_COLORS[c.key], flexShrink: 0 }} />
                           <div>
-                            <div style={{ fontWeight: 500 }}>{c.label}</div>
+                            <div style={{ fontWeight: 500, fontSize: 18 }}>{c.label}</div>
                           </div>
                         </div>
                       </td>
@@ -250,8 +250,8 @@ export default function CompareClient({ providers, criteria }: Props) {
                                       {selected ? '✓' : ''}
                                     </span>
                                     <div>
-                                      <div style={{ fontWeight: 600 }}>{l.label}</div>
-                                      <div style={{ color: 'var(--text-3)', lineHeight: 1.3 }}>{l.condition}</div>
+                                      <div style={{ fontWeight: 600, fontSize: 18 }}>{l.label}</div>
+                                      <div style={{ color: 'var(--text-3)', lineHeight: 1.3, fontSize: 15 }}>{l.condition}</div>
                                     </div>
                                   </button>
                                 )
